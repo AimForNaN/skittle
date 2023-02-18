@@ -1,0 +1,19 @@
+{
+	"extends": "@vue/tsconfig/tsconfig.web.json",
+	"include": ["env.d.ts", "src/**/*.ts"],
+	"exclude": ["src/main.ts"],
+	"compilerOptions": {
+		"baseUrl": ".",
+		"lib": ["ESNext", "DOM", "ES2018.Regexp"],
+		"paths": {
+			"@/*": ["./src/*"]
+		},
+		"target": "ESNext",
+		"types": ["offscreencanvas"]
+	},
+	"references": [
+		{
+			"path": "./tsconfig.config.json"
+		}
+	]
+}
