@@ -35,7 +35,7 @@ $skittle.addShape({
 	},
 }).draw();
 
-var img = $skittle.toUrl('image/jpeg', 1).then((dataUrl) => {
+$skittle.toUrl('image/jpeg', 1).then((dataUrl) => {
 	// Do something with dataUrl...
 });
 ```
