@@ -1,7 +1,7 @@
 {
 	"extends": "@vue/tsconfig/tsconfig.web.json",
 	"include": ["env.d.ts", "src/**/*.ts"],
-	"exclude": ["src/main.ts"],
+	"exclude": ["src/main.ts", "src/router.ts"],
 	"compilerOptions": {
 		"baseUrl": ".",
 		"lib": ["ESNext", "DOM", "ES2018.Regexp"],
