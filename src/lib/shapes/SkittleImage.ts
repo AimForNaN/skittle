@@ -1,8 +1,8 @@
 import ImageCache from '../ImageCache';
-import SkittleRect from './SkittleRect';
-import type SkittleStyledShape from './SkittleStyledShape';
+import Rect from './SkittleRect';
+import type StyledShape from './SkittleStyledShape';
 
-export default class SkittleImage extends SkittleRect {
+export default class Image extends Rect {
 	src: string;
 
 	constructor(
@@ -27,13 +27,13 @@ export default class SkittleImage extends SkittleRect {
 			ctx.drawImage(img, 0, 0, this.width, this.height);
 		}
 
-		SkittleImage.clearShadow(ctx);
+		Image.clearShadow(ctx);
 		ctx.stroke(path);
 	}
 
-	fromObject(shape: TSkittleShape): SkittleStyledShape | null {
+	fromObject(shape: TSkittleShape): StyledShape | null {
 		if (shape.type == 'image') {
-			return new SkittleImage(
+			return new Image(
 				shape.src,
 				shape.x,
 				shape.y,

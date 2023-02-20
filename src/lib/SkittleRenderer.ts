@@ -1,28 +1,22 @@
-import type Skittle from './Skittle';
-import type SkittleShape from './shapes/SkittleShape';
+import type Layer from './Skittle';
+import type Shape from './shapes/SkittleShape';
 
-export default class SkittleRenderer {
-	protected static Shapes: Map<string, TSkittleShapeConstructor<SkittleShape>> = new Map();
-	protected layer: Skittle;
+export default class Renderer {
+	protected static Shapes: Map<
+		string,
+		TSkittleShapeConstructor<Shape>
+	> = new Map();
 	protected transform: DOMMatrix = new DOMMatrix();
 
-	constructor(layer: Skittle) {
-		this.layer = layer;
-	}
-
-	get context(): TSkittleRenderingContext {
-		return this.layer.canvas.getContext('2d') as CanvasRenderingContext2D;
-	}
-
-	draw(ctx?: TSkittleRenderingContext): SkittleRenderer {
-		this.wipe();
+	draw(layer: Layer, ctx?: TSkittleRenderingContext): Renderer {
+		Renderer.wipe(layer);
 
 		if (!ctx) {
-			ctx = this.context;
+			ctx = Renderer.getContext(layer);
 		}
 
 		ctx.setTransform(this.transform);
-		this.layer.forEach((shape) => {
+		layer.forEach((shape) => {
 			if (ctx) {
 				ctx.save();
 				shape.draw(ctx);
@@ -33,33 +27,50 @@ export default class SkittleRenderer {
 		return this;
 	}
 
-	static registerShape(name: string, shape: TSkittleShapeConstructor<SkittleShape>) {
-		SkittleRenderer.Shapes.set(name, shape);
+	static getContext(layer: Layer): TSkittleRenderingContext {
+		return layer.canvas.getContext('2d') as CanvasRenderingContext2D;
 	}
 
-	resetTransform(): SkittleRenderer {
-		this.context.resetTransform();
-		return this;
+	static registerShape(
+		name: string,
+		shape: TSkittleShapeConstructor<Shape>
+	) {
+		Renderer.Shapes.set(name, shape);
 	}
 
-	restore(): SkittleRenderer {
-		this.context.restore();
-		return this;
+	static resetTransform(layer: Layer) {
+		var context = Renderer.getContext(layer);
+		if (context) {
+			context.resetTransform();
+		}
 	}
 
-	rotate(angle: number): SkittleRenderer {
-		this.context.rotate(angle);
-		return this;
+	static restore(layer: Layer) {
+		var context = Renderer.getContext(layer);
+		if (context) {
+			context.restore();
+		}
 	}
 
-	save(): SkittleRenderer {
-		this.context.save();
-		return this;
+	static rotate(layer: Layer, angle: number) {
+		var context = Renderer.getContext(layer);
+		if (context) {
+			context.rotate(angle);
+		}
 	}
 
-	scale(x: number, y: number): SkittleRenderer {
-		this.context.scale(x, y);
-		return this;
+	static save(layer: Layer) {
+		var context = Renderer.getContext(layer);
+		if (context) {
+			context.save();
+		}
+	}
+
+	static scale(layer: Layer, x: number, y: number) {
+		var context = Renderer.getContext(layer);
+		if (context) {
+			context.scale(x, y);
+		}
 	}
 
 	setTransform(matrix: DOMMatrix | number[]) {
@@ -67,22 +78,25 @@ export default class SkittleRenderer {
 			matrix = new DOMMatrix(matrix);
 		}
 		this.transform = matrix;
-		return this;
 	}
 
-	static shapeFromObject(shape: ISkittleShape): SkittleShape | null {
-		var factory = this.Shapes.get(shape.type);
+	static shapeFromObject(shape: ISkittleShape): Shape | null {
+		var factory = Renderer.Shapes.get(shape.type);
 		return factory ? factory.prototype.fromObject(shape) : null;
 	}
 
-	translate(x: number, y: number): SkittleRenderer {
-		this.context.translate(x, y);
-		return this;
+	static translate(layer: Layer, x: number, y: number) {
+		var context = Renderer.getContext(layer);
+		if (context) {
+			context.translate(x, y);
+		}
 	}
 
-	wipe(): SkittleRenderer {
-		this.context.resetTransform();
-		this.context.clearRect(0, 0, this.layer.width, this.layer.height);
-		return this;
+	static wipe(layer: Layer) {
+		var context = Renderer.getContext(layer);
+		if (context) {
+			context.resetTransform();
+			context.clearRect(0, 0, layer.width, layer.height);
+		}
 	}
 }

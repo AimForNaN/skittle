@@ -1,46 +1,46 @@
 import ImageCache from './ImageCache';
-import SkittleImage from './shapes/SkittleImage';
-import SkittleRect from './shapes/SkittleRect';
-import SkittleRenderer from './SkittleRenderer';
-import SkittleShape from './shapes/SkittleShape';
-import SkittleStyledShape from './shapes/SkittleStyledShape';
+import Image from './shapes/SkittleImage';
+import Rect from './shapes/SkittleRect';
+import Renderer from './SkittleRenderer';
+import Shape from './shapes/SkittleShape';
+import StyledShape from './shapes/SkittleStyledShape';
 
-SkittleRenderer.registerShape('rect', SkittleRect);
-SkittleRenderer.registerShape('image', SkittleImage);
+Renderer.registerShape('rect', Rect);
+Renderer.registerShape('image', Image);
 
-export default class Skittle {
+export default class Layer {
 	canvas: TSkittleCanvasTarget;
-	Renderer: SkittleRenderer;
+	Renderer: Renderer;
 	protected Shapes: Set<TSkittleAnyShape> = new Set();
 
 	constructor(canvas?: TSkittleCanvasTarget | string) {
 		this.canvas = new OffscreenCanvas(0, 0);
 		this.target(canvas);
 
-		this.Renderer = new SkittleRenderer(this);
+		this.Renderer = new Renderer();
 	}
 
-	addShape(shape: TSkittleAnyShape): Skittle {
+	addShape(shape: TSkittleAnyShape): Layer {
 		this.Shapes.add(shape);
 		return this;
 	}
 
-	addShapes(shapes: TSkittleAnyShape[]): Skittle {
+	addShapes(shapes: TSkittleAnyShape[]): Layer {
 		this.Shapes = new Set([...this.Shapes, ...shapes]);
 		return this;
 	}
 
-	draw(ctx?: TSkittleRenderingContext): Skittle {
-		this.Renderer.draw(ctx);
+	draw(ctx?: TSkittleRenderingContext): Layer {
+		this.Renderer.draw(this);
 		return this;
 	}
 
-	forEach(fn: (shape: SkittleShape) => void): Skittle {
+	forEach(fn: (shape: Shape) => void): Layer {
 		this.Shapes.forEach((shape) => {
-			if (shape instanceof SkittleShape) {
+			if (shape instanceof Shape) {
 				fn(shape);
 			} else {
-				var sh = SkittleRenderer.shapeFromObject(shape);
+				var sh = Renderer.shapeFromObject(shape);
 				if (sh) {
 					fn(sh);
 				}
@@ -58,26 +58,27 @@ export default class Skittle {
 	}
 
 	isPointInPath(x: number, y: number, shape: TSkittleAnyShape): boolean {
-		var sk = new Skittle();
+		var sk = new Layer();
 		sk.resize(this.width, this.height);
-		var skShape = SkittleRenderer.shapeFromObject(shape);
+		var skShape = Renderer.shapeFromObject(shape);
 		if (skShape) {
 			let path = skShape.createPath();
-			skShape.draw(sk.Renderer.context);
-			return sk.Renderer.context.isPointInPath(path, x, y);
+			let context = Renderer.getContext(sk);
+			skShape.draw(context);
+			return context.isPointInPath(path, x, y);
 		}
 		return false;
 	}
 
 	preloadImages() {
-		return new Promise<Skittle>((resolve, reject) => {
+		return new Promise<Layer>((resolve, reject) => {
 			var queue: any[] = [];
 			this.forEach((shape) => {
 				let src = null;
-				if (shape instanceof SkittleImage) {
+				if (shape instanceof Image) {
 					src = shape.src;
-				} else if (shape instanceof SkittleStyledShape) {
-					src = SkittleStyledShape.getImage(shape);
+				} else if (shape instanceof StyledShape) {
+					src = StyledShape.getImage(shape);
 				}
 				if (src) {
 					queue.push(ImageCache.queueImage(src));
@@ -94,22 +95,22 @@ export default class Skittle {
 		});
 	}
 
-	registerShape(name: string, shape: TSkittleShapeConstructor<SkittleShape>) {
-		SkittleRenderer.registerShape(name, shape);
+	registerShape(name: string, shape: TSkittleShapeConstructor<Shape>) {
+		Renderer.registerShape(name, shape);
 	}
 
-	removeShape(shape: TSkittleAnyShape): Skittle {
+	removeShape(shape: TSkittleAnyShape): Layer {
 		this.Shapes.delete(shape);
 		return this;
 	}
 
-	resize(width: number, height: number): Skittle {
+	resize(width: number, height: number): Layer {
 		this.height = height;
 		this.width = width;
 		return this;
 	}
 
-	setShapes(shapes: TSkittleAnyShape[]): Skittle {
+	setShapes(shapes: TSkittleAnyShape[]): Layer {
 		this.Shapes = new Set(shapes);
 		return this;
 	}
@@ -125,7 +126,7 @@ export default class Skittle {
 		return null;
 	}
 
-	target(canvas?: TSkittleCanvasTarget | string): Skittle {
+	target(canvas?: TSkittleCanvasTarget | string): Layer {
 		if (typeof canvas == 'string') {
 			let el: any = document.querySelector(canvas);
 			if (el instanceof HTMLCanvasElement) {

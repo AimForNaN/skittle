@@ -1,7 +1,7 @@
 import ImageCache from '../ImageCache';
-import SkittleShape from './SkittleShape';
+import Shape from './SkittleShape';
 
-export default abstract class SkittleStyledShape extends SkittleShape {
+export default abstract class StyledShape extends Shape {
 	protected style!: ISkittleStyle;
 
 	constructor(style: ISkittleStyle) {
@@ -61,7 +61,7 @@ export default abstract class SkittleStyledShape extends SkittleShape {
 	}
 
 	applyShadow(boxShadow: ISkittleShadow, ctx: CanvasRenderingContext2D) {
-		SkittleStyledShape.clearShadow(ctx);
+		StyledShape.clearShadow(ctx);
 		if (boxShadow.x || boxShadow.y) {
 			ctx.shadowColor = boxShadow.color;
 			ctx.shadowBlur = boxShadow.blur;
@@ -77,7 +77,7 @@ export default abstract class SkittleStyledShape extends SkittleShape {
 
 	applyStyle(ctx: CanvasRenderingContext2D) {
 		var { background, border, boxShadow, transform } =
-			SkittleStyledShape.normalizeStyle(this);
+			StyledShape.normalizeStyle(this);
 
 		this.applyBackground(background, ctx);
 		this.applyBorder(border, ctx);
@@ -96,16 +96,16 @@ export default abstract class SkittleStyledShape extends SkittleShape {
 		var path = this.createPath();
 		this.applyStyle(ctx);
 		ctx.fill(path);
-		SkittleStyledShape.clearShadow(ctx);
+		StyledShape.clearShadow(ctx);
 		ctx.stroke(path);
 	}
 
-	static fromObject(shape: TSkittleShape): SkittleShape | null {
+	static fromObject(shape: TSkittleShape): Shape | null {
 		return null;
 	}
 
-	static getImage(shape: SkittleStyledShape): string | null {
-		let { background } = SkittleStyledShape.normalizeStyle(shape);
+	static getImage(shape: StyledShape): string | null {
+		let { background } = StyledShape.normalizeStyle(shape);
 		if (background.image) {
 			return background.image;
 		}
@@ -176,18 +176,18 @@ export default abstract class SkittleStyledShape extends SkittleShape {
 		return ret;
 	}
 
-	static normalizeStyle(shape: SkittleStyledShape): ISkittleStyleBase {
+	static normalizeStyle(shape: StyledShape): ISkittleStyleBase {
 		var { style } = shape;
 		if (style) {
 			return {
-				background: SkittleStyledShape.normalizeBackground(
+				background: StyledShape.normalizeBackground(
 					style.background
 				),
-				border: SkittleStyledShape.normalizeBorder(style.border),
-				boxShadow: SkittleStyledShape.normalizeBoxShadow(
+				border: StyledShape.normalizeBorder(style.border),
+				boxShadow: StyledShape.normalizeBoxShadow(
 					style.boxShadow
 				),
-				transform: SkittleStyledShape.normalizeTransform(
+				transform: StyledShape.normalizeTransform(
 					style.transform,
 					style.transformOrigin
 				),
@@ -216,7 +216,7 @@ export default abstract class SkittleStyledShape extends SkittleShape {
 
 		if (typeof transform == 'object') {
 			if (transform.rotate) {
-				ret.rotate = SkittleStyledShape.toRadians(transform.rotate);
+				ret.rotate = StyledShape.toRadians(transform.rotate);
 			}
 
 			if (typeof transform.scale == 'object') {
@@ -240,7 +240,7 @@ export default abstract class SkittleStyledShape extends SkittleShape {
 						let { key, val } = groups;
 						switch (key) {
 							case 'rotate': {
-								ret.rotate = SkittleStyledShape.toRadians(parseInt(val));
+								ret.rotate = StyledShape.toRadians(parseInt(val));
 								break;
 							}
 						}

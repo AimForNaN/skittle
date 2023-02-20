@@ -1,4 +1,4 @@
-export enum SkittleOrigin {
+export enum Origin {
 	BottomLeft = 'bottom-left',
 	BottomRight = 'bottom-right',
 	Center = 'center',

@@ -1,7 +1,7 @@
-import SkittleStyledShape from './SkittleStyledShape';
-import { SkittleOrigin } from '../common';
+import StyledShape from './SkittleStyledShape';
+import { Origin } from '../common';
 
-export default class SkittleRect extends SkittleStyledShape {
+export default class Rect extends StyledShape {
 	x: number;
 	y: number;
 	width: number;
@@ -26,19 +26,19 @@ export default class SkittleRect extends SkittleStyledShape {
 		ctx: CanvasRenderingContext2D
 	) {
 		switch (transform.origin) {
-			case SkittleOrigin.BottomLeft: {
+			case Origin.BottomLeft: {
 				ctx.translate(0, this.height);
 				break;
 			}
-			case SkittleOrigin.BottomRight: {
+			case Origin.BottomRight: {
 				ctx.translate(this.width, this.height);
 				break;
 			}
-			case SkittleOrigin.Center: {
+			case Origin.Center: {
 				ctx.translate(this.width / 2, this.height / 2);
 				break;
 			}
-			case SkittleOrigin.TopRight: {
+			case Origin.TopRight: {
 				ctx.translate(this.width, 0);
 				break;
 			}
@@ -50,19 +50,19 @@ export default class SkittleRect extends SkittleStyledShape {
 		ctx.translate(transform.translate.x, transform.translate.y);
 
 		switch (transform.origin) {
-			case SkittleOrigin.BottomLeft: {
+			case Origin.BottomLeft: {
 				ctx.translate(0, -this.height);
 				break;
 			}
-			case SkittleOrigin.BottomRight: {
+			case Origin.BottomRight: {
 				ctx.translate(-this.width, -this.height);
 				break;
 			}
-			case SkittleOrigin.Center: {
+			case Origin.Center: {
 				ctx.translate(this.width / -2, this.height / -2);
 				break;
 			}
-			case SkittleOrigin.TopRight: {
+			case Origin.TopRight: {
 				ctx.translate(-this.width, 0);
 				break;
 			}
@@ -75,9 +75,9 @@ export default class SkittleRect extends SkittleStyledShape {
 		return path;
 	}
 
-	fromObject(shape: TSkittleShape): SkittleStyledShape | null {
+	fromObject(shape: TSkittleShape): StyledShape | null {
 		if (shape.type == 'rect') {
-			return new SkittleRect(
+			return new Rect(
 				shape.x,
 				shape.y,
 				shape.width,

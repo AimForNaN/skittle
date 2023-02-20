@@ -1,6 +1,6 @@
 <script setup>
 	import { onMounted, provide, ref, watch } from 'vue';
-	import { Skittle } from '../plugin';
+	import Skittle from '../plugin';
 
 	const $emit = defineEmits(['mousedown']);
 	const $props = defineProps({
@@ -22,7 +22,7 @@
 		},
 	});
 	const $canvas = ref(null);
-	const $stage = new Skittle();
+	const $stage = new Skittle.Layer();
 
 	function addShape(shape) {
 		$stage.addShape(shape);

@@ -15,10 +15,10 @@ In fact, you can change where each instance renders to at any point in your code
 For simplicity, we'll call these `render targets`.
 
 ```js
-import { Skittle } from '@truefusion/skittle';
+import Skittle from '@truefusion/skittle';
 
 // An OffscreenCanvas is used by default. (Eat your heart out, Safari!)
-const $skittle = new Skittle();
+const $skittle = new Skittle.Layer();
 
 // Set size of canvas.
 $skittle.resize(500, 500);
@@ -44,7 +44,7 @@ $skittle.toUrl('image/jpeg', 1).then((dataUrl) => {
 ```js
 // Set render target through constructor.
 const canvas = document.createElement('canvas');
-const $skittle = new Skittle(canvas);
+const $skittle = new Skittle.Layer(canvas);
 
 // Change render target.
 $skittle.target('#canvas');

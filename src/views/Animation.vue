@@ -3,7 +3,7 @@
 	import anime from 'animejs/lib/anime.es.js';
 	import Canvas from '../components/Canvas.vue';
 	import Shape from '../components/Shape.vue';
-	import { SkittleOrigin } from '../plugin';
+	import Skittle from '../plugin';
 
 	const $canvas = ref(null);
 	const timeline = anime.timeline({
@@ -32,7 +32,7 @@
 					rotate: 0,
 					scale: 1,
 				},
-				transformOrigin: SkittleOrigin.TopLeft,
+				transformOrigin: Skittle.Origin.TopLeft,
 			},
 		},
 		{
@@ -47,7 +47,7 @@
 					rotate: 0,
 					scale: 1,
 				},
-				transformOrigin: SkittleOrigin.TopRight,
+				transformOrigin: Skittle.Origin.TopRight,
 			},
 		},
 		{
@@ -62,7 +62,7 @@
 					rotate: 0,
 					scale: 1,
 				},
-				transformOrigin: SkittleOrigin.Center,
+				transformOrigin: Skittle.Origin.Center,
 			},
 		},
 		{
@@ -77,7 +77,7 @@
 					rotate: 0,
 					scale: 1,
 				},
-				transformOrigin: SkittleOrigin.BottomLeft,
+				transformOrigin: Skittle.Origin.BottomLeft,
 			},
 		},
 		{
@@ -92,7 +92,7 @@
 					rotate: 0,
 					scale: 1,
 				},
-				transformOrigin: SkittleOrigin.BottomRight,
+				transformOrigin: Skittle.Origin.BottomRight,
 			},
 		},
 	];
