@@ -4,8 +4,12 @@
 	"description": "API-agnostic, HTML5 canvas library.",
 	"main": "./dist/skittle.mjs",
 	"type": "module",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/truefusion/skittle.git"
+	},
 	"files": [
-		"./dist/*"
+		"dist/*"
 	],
 	"scripts": {
 		"dev": "vite",
@@ -15,6 +19,7 @@
 		"type-check": "vue-tsc --noEmit"
 	},
 	"keywords": [
+		"html5",
 		"canvas",
 		"skittle"
 	],
