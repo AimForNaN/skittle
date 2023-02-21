@@ -15,16 +15,6 @@
 			background: 'red',
 		},
 	};
-	const ghost = {
-		type: 'rect',
-		x: 0,
-		y: 0,
-		width: 200,
-		height: 200,
-		style: {
-			border: '1 solid blue',
-		},
-	};
 	const rects = [
 		{
 			type: 'rect',
@@ -62,7 +52,6 @@
 		<Shape :config="rect" v-for="rect in rects"></Shape>
 	</Canvas>
 	<Canvas ref="$hitCanvas" @mousedown="onMouseDown">
-		<Shape :config="ghost"></Shape>
 		<Shape :config="hit"></Shape>
 	</Canvas>
 </template>

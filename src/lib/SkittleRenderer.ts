@@ -7,14 +7,12 @@ export default class Renderer {
 		new Map();
 	protected transform: Matrix = new DOMMatrix();
 
-	applyTransform(ctx: CanvasRenderingContext2D) {
+	applyTransform(ctx: TSkittleRenderingContext) {
 		var t = this.transform;
-		if (ctx instanceof CanvasRenderingContext2D) {
-			ctx.transform(t.a, t.b, t.c, t.d, t.e, t.f);
-		}
+		ctx.transform(t.a, t.b, t.c, t.d, t.e, t.f);
 	}
 
-	draw(shape: Shape, context: CanvasRenderingContext2D): Renderer {
+	draw(shape: Shape, context: TSkittleRenderingContext): Renderer {
 		if (shape instanceof StyledShape) {
 			this.applyTransform(context);
 			shape.applyStyle(context);

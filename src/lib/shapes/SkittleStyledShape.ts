@@ -21,7 +21,7 @@ export default abstract class StyledShape extends Shape {
 		}
 	}
 
-	applyBackground(ctx: CanvasRenderingContext2D) {
+	applyBackground(ctx: TSkittleRenderingContext) {
 		var { background } = this;
 		if (background.image) {
 			if (ImageCache.has(background.image)) {
@@ -46,7 +46,7 @@ export default abstract class StyledShape extends Shape {
 		}
 	}
 
-	applyBorder(ctx: CanvasRenderingContext2D) {
+	applyBorder(ctx: TSkittleRenderingContext) {
 		ctx.strokeStyle = 'transparent';
 
 		var { border } = this;
@@ -72,7 +72,7 @@ export default abstract class StyledShape extends Shape {
 		}
 	}
 
-	applyShadow(ctx: CanvasRenderingContext2D) {
+	applyShadow(ctx: TSkittleRenderingContext) {
 		StyledShape.clearShadow(ctx);
 
 		var { shadow } = this;
@@ -84,28 +84,26 @@ export default abstract class StyledShape extends Shape {
 		}
 	}
 
-	applyTransform(ctx: CanvasRenderingContext2D) {
+	applyTransform(ctx: TSkittleRenderingContext) {
 		var t = this.transform;
-		if (ctx instanceof CanvasRenderingContext2D) {
-			ctx.transform(t.a, t.b, t.c, t.d, t.e, t.f);
-		}
+		ctx.transform(t.a, t.b, t.c, t.d, t.e, t.f);
 	}
 
-	applyStyle(ctx: CanvasRenderingContext2D) {
+	applyStyle(ctx: TSkittleRenderingContext) {
 		this.applyBackground(ctx);
 		this.applyBorder(ctx);
 		this.applyShadow(ctx);
 		this.applyTransform(ctx);
 	}
 
-	static clearShadow(ctx: CanvasRenderingContext2D) {
+	static clearShadow(ctx: TSkittleRenderingContext) {
 		ctx.shadowColor = 'transparent';
 		ctx.shadowBlur = 0;
 		ctx.shadowOffsetX = 0;
 		ctx.shadowOffsetY = 0;
 	}
 
-	draw(ctx: CanvasRenderingContext2D): void {
+	draw(ctx: TSkittleRenderingContext): void {
 		var path = this.createPath();
 		ctx.fill(path);
 		StyledShape.clearShadow(ctx);
