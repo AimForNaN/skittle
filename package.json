@@ -11,6 +11,9 @@
 	"files": [
 		"dist/*"
 	],
+	"publishConfig": {
+		"access": "public"
+	},
 	"scripts": {
 		"dev": "vite",
 		"build": "run-p type-check build-only",
