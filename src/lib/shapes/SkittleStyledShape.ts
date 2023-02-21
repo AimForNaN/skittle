@@ -85,9 +85,13 @@ export default abstract class StyledShape extends Shape {
 		}
 	}
 
-	applyTransform(ctx: CanvasRenderingContext2D) {
+	applyTransform(input: CanvasRenderingContext2D | Matrix) {
 		var t = this.transform;
-		ctx.transform(t.a, t.b, t.c, t.d, t.e, t.f);
+		if (input instanceof CanvasRenderingContext2D) {
+			input.transform(t.a, t.b, t.c, t.d, t.e, t.f);
+		} else {
+			this.transform = compose(input, t);
+		}
 	}
 
 	applyStyle(ctx: CanvasRenderingContext2D) {

@@ -49,15 +49,14 @@
 	}
 
 	watch($props, () => {
-		$stage.Renderer.setTransform({
-			rotate: $props.rotation,
-			scale: $props.scale,
-			translate: {
-				x: $props.x,
-				y: $props.y,
-			},
-		});
+		var r = $stage.Renderer;
+		r.resetTransform();
+		r.rotate($props.rotation);
+		r.scale($props.scale, $props.scale);
+		r.translate($props.x, $props.y);
 		draw();
+	}, {
+		immediate: true,
 	});
 
 	defineExpose({

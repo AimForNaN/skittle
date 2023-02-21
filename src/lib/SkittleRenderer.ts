@@ -1,13 +1,15 @@
 import type Layer from './Skittle';
 import type Shape from './shapes/SkittleShape';
 import StyledShape from './shapes/SkittleStyledShape';
+import { compose, rotateDEG, scale, translate, type Matrix } from 'transformation-matrix';
 
 export default class Renderer {
 	protected static Shapes: Map<string, TSkittleShapeConstructor<Shape>> =
 		new Map();
-	protected transform: TSkittleTransformValue = '';
+	protected transform: Matrix = new DOMMatrix();
 
-	draw(layer: Layer, ctx?: TSkittleRenderingContext): Renderer {
+	draw(layer: Layer): Renderer {
+		var ctx = Renderer.getContext(layer);
 		Renderer.wipe(layer);
 
 		if (!ctx) {
@@ -18,6 +20,7 @@ export default class Renderer {
 			if (ctx) {
 				ctx.save();
 				if (shape instanceof StyledShape) {
+					shape.applyTransform(this.transform);
 					shape.applyStyle(ctx);
 				}
 				shape.draw(ctx);
@@ -36,42 +39,33 @@ export default class Renderer {
 		Renderer.Shapes.set(name, shape);
 	}
 
-	static resetTransform(layer: Layer) {
-		var context = Renderer.getContext(layer);
-		if (context) {
-			context.resetTransform();
-		}
+	resetTransform() {
+		this.transform = new DOMMatrix();
 	}
 
 	static restore(layer: Layer) {
-		var context = Renderer.getContext(layer);
-		if (context) {
-			context.restore();
+		var ctx = Renderer.getContext(layer);
+		if (ctx) {
+			ctx.restore();
 		}
 	}
 
-	static rotate(layer: Layer, angle: number) {
-		var context = Renderer.getContext(layer);
-		if (context) {
-			context.rotate(angle);
-		}
+	rotate(deg: number) {
+		this.transform = compose(this.transform, rotateDEG(deg));
 	}
 
 	static save(layer: Layer) {
-		var context = Renderer.getContext(layer);
-		if (context) {
-			context.save();
+		var ctx = Renderer.getContext(layer);
+		if (ctx) {
+			ctx.save();
 		}
 	}
 
-	static scale(layer: Layer, x: number, y: number) {
-		var context = Renderer.getContext(layer);
-		if (context) {
-			context.scale(x, y);
-		}
+	scale(x: number, y: number) {
+		this.transform = compose(this.transform, scale(x, y));
 	}
 
-	setTransform(transform: TSkittleTransformValue) {
+	setTransform(transform: Matrix) {
 		this.transform = transform;
 	}
 
@@ -80,18 +74,15 @@ export default class Renderer {
 		return factory ? factory.prototype.fromObject(shape) : null;
 	}
 
-	static translate(layer: Layer, x: number, y: number) {
-		var context = Renderer.getContext(layer);
-		if (context) {
-			context.translate(x, y);
-		}
+	translate(x: number, y: number) {
+		this.transform = compose(this.transform, translate(x, y));
 	}
 
 	static wipe(layer: Layer) {
-		var context = Renderer.getContext(layer);
-		if (context) {
-			context.resetTransform();
-			context.clearRect(0, 0, layer.width, layer.height);
+		var ctx = Renderer.getContext(layer);
+		if (ctx) {
+			ctx.resetTransform();
+			ctx.clearRect(0, 0, layer.width, layer.height);
 		}
 	}
 }
