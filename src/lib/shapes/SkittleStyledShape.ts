@@ -277,8 +277,4 @@ export default abstract class StyledShape extends Shape {
 			style.transformOrigin
 		);
 	}
-
-	static toRadians(v: number) {
-		return (Math.PI / 180) * v;
-	}
 }
