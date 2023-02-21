@@ -4,7 +4,6 @@ import {
 	scale,
 	translate,
 	type Matrix,
-	type MatrixDescriptor,
 } from 'transformation-matrix';
 import ImageCache from '../ImageCache';
 import Shape from './SkittleShape';
@@ -13,7 +12,7 @@ export default abstract class StyledShape extends Shape {
 	protected background!: ISkittleBackground;
 	protected border!: ISkittleBorder;
 	protected shadow!: ISkittleShadow;
-	protected transform!: Matrix;
+	protected transform: Matrix = new DOMMatrix();
 
 	constructor(style?: ISkittleStyle) {
 		super();
@@ -85,12 +84,10 @@ export default abstract class StyledShape extends Shape {
 		}
 	}
 
-	applyTransform(input: CanvasRenderingContext2D | Matrix) {
+	applyTransform(ctx: CanvasRenderingContext2D) {
 		var t = this.transform;
-		if (input instanceof CanvasRenderingContext2D) {
-			input.transform(t.a, t.b, t.c, t.d, t.e, t.f);
-		} else {
-			this.transform = compose(input, t);
+		if (ctx instanceof CanvasRenderingContext2D) {
+			ctx.transform(t.a, t.b, t.c, t.d, t.e, t.f);
 		}
 	}
 

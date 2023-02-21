@@ -20,7 +20,14 @@ export default class Renderer {
 			if (ctx) {
 				ctx.save();
 				if (shape instanceof StyledShape) {
-					shape.applyTransform(this.transform);
+					ctx.transform(
+						this.transform.a,
+						this.transform.b,
+						this.transform.c,
+						this.transform.d,
+						this.transform.e,
+						this.transform.f
+					);
 					shape.applyStyle(ctx);
 				}
 				shape.draw(ctx);
