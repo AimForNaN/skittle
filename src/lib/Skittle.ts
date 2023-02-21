@@ -68,15 +68,14 @@ export default class Layer {
 		this.canvas.height = h;
 	}
 
-	isPointInPath(x: number, y: number, shape: Shape): boolean {
+	isPointInShape(x: number, y: number, shape: Shape): boolean {
 		var layer = new Layer();
 		layer.resize(this.width, this.height);
 
 		var { context } = layer;
-		var path = shape.createPath();
 		this.Renderer.draw(shape, context);
 
-		return context.isPointInPath(path, x, y);
+		return context.isPointInPath(shape.createPath(), x, y);
 	}
 
 	preloadImages() {
@@ -127,10 +126,11 @@ export default class Layer {
 	shapeAtPoint(x: number, y: number): TSkittleAnyShape | null {
 		var hit: Shape[] = [];
 		this.forEach((shape) => {
-			if (this.isPointInPath(x, y, shape)) {
+			if (this.isPointInShape(x, y, shape)) {
 				hit.push(shape);
 			}
 		});
+
 		hit.reverse();
 		var [first] = hit;
 		return first;
