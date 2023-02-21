@@ -1,5 +1,5 @@
 <script setup>
-	import { reactive, ref } from 'vue';
+	import { onMounted, reactive, ref } from 'vue';
 	import Canvas from "../components/Canvas.vue";
 	import Shape from "../components/Shape.vue";
 
@@ -15,11 +15,21 @@
 			background: 'red',
 		},
 	};
+	const ghost = {
+		type: 'rect',
+		x: 0,
+		y: 0,
+		width: 200,
+		height: 200,
+		style: {
+			border: '1 solid blue',
+		},
+	};
 	const rects = [
 		{
 			type: 'rect',
-			x: 50,
-			y: 50,
+			x: 0,
+			y: 0,
 			width: 200,
 			height: 200,
 			style: {
@@ -38,13 +48,21 @@
 		hit.style.background = shape ? 'cyan' : 'red';
 		$hitCanvas.value.draw();
 	}
+
+	onMounted(() => {
+		onMouseDown({
+			offsetX: 0,
+			offsetY: 0,
+		});
+	});
 </script>
 
 <template>
-	<Canvas ref="$canvas">
+	<Canvas :x="100" :y="100" ref="$canvas">
 		<Shape :config="rect" v-for="rect in rects"></Shape>
 	</Canvas>
 	<Canvas ref="$hitCanvas" @mousedown="onMouseDown">
+		<Shape :config="ghost"></Shape>
 		<Shape :config="hit"></Shape>
 	</Canvas>
 </template>
