@@ -49,14 +49,14 @@
 	}
 
 	watch($props, () => {
-		$stage.Renderer.setTransform([
-			$props.scale,
-			$props.rotation,
-			-$props.rotation,
-			$props.scale,
-			$props.x,
-			$props.y,
-		]);
+		$stage.Renderer.setTransform({
+			rotate: $props.rotation,
+			scale: $props.scale,
+			translate: {
+				x: $props.x,
+				y: $props.y,
+			},
+		});
 		draw();
 	});
 

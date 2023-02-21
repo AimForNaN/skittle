@@ -1,18 +1,29 @@
+import {
+	compose,
+	rotateDEG,
+	scale,
+	translate,
+	type Matrix,
+	type MatrixDescriptor,
+} from 'transformation-matrix';
 import ImageCache from '../ImageCache';
 import Shape from './SkittleShape';
 
 export default abstract class StyledShape extends Shape {
-	protected style!: ISkittleStyle;
+	protected background!: ISkittleBackground;
+	protected border!: ISkittleBorder;
+	protected shadow!: ISkittleShadow;
+	protected transform!: Matrix;
 
-	constructor(style: ISkittleStyle) {
+	constructor(style?: ISkittleStyle) {
 		super();
-		this.setStyle(style);
+		if (style) {
+			this.setStyle(style);
+		}
 	}
 
-	applyBackground(
-		background: ISkittleBackground,
-		ctx: CanvasRenderingContext2D
-	) {
+	applyBackground(ctx: CanvasRenderingContext2D) {
+		var { background } = this;
 		if (background.image) {
 			if (ImageCache.has(background.image)) {
 				let pattern = ctx.createPattern(
@@ -36,8 +47,10 @@ export default abstract class StyledShape extends Shape {
 		}
 	}
 
-	applyBorder(border: ISkittleBorder, ctx: CanvasRenderingContext2D) {
+	applyBorder(ctx: CanvasRenderingContext2D) {
 		ctx.strokeStyle = 'transparent';
+
+		var { border } = this;
 		if (border.width) {
 			ctx.strokeStyle = border.color;
 			ctx.lineWidth = border.width;
@@ -60,29 +73,28 @@ export default abstract class StyledShape extends Shape {
 		}
 	}
 
-	applyShadow(boxShadow: ISkittleShadow, ctx: CanvasRenderingContext2D) {
+	applyShadow(ctx: CanvasRenderingContext2D) {
 		StyledShape.clearShadow(ctx);
-		if (boxShadow.x || boxShadow.y) {
-			ctx.shadowColor = boxShadow.color;
-			ctx.shadowBlur = boxShadow.blur;
-			ctx.shadowOffsetX = boxShadow.x;
-			ctx.shadowOffsetY = boxShadow.y;
+
+		var { shadow } = this;
+		if (shadow.x || shadow.y) {
+			ctx.shadowColor = shadow.color;
+			ctx.shadowBlur = shadow.blur;
+			ctx.shadowOffsetX = shadow.x;
+			ctx.shadowOffsetY = shadow.y;
 		}
 	}
 
-	abstract applyTransform(
-		transform: ISkittleTransform,
-		ctx: CanvasRenderingContext2D
-	): void;
+	applyTransform(ctx: CanvasRenderingContext2D) {
+		var t = this.transform;
+		ctx.transform(t.a, t.b, t.c, t.d, t.e, t.f);
+	}
 
 	applyStyle(ctx: CanvasRenderingContext2D) {
-		var { background, border, boxShadow, transform } =
-			StyledShape.normalizeStyle(this);
-
-		this.applyBackground(background, ctx);
-		this.applyBorder(border, ctx);
-		this.applyShadow(boxShadow, ctx);
-		this.applyTransform(transform, ctx);
+		this.applyBackground(ctx);
+		this.applyBorder(ctx);
+		this.applyShadow(ctx);
+		this.applyTransform(ctx);
 	}
 
 	static clearShadow(ctx: CanvasRenderingContext2D) {
@@ -99,10 +111,6 @@ export default abstract class StyledShape extends Shape {
 		ctx.stroke(path);
 	}
 
-	static fromObject(shape: TSkittleShape): Shape | null {
-		return null;
-	}
-
 	static getImage(shape: StyledShape): string | null {
 		let { background } = StyledShape.normalizeStyle(shape);
 		if (background.image) {
@@ -111,147 +119,154 @@ export default abstract class StyledShape extends Shape {
 		return null;
 	}
 
-	static normalizeBackground(
-		bg?: TSkittleBackgroundValue
+	protected normalizeBackground(
+		background: TSkittleBackgroundValue
 	): ISkittleBackground {
-		if (typeof bg == 'object') {
-			return bg;
-		}
-
 		var ret: ISkittleBackground = {
 			color: 'transparent',
 			image: '',
 			repeat: 'repeat',
 		};
-		if (bg && typeof bg == 'string') {
-			var [color, repeat] = bg.split(' ');
-			if (color.startsWith('url')) {
-				ret.image = color ?? ret.image;
-				ret.repeat = repeat ?? ret.repeat;
-			} else {
-				ret.color = color ?? ret.color;
+
+		switch (typeof background) {
+			case 'object': {
+				ret.color = background.color;
+				ret.image = background.image;
+				ret.repeat = background.repeat;
+				break;
+			}
+			case 'string': {
+				let [color, repeat] = background.split(' ');
+				if (color.startsWith('url')) {
+					ret.image = color ?? ret.image;
+					ret.repeat = repeat ?? ret.repeat;
+				} else {
+					ret.color = color ?? ret.color;
+				}
+				break;
 			}
 		}
 		return ret;
 	}
 
-	static normalizeBorder(border?: TSkittleBorderValue): ISkittleBorder {
-		if (typeof border == 'object') {
-			return border;
-		}
-
+	protected normalizeBorder(border?: TSkittleBorderValue): ISkittleBorder {
 		var ret: ISkittleBorder = {
 			color: 'transparent',
 			style: 'solid',
 			width: 0,
 		};
-		if (border && typeof border == 'string') {
-			var [width, style, color] = border.split(' ');
-			ret.color = color ?? ret.color;
-			ret.style = style ?? ret.style;
-			ret.width = parseInt(width ?? ret.width);
+		switch (typeof border) {
+			case 'object': {
+				ret.color = border.color;
+				ret.style = border.style;
+				ret.width = border.width;
+				break;
+			}
+			case 'string': {
+				var [width, style, color] = border.split(' ');
+				ret.color = color ?? ret.color;
+				ret.style = style ?? ret.style;
+				ret.width = parseInt(width ?? ret.width);
+				break;
+			}
 		}
 		return ret;
 	}
 
-	static normalizeBoxShadow(boxShadow?: TSkittleShadowValue): ISkittleShadow {
-		if (typeof boxShadow == 'object') {
-			return boxShadow;
-		}
-
+	protected normalizeBoxShadow(boxShadow?: TSkittleShadowValue): ISkittleShadow {
 		var ret: ISkittleShadow = {
 			x: 0,
 			y: 0,
 			blur: 0,
 			color: 'transparent',
 		};
-		if (boxShadow && typeof boxShadow == 'string') {
-			var [x, y, blur, color] = boxShadow.split(' ');
-			ret.blur = parseInt(blur ?? ret.blur);
-			ret.color = color ?? ret.color;
-			ret.x = parseInt(x ?? ret.x);
-			ret.y = parseInt(y ?? ret.y);
+		switch (typeof boxShadow) {
+			case 'object': {
+				ret.blur = boxShadow.blur;
+				ret.color = boxShadow.color;
+				ret.x = boxShadow.x;
+				ret.y = boxShadow.y;
+				break;
+			}
+			case 'string': {
+				var [x, y, blur, color] = boxShadow.split(' ');
+				ret.blur = parseInt(blur ?? ret.blur);
+				ret.color = color ?? ret.color;
+				ret.x = parseInt(x ?? ret.x);
+				ret.y = parseInt(y ?? ret.y);
+				break;
+			}
 		}
 		return ret;
 	}
 
-	static normalizeStyle(shape: StyledShape): ISkittleStyleBase {
-		var { style } = shape;
-		if (style) {
-			return {
-				background: StyledShape.normalizeBackground(
-					style.background
-				),
-				border: StyledShape.normalizeBorder(style.border),
-				boxShadow: StyledShape.normalizeBoxShadow(
-					style.boxShadow
-				),
-				transform: StyledShape.normalizeTransform(
-					style.transform,
-					style.transformOrigin
-				),
-			};
-		}
-
-		return {} as ISkittleStyle;
-	}
-
-	static normalizeTransform(
+	protected normalizeTransform(
 		transform?: TSkittleTransformValue,
 		origin: TSkittleTransformOriginValue = 'center'
-	): ISkittleTransform {
-		var ret: ISkittleTransform = {
-			origin,
-			rotate: 0,
-			scale: {
-				x: 1,
-				y: 1,
-			},
-			translate: {
-				x: 0,
-				y: 0,
-			},
-		};
-
-		if (typeof transform == 'object') {
-			if (transform.rotate) {
-				ret.rotate = StyledShape.toRadians(transform.rotate);
+	): Matrix {
+		var ret: Matrix = new DOMMatrix();
+		switch (typeof transform) {
+			case 'object': {
+				ret = this.normalizeTransformObject(transform);
+				break;
 			}
-
-			if (typeof transform.scale == 'object') {
-				ret.scale = transform.scale;
-			} else if (typeof transform.scale == 'number') {
-				ret.scale.x = transform.scale;
-				ret.scale.y = transform.scale;
-			}
-
-			if (typeof transform.translate == 'object') {
-				ret.translate = transform.translate;
+			case 'string': {
+				ret = this.normalizeTransformString(transform);
+				break;
 			}
 		}
+		return ret;
+	}
 
-		if (transform && typeof transform == 'string') {
-			transform.split(' ').forEach((val) => {
-				let matches = val.match(/(?<key>\w+)\((?<val>\w+)\)/);
-				if (matches) {
-					let { groups } = matches;
-					if (groups) {
-						let { key, val } = groups;
-						switch (key) {
-							case 'rotate': {
-								ret.rotate = StyledShape.toRadians(parseInt(val));
-								break;
-							}
+	protected normalizeTransformObject(
+		transform: ISkittleTransform,
+		transformOrigin: TSkittleTransformOriginValue = 'center'
+	): Matrix {
+		var ret: Matrix[] = [];
+		if (transform.rotate) {
+			ret.push(rotateDEG(transform.rotate));
+		}
+
+		if (typeof transform.scale == 'object') {
+			ret.push(scale(transform.scale.x, transform.scale.y));
+		} else if (typeof transform.scale == 'number') {
+			ret.push(scale(transform.scale, transform.scale));
+		}
+
+		if (typeof transform.translate == 'object') {
+			ret.push(translate(transform.translate.x, transform.translate.y));
+		}
+		return compose(...ret);
+	}
+
+	protected normalizeTransformString(
+		transform: string,
+		transformOrigin: TSkittleTransformOriginValue = 'center'
+	): Matrix {
+		var ret: Matrix[] = [];
+		transform.split(' ').forEach((val) => {
+			let matches = val.match(/(?<key>\w+)\((?<val>\w+)\)/);
+			if (matches) {
+				let { groups } = matches;
+				if (groups) {
+					let { key, val } = groups;
+					switch (key) {
+						case 'rotate': {
+							ret.push(rotateDEG(parseInt(val)));
+							break;
 						}
 					}
 				}
-			});
-		}
-		return ret;
+			}
+		});
+		return compose(...ret);
 	}
 
 	setStyle(style: ISkittleStyle) {
-		this.style = style;
+		this.background = this.normalizeBackground(style.background);
+		this.border = this.normalizeBorder(style.border);
+		this.shadow = this.normalizeBoxShadow(style.boxShadow);
+		this.transform = this.normalizeTransform(style.transform, style.transformOrigin);
 	}
 
 	static toRadians(v: number) {

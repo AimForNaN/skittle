@@ -1,5 +1,6 @@
 import StyledShape from './SkittleStyledShape';
 import { Origin } from '../common';
+import { compose, translate, type Matrix } from 'transformation-matrix';
 
 export default class Rect extends StyledShape {
 	x: number;
@@ -14,59 +15,12 @@ export default class Rect extends StyledShape {
 		height: number,
 		style: ISkittleStyle
 	) {
-		super(style);
+		super();
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
-	}
-
-	applyTransform(
-		transform: ISkittleTransform,
-		ctx: CanvasRenderingContext2D
-	) {
-		switch (transform.origin) {
-			case Origin.BottomLeft: {
-				ctx.translate(0, this.height);
-				break;
-			}
-			case Origin.BottomRight: {
-				ctx.translate(this.width, this.height);
-				break;
-			}
-			case Origin.Center: {
-				ctx.translate(this.width / 2, this.height / 2);
-				break;
-			}
-			case Origin.TopRight: {
-				ctx.translate(this.width, 0);
-				break;
-			}
-		}
-
-		ctx.translate(this.x, this.y);
-		ctx.rotate(transform.rotate);
-		ctx.scale(transform.scale.x, transform.scale.y)
-		ctx.translate(transform.translate.x, transform.translate.y);
-
-		switch (transform.origin) {
-			case Origin.BottomLeft: {
-				ctx.translate(0, -this.height);
-				break;
-			}
-			case Origin.BottomRight: {
-				ctx.translate(-this.width, -this.height);
-				break;
-			}
-			case Origin.Center: {
-				ctx.translate(this.width / -2, this.height / -2);
-				break;
-			}
-			case Origin.TopRight: {
-				ctx.translate(-this.width, 0);
-				break;
-			}
-		}
+		this.setStyle(style);
 	}
 
 	createPath(): Path2D {
@@ -86,5 +40,55 @@ export default class Rect extends StyledShape {
 			);
 		}
 		return null;
+	}
+
+	protected normalizeTransform(
+		transform?: TSkittleTransformValue,
+		origin: TSkittleTransformOriginValue = 'center'
+	): Matrix {
+		var ret: Matrix[] = [];
+
+		switch (origin) {
+			case Origin.BottomLeft: {
+				ret.push(translate(0, this.height));
+				break;
+			}
+			case Origin.BottomRight: {
+				ret.push(translate(this.width, this.height));
+				break;
+			}
+			case Origin.Center: {
+				ret.push(translate(this.width / 2, this.height / 2));
+				break;
+			}
+			case Origin.TopRight: {
+				ret.push(translate(this.width, 0));
+				break;
+			}
+		}
+
+		ret.push(translate(this.x, this.y));
+		ret.push(super.normalizeTransform(transform, origin));
+
+		switch (origin) {
+			case Origin.BottomLeft: {
+				ret.push(translate(0, -this.height));
+				break;
+			}
+			case Origin.BottomRight: {
+				ret.push(translate(-this.width, -this.height));
+				break;
+			}
+			case Origin.Center: {
+				ret.push(translate(this.width / -2, this.height / -2));
+				break;
+			}
+			case Origin.TopRight: {
+				ret.push(translate(-this.width, 0));
+				break;
+			}
+		}
+
+		return compose(...ret);
 	}
 }

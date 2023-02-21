@@ -1,14 +1,12 @@
 import type Layer from './Skittle';
 import type Shape from './shapes/SkittleShape';
 import StyledShape from './shapes/SkittleStyledShape';
-import type { Matrix } from "transformation-matrix";
+import type { Matrix } from 'transformation-matrix';
 
 export default class Renderer {
-	protected static Shapes: Map<
-		string,
-		TSkittleShapeConstructor<Shape>
-	> = new Map();
-	protected transform: Matrix = new DOMMatrix();
+	protected static Shapes: Map<string, TSkittleShapeConstructor<Shape>> =
+		new Map();
+	protected transform: TSkittleTransformValue = '';
 
 	draw(layer: Layer, ctx?: TSkittleRenderingContext): Renderer {
 		Renderer.wipe(layer);
@@ -17,7 +15,6 @@ export default class Renderer {
 			ctx = Renderer.getContext(layer);
 		}
 
-		ctx.setTransform(this.transform);
 		layer.forEach((shape) => {
 			if (ctx) {
 				ctx.save();
@@ -36,10 +33,7 @@ export default class Renderer {
 		return layer.canvas.getContext('2d') as CanvasRenderingContext2D;
 	}
 
-	static registerShape(
-		name: string,
-		shape: TSkittleShapeConstructor<Shape>
-	) {
+	static registerShape(name: string, shape: TSkittleShapeConstructor<Shape>) {
 		Renderer.Shapes.set(name, shape);
 	}
 
@@ -78,11 +72,8 @@ export default class Renderer {
 		}
 	}
 
-	setTransform(matrix: Matrix | number[]) {
-		if (Array.isArray(matrix)) {
-			matrix = new DOMMatrix(matrix);
-		}
-		this.transform = matrix;
+	setTransform(transform: TSkittleTransformValue) {
+		this.transform = transform;
 	}
 
 	static shapeFromObject(shape: ISkittleShape): Shape | null {
