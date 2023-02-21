@@ -261,6 +261,16 @@ export default abstract class StyledShape extends Shape {
 							ret.push(rotateDEG(parseInt(val)));
 							break;
 						}
+						case 'scale': {
+							let s = parseInt(val);
+							ret.push(scale(s, s));
+							break;
+						}
+						case 'translate': {
+							let [x,y] = val.split(',');
+							ret.push(translate(parseInt(x), parseInt(y)));
+							break;
+						}
 					}
 				}
 			}
