@@ -1,4 +1,3 @@
-import type Layer from './Skittle';
 import type Shape from './shapes/SkittleShape';
 import StyledShape from './shapes/SkittleStyledShape';
 import { compose, rotateDEG, scale, translate, type Matrix } from 'transformation-matrix';
