@@ -22,8 +22,8 @@
 	const rects = [
 		{
 			type: 'rect',
-			x: 50,
-			y: 50,
+			x: 0,
+			y: 0,
 			width: 100,
 			height: 50,
 			style: {
@@ -37,8 +37,8 @@
 		},
 		{
 			type: 'rect',
-			x: 550,
-			y: 50,
+			x: 500,
+			y: 0,
 			width: 100,
 			height: 50,
 			style: {
@@ -52,8 +52,8 @@
 		},
 		{
 			type: 'rect',
-			x: 300,
-			y: 175,
+			x: 250,
+			y: 125,
 			width: 100,
 			height: 50,
 			style: {
@@ -67,8 +67,8 @@
 		},
 		{
 			type: 'rect',
-			x: 50,
-			y: 300,
+			x: 0,
+			y: 250,
 			width: 100,
 			height: 50,
 			style: {
@@ -82,8 +82,8 @@
 		},
 		{
 			type: 'rect',
-			x: 550,
-			y: 300,
+			x: 500,
+			y: 250,
 			width: 100,
 			height: 50,
 			style: {
@@ -96,6 +96,16 @@
 			},
 		},
 	];
+	const ruler = {
+		type: 'rect',
+		x: 0,
+		y: 0,
+		width: 150,
+		height: 150,
+		style: {
+			border: '1 solid blue',
+		},
+	};
 
 	timeline.add({
 		targets: rects.map(rect => rect.style.transform),
@@ -106,7 +116,10 @@
 </script>
 
 <template>
-	<Canvas ref="$canvas">
+	<Canvas>
+		<Shape :config="ruler"></Shape>
+	</Canvas>
+	<Canvas :x="150" :y="150" :scale="0.5" :rotation="15" ref="$canvas">
 		<Shape :config="rect" v-for="rect in rects"></Shape>
 	</Canvas>
 </template>
