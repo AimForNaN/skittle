@@ -94,7 +94,6 @@ export default abstract class StyledShape extends Shape {
 
 	draw(ctx: CanvasRenderingContext2D): void {
 		var path = this.createPath();
-		this.applyStyle(ctx);
 		ctx.fill(path);
 		StyledShape.clearShadow(ctx);
 		ctx.stroke(path);

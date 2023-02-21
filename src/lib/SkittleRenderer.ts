@@ -1,12 +1,14 @@
 import type Layer from './Skittle';
 import type Shape from './shapes/SkittleShape';
+import StyledShape from './shapes/SkittleStyledShape';
+import type { Matrix } from "transformation-matrix";
 
 export default class Renderer {
 	protected static Shapes: Map<
 		string,
 		TSkittleShapeConstructor<Shape>
 	> = new Map();
-	protected transform: DOMMatrix = new DOMMatrix();
+	protected transform: Matrix = new DOMMatrix();
 
 	draw(layer: Layer, ctx?: TSkittleRenderingContext): Renderer {
 		Renderer.wipe(layer);
@@ -19,6 +21,9 @@ export default class Renderer {
 		layer.forEach((shape) => {
 			if (ctx) {
 				ctx.save();
+				if (shape instanceof StyledShape) {
+					shape.applyStyle(ctx);
+				}
 				shape.draw(ctx);
 				ctx.restore();
 			}
@@ -73,7 +78,7 @@ export default class Renderer {
 		}
 	}
 
-	setTransform(matrix: DOMMatrix | number[]) {
+	setTransform(matrix: Matrix | number[]) {
 		if (Array.isArray(matrix)) {
 			matrix = new DOMMatrix(matrix);
 		}
