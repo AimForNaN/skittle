@@ -51,7 +51,7 @@ export default class Renderer {
 	}
 
 	rotate(deg: number) {
-		this.transform = compose(this.transform, rotateDEG(deg));
+		this.transform = compose(rotateDEG(deg), this.transform);
 	}
 
 	static save(layer: Layer) {
@@ -62,7 +62,7 @@ export default class Renderer {
 	}
 
 	scale(x: number, y: number) {
-		this.transform = compose(this.transform, scale(x, y));
+		this.transform = compose(scale(x, y), this.transform);
 	}
 
 	setTransform(transform: Matrix) {
@@ -75,7 +75,7 @@ export default class Renderer {
 	}
 
 	translate(x: number, y: number) {
-		this.transform = compose(this.transform, translate(x, y));
+		this.transform = compose(translate(x, y), this.transform);
 	}
 
 	static wipe(layer: Layer) {

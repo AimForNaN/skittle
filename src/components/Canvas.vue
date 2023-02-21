@@ -51,8 +51,8 @@
 	watch($props, () => {
 		var r = $stage.Renderer;
 		r.resetTransform();
-		r.rotate($props.rotation);
 		r.scale($props.scale, $props.scale);
+		r.rotate($props.rotation);
 		r.translate($props.x, $props.y);
 		draw();
 	}, {

@@ -229,14 +229,14 @@ export default abstract class StyledShape extends Shape {
 		transformOrigin: TSkittleTransformOriginValue = 'center'
 	): Matrix {
 		var ret: Matrix[] = [];
-		if (transform.rotate) {
-			ret.push(rotateDEG(transform.rotate));
-		}
-
 		if (typeof transform.scale == 'object') {
 			ret.push(scale(transform.scale.x, transform.scale.y));
 		} else if (typeof transform.scale == 'number') {
 			ret.push(scale(transform.scale, transform.scale));
+		}
+
+		if (transform.rotate) {
+			ret.push(rotateDEG(transform.rotate));
 		}
 
 		if (typeof transform.translate == 'object') {
