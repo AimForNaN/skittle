@@ -8,6 +8,13 @@ export default class Renderer {
 		new Map();
 	protected transform: Matrix = new DOMMatrix();
 
+	applyTransform(ctx: CanvasRenderingContext2D) {
+		var t = this.transform;
+		if (ctx instanceof CanvasRenderingContext2D) {
+			ctx.transform(t.a, t.b, t.c, t.d, t.e, t.f);
+		}
+	}
+
 	draw(layer: Layer): Renderer {
 		var ctx = Renderer.getContext(layer);
 		Renderer.wipe(layer);
@@ -20,14 +27,7 @@ export default class Renderer {
 			if (ctx) {
 				ctx.save();
 				if (shape instanceof StyledShape) {
-					ctx.transform(
-						this.transform.a,
-						this.transform.b,
-						this.transform.c,
-						this.transform.d,
-						this.transform.e,
-						this.transform.f
-					);
+					this.applyTransform(ctx);
 					shape.applyStyle(ctx);
 				}
 				shape.draw(ctx);
