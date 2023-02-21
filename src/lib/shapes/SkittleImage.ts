@@ -19,7 +19,6 @@ export default class Image extends Rect {
 
 	draw(ctx: CanvasRenderingContext2D): void {
 		var path = this.createPath();
-		this.applyStyle(ctx);
 		ctx.fill(path);
 
 		var img = ImageCache.get(this.src);

@@ -1,7 +1,6 @@
 import type Layer from './Skittle';
 import type Shape from './shapes/SkittleShape';
 import StyledShape from './shapes/SkittleStyledShape';
-import type { Matrix } from 'transformation-matrix';
 
 export default class Renderer {
 	protected static Shapes: Map<string, TSkittleShapeConstructor<Shape>> =
