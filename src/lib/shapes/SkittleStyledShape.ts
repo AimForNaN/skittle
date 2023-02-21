@@ -111,9 +111,9 @@ export default abstract class StyledShape extends Shape {
 		ctx.stroke(path);
 	}
 
-	static getImage(shape: StyledShape): string | null {
-		let { background } = StyledShape.normalizeStyle(shape);
-		if (background.image) {
+	get image(): string | null {
+		var { background } = this;
+		if (background && background.image) {
 			return background.image;
 		}
 		return null;

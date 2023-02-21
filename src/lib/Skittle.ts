@@ -78,7 +78,7 @@ export default class Layer {
 				if (shape instanceof Image) {
 					src = shape.src;
 				} else if (shape instanceof StyledShape) {
-					src = StyledShape.getImage(shape);
+					src = shape.image;
 				}
 				if (src) {
 					queue.push(ImageCache.queueImage(src));
