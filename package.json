@@ -2,7 +2,7 @@
 	"name": "@truefusion/skittle",
 	"version": "0.8.9",
 	"description": "API-agnostic, HTML5 canvas library.",
-	"main": "./dist/skittle.mjs",
+	"main": "./dist/skittle.js",
 	"type": "module",
 	"repository": {
 		"type": "git",
