@@ -144,24 +144,31 @@ export default class Layer {
 	toUrl(type: string = 'image/jpeg', quality: number = 0.9): Promise<string> {
 		return new Promise<string>((resolve, reject) => {
 			if (this.canvas instanceof HTMLCanvasElement) {
-				this.canvas.toBlob((blob) => {
-					if (blob) {
+				this.canvas.toBlob(
+					(blob) => {
+						if (blob) {
+							var obj = URL.createObjectURL(blob);
+							resolve(obj);
+							URL.revokeObjectURL(obj);
+						} else {
+							reject('Failed to convert to blob!');
+						}
+					},
+					type,
+					quality
+				);
+			} else if (this.canvas instanceof OffscreenCanvas) {
+				this.canvas
+					.convertToBlob({
+						type,
+						quality,
+					})
+					.then((blob) => {
 						var obj = URL.createObjectURL(blob);
 						resolve(obj);
 						URL.revokeObjectURL(obj);
-					} else {
-						reject('Failed to convert to blob!');
-					}
-				}, type, quality);
-			} else if (this.canvas instanceof OffscreenCanvas) {
-				this.canvas.convertToBlob({
-					type,
-					quality,
-				}).then((blob) => {
-					var obj = URL.createObjectURL(blob);
-					resolve(obj);
-					URL.revokeObjectURL(obj);
-				}).catch(reject);
+					})
+					.catch(reject);
 			} else {
 				reject('Unsupported canvas!');
 			}

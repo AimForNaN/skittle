@@ -173,7 +173,9 @@ export default abstract class StyledShape extends Shape {
 		return ret;
 	}
 
-	protected normalizeBoxShadow(boxShadow?: TSkittleShadowValue): ISkittleShadow {
+	protected normalizeBoxShadow(
+		boxShadow?: TSkittleShadowValue
+	): ISkittleShadow {
 		var ret: ISkittleShadow = {
 			x: 0,
 			y: 0,
@@ -266,7 +268,10 @@ export default abstract class StyledShape extends Shape {
 		this.background = this.normalizeBackground(style.background);
 		this.border = this.normalizeBorder(style.border);
 		this.shadow = this.normalizeBoxShadow(style.boxShadow);
-		this.transform = this.normalizeTransform(style.transform, style.transformOrigin);
+		this.transform = this.normalizeTransform(
+			style.transform,
+			style.transformOrigin
+		);
 	}
 
 	static toRadians(v: number) {
