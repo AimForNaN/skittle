@@ -15,6 +15,18 @@
 				boxShadow: '5 5 0 #999',
 			},
 		},
+		{
+			type: 'rect',
+			x: 50,
+			y: 250,
+			width: 700,
+			height: 300,
+			style: {
+				background: 'url(/350x150.png)',
+				border: '1 solid black',
+				boxShadow: '5 5 0 #999',
+			},
+		},
 	];
 
 </script>

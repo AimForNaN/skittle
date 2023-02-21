@@ -138,9 +138,18 @@ export default abstract class StyledShape extends Shape {
 			}
 			case 'string': {
 				let [color, repeat] = background.split(' ');
+
 				if (color.startsWith('url')) {
 					ret.image = color ?? ret.image;
 					ret.repeat = repeat ?? ret.repeat;
+					let matches = ret.image.match(/url\((?<url>[^\(]+)\)/);
+					if (matches) {
+						let { groups } = matches;
+						if (groups) {
+							let { url } = groups;
+							ret.image = String(url).trim();
+						}
+					}
 				} else {
 					ret.color = color ?? ret.color;
 				}
