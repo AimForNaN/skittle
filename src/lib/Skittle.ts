@@ -30,8 +30,19 @@ export default class Layer {
 		return this;
 	}
 
-	draw(ctx?: TSkittleRenderingContext): Layer {
-		this.Renderer.draw(this);
+	get context(): TSkittleRenderingContext {
+		return this.canvas.getContext('2d') as CanvasRenderingContext2D;
+	}
+
+	draw(): Layer {
+		this.wipe();
+
+		var { context } = this;
+		this.forEach((shape) => {
+			context.save();
+			this.Renderer.draw(shape, context);
+			context.restore();
+		});
 		return this;
 	}
 
@@ -57,17 +68,15 @@ export default class Layer {
 		this.canvas.height = h;
 	}
 
-	isPointInPath(x: number, y: number, shape: TSkittleAnyShape): boolean {
-		var sk = new Layer();
-		sk.resize(this.width, this.height);
-		var skShape = Renderer.shapeFromObject(shape);
-		if (skShape) {
-			let path = skShape.createPath();
-			let context = Renderer.getContext(sk);
-			skShape.draw(context);
-			return context.isPointInPath(path, x, y);
-		}
-		return false;
+	isPointInPath(x: number, y: number, shape: Shape): boolean {
+		var layer = new Layer();
+		layer.resize(this.width, this.height);
+
+		var { context } = layer;
+		var path = shape.createPath();
+		this.Renderer.draw(shape, context);
+
+		return context.isPointInPath(path, x, y);
 	}
 
 	preloadImages() {
@@ -116,14 +125,15 @@ export default class Layer {
 	}
 
 	shapeAtPoint(x: number, y: number): TSkittleAnyShape | null {
-		var shapes = Array.from(this.Shapes.values());
-		shapes.reverse();
-		for (let shape of shapes) {
+		var hit: Shape[] = [];
+		this.forEach((shape) => {
 			if (this.isPointInPath(x, y, shape)) {
-				return shape;
+				hit.push(shape);
 			}
-		}
-		return null;
+		});
+		hit.reverse();
+		var [first] = hit;
+		return first;
 	}
 
 	target(canvas?: TSkittleCanvasTarget | string): Layer {
@@ -181,5 +191,11 @@ export default class Layer {
 
 	set width(w: number) {
 		this.canvas.width = w;
+	}
+
+	wipe() {
+		var { context } = this;
+		context.resetTransform();
+		context.clearRect(0, 0, this.width, this.height);
 	}
 }

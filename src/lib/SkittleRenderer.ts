@@ -15,31 +15,13 @@ export default class Renderer {
 		}
 	}
 
-	draw(layer: Layer): Renderer {
-		var ctx = Renderer.getContext(layer);
-		Renderer.wipe(layer);
-
-		if (!ctx) {
-			ctx = Renderer.getContext(layer);
+	draw(shape: Shape, context: CanvasRenderingContext2D): Renderer {
+		if (shape instanceof StyledShape) {
+			this.applyTransform(context);
+			shape.applyStyle(context);
 		}
-
-		layer.forEach((shape) => {
-			if (ctx) {
-				ctx.save();
-				if (shape instanceof StyledShape) {
-					this.applyTransform(ctx);
-					shape.applyStyle(ctx);
-				}
-				shape.draw(ctx);
-				ctx.restore();
-			}
-		});
-
+		shape.draw(context);
 		return this;
-	}
-
-	static getContext(layer: Layer): TSkittleRenderingContext {
-		return layer.canvas.getContext('2d') as CanvasRenderingContext2D;
 	}
 
 	static registerShape(name: string, shape: TSkittleShapeConstructor<Shape>) {
@@ -50,22 +32,8 @@ export default class Renderer {
 		this.transform = new DOMMatrix();
 	}
 
-	static restore(layer: Layer) {
-		var ctx = Renderer.getContext(layer);
-		if (ctx) {
-			ctx.restore();
-		}
-	}
-
 	rotate(deg: number) {
 		this.transform = compose(rotateDEG(deg), this.transform);
-	}
-
-	static save(layer: Layer) {
-		var ctx = Renderer.getContext(layer);
-		if (ctx) {
-			ctx.save();
-		}
 	}
 
 	scale(x: number, y: number) {
@@ -83,13 +51,5 @@ export default class Renderer {
 
 	translate(x: number, y: number) {
 		this.transform = compose(translate(x, y), this.transform);
-	}
-
-	static wipe(layer: Layer) {
-		var ctx = Renderer.getContext(layer);
-		if (ctx) {
-			ctx.resetTransform();
-			ctx.clearRect(0, 0, layer.width, layer.height);
-		}
 	}
 }
