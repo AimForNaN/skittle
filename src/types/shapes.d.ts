@@ -1,7 +1,8 @@
 interface ISkittleBackground {
 	color: string;
 	image: string;
-	repeat: string;
+	repeat: boolean;
+	size: TSkittlePoint | number;
 }
 
 interface ISkittleBorder {
@@ -20,15 +21,11 @@ interface ISkittleShadow {
 interface ISkittleTransform {
 	origin: TSkittleTransformOriginValue;
 	rotate: number;
-	scale: TSkittlePoint;
+	scale: number;
 	translate: TSkittlePoint;
 }
 
-type TSkittleBackgroundValue = ISkittleBackground | string;
-type TSkittleBorderValue = ISkittleBorder | string;
-type TSkittleShadowValue = ISkittleShadow | string;
-type TSkittleTransformValue = ISkittleTransform | string;
-type TSkittleTransformOriginValue = TSkittlePoint | SkittleOrigin;
+type TSkittleTransformOriginValue = TSkittlePoint | string;
 
 type TSkittleShapeConstructor<T extends SkittleShape> = {
 	new (...args: any[]): T;
@@ -38,18 +35,11 @@ interface ISkittleShape {
 	type: string;
 }
 
-interface ISkittleStyleBase {
+interface ISkittleStyle {
 	background: ISkittleBackground;
 	border: ISkittleBorder;
-	boxShadow: ISkittleShadow;
+	shadow: ISkittleShadow;
 	transform: ISkittleTransform;
-}
-interface ISkittleStyle extends ISkittleStyleBase {
-	background: ISkittleBackground;
-	border: ISkittleBorder;
-	boxShadow: ISkittleShadow;
-	transform: ISkittleTransform;
-	transformOrigin: TSkittleTransformOriginValue;
 }
 
 interface ISkittleStyledShape extends ISkittleShape {
@@ -70,4 +60,3 @@ interface ISkittleImage extends ISkittleRect {
 }
 
 type TSkittleShape = ISkittleRect | ISkittleImage;
-type TSkittleAnyShape = SkittleShape | ISkittleShape;

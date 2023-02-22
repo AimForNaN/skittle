@@ -27,12 +27,14 @@
 			width: 100,
 			height: 50,
 			style: {
-				background: 'black',
+				background: {
+					color: 'black',
+				},
 				transform: {
+					// origin: Skittle.Origin.TopLeft,
 					rotate: 0,
 					scale: 1,
 				},
-				transformOrigin: Skittle.Origin.TopLeft,
 			},
 		},
 		{
@@ -42,12 +44,14 @@
 			width: 100,
 			height: 50,
 			style: {
-				background: 'black',
+				background: {
+					color: 'black',
+				},
 				transform: {
+					origin: Skittle.Origin.TopRight,
 					rotate: 0,
 					scale: 1,
 				},
-				transformOrigin: Skittle.Origin.TopRight,
 			},
 		},
 		{
@@ -57,12 +61,14 @@
 			width: 100,
 			height: 50,
 			style: {
-				background: 'black',
+				background: {
+					color: 'black',
+				},
 				transform: {
+					origin: Skittle.Origin.Center,
 					rotate: 0,
 					scale: 1,
 				},
-				transformOrigin: Skittle.Origin.Center,
 			},
 		},
 		{
@@ -72,12 +78,14 @@
 			width: 100,
 			height: 50,
 			style: {
-				background: 'black',
+				background: {
+					color: 'black',
+				},
 				transform: {
+					origin: Skittle.Origin.BottomLeft,
 					rotate: 0,
 					scale: 1,
 				},
-				transformOrigin: Skittle.Origin.BottomLeft,
 			},
 		},
 		{
@@ -87,12 +95,14 @@
 			width: 100,
 			height: 50,
 			style: {
-				background: 'black',
+				background: {
+					color: 'black',
+				},
 				transform: {
+					origin: Skittle.Origin.BottomRight,
 					rotate: 0,
 					scale: 1,
 				},
-				transformOrigin: Skittle.Origin.BottomRight,
 			},
 		},
 	];
@@ -103,7 +113,11 @@
 		width: 150,
 		height: 150,
 		style: {
-			border: '1 solid blue',
+			border: {
+				color: 'blue',
+				style: 'solid',
+				width: 1,
+			},
 		},
 	};
 

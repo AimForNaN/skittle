@@ -10,9 +10,13 @@
 			width: 200,
 			height: 200,
 			style: {
-				background: 'black',
-				transform: 'rotate(45deg)',
-				transformOrigin: 'center',
+				background: {
+					color: 'black',
+				},
+				transform: {
+					origin: 'center',
+					rotate: 45,
+				},
 			},
 		},
 		{
@@ -22,9 +26,20 @@
 			width: 200,
 			height: 200,
 			style: {
-				background: 'blue',
-				border: '1 solid black',
-				boxShadow: '5px 5px 0 #999',
+				background: {
+					color: 'blue',
+				},
+				border: {
+					color: 'black',
+					style: 'solid',
+					width: 1,
+				},
+				shadow: {
+					x: 5,
+					y: 5,
+					blur: 0,
+					color: '#999',
+				},
 			},
 		},
 	];

@@ -11,8 +11,17 @@
 			width: 350,
 			height: 150,
 			style: {
-				border: '1 solid black',
-				boxShadow: '5 5 0 #999',
+				border: {
+					color: 'black',
+					style: 'solid',
+					width: 1,
+				},
+				shadow: {
+					x: 5,
+					y: 5,
+					blur: 0,
+					color: '#999',
+				},
 			},
 		},
 		{
@@ -22,9 +31,46 @@
 			width: 700,
 			height: 300,
 			style: {
-				background: 'url(/350x150.png)',
-				border: '1 solid black',
-				boxShadow: '5 5 0 #999',
+				background: {
+					image: '/350x150.png',
+					repeat: true,
+				},
+				border: {
+					color: 'black',
+					style: 'solid',
+					width: 1,
+				},
+				shadow: {
+					x: 5,
+					y: 5,
+					blur: 0,
+					color: '#999',
+				},
+			},
+		},
+		{
+			type: 'rect',
+			x: 50,
+			y: 600,
+			width: 350,
+			height: 150,
+			style: {
+				background: {
+					image: '/350x150.png',
+					repeat: true,
+					size: 0.5,
+				},
+				border: {
+					color: 'black',
+					style: 'solid',
+					width: 1,
+				},
+				shadow: {
+					x: 5,
+					y: 5,
+					blur: 0,
+					color: '#999',
+				},
 			},
 		},
 	];

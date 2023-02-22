@@ -42,13 +42,10 @@ export default class Rect extends StyledShape {
 		return null;
 	}
 
-	protected normalizeTransform(
-		transform?: TSkittleTransformValue,
-		origin: TSkittleTransformOriginValue = 'center'
-	): Matrix {
+	protected normalizeTransform(transform: ISkittleTransform): Matrix {
 		var ret: Matrix[] = [];
 
-		switch (origin) {
+		switch (transform.origin) {
 			case Origin.BottomLeft: {
 				ret.push(translate(0, this.height));
 				break;
@@ -68,9 +65,9 @@ export default class Rect extends StyledShape {
 		}
 
 		ret.push(translate(this.x, this.y));
-		ret.push(super.normalizeTransform(transform, origin));
+		ret.push(super.normalizeTransform(transform));
 
-		switch (origin) {
+		switch (transform.origin) {
 			case Origin.BottomLeft: {
 				ret.push(translate(0, -this.height));
 				break;

@@ -12,7 +12,9 @@
 		width: 10,
 		height: 10,
 		style: {
-			background: 'red',
+			background: {
+				color: 'red',
+			},
 		},
 	};
 	const rects = [
@@ -23,9 +25,13 @@
 			width: 200,
 			height: 200,
 			style: {
-				background: 'black',
-				transform: 'rotate(45deg)',
-				transformOrigin: 'center',
+				background: {
+					color: 'black',
+				},
+				transform: {
+					origin: 'center',
+					rotate: 45,
+				},
 			},
 		},
 	];
@@ -35,7 +41,7 @@
 		var shape = stage.shapeAtPoint(e.offsetX, e.offsetY);
 		hit.x = e.offsetX - 5;
 		hit.y = e.offsetY - 5;
-		hit.style.background = shape ? 'cyan' : 'red';
+		hit.style.background.color = shape ? 'cyan' : 'red';
 		$hitCanvas.value.draw();
 	}
 

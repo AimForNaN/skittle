@@ -1,5 +1,6 @@
 import {
 	compose,
+	isAffineMatrix,
 	rotateDEG,
 	scale,
 	translate,
@@ -9,9 +10,9 @@ import ImageCache from '../ImageCache';
 import Shape from './SkittleShape';
 
 export default abstract class StyledShape extends Shape {
-	protected background!: ISkittleBackground;
-	protected border!: ISkittleBorder;
-	protected shadow!: ISkittleShadow;
+	protected background: ISkittleBackground = {} as ISkittleBackground;
+	protected border: ISkittleBorder = {} as ISkittleBorder;
+	protected shadow: ISkittleShadow = {} as ISkittleShadow;
 	protected transform: Matrix = new DOMMatrix();
 
 	constructor(style?: ISkittleStyle) {
@@ -22,12 +23,14 @@ export default abstract class StyledShape extends Shape {
 	}
 
 	applyBackground(ctx: TSkittleRenderingContext) {
+		ctx.fillStyle = 'transparent';
+
 		var { background } = this;
 		if (background.image) {
 			if (ImageCache.has(background.image)) {
 				let pattern = ctx.createPattern(
 					ImageCache.get(background.image) as HTMLImageElement,
-					background.repeat
+					background.repeat ? 'repeat' : 'no-repeat'
 				);
 				if (pattern) {
 					ctx.fillStyle = pattern;
@@ -118,177 +121,42 @@ export default abstract class StyledShape extends Shape {
 		return null;
 	}
 
-	protected normalizeBackground(
-		background: TSkittleBackgroundValue
-	): ISkittleBackground {
-		var ret: ISkittleBackground = {
-			color: 'transparent',
-			image: '',
-			repeat: 'repeat',
-		};
-
-		switch (typeof background) {
-			case 'object': {
-				ret.color = background.color;
-				ret.image = background.image;
-				ret.repeat = background.repeat;
-				break;
-			}
-			case 'string': {
-				let [color, repeat] = background.split(' ');
-
-				if (color.startsWith('url')) {
-					ret.image = color ?? ret.image;
-					ret.repeat = repeat ?? ret.repeat;
-					let matches = ret.image.match(/url\((?<url>[^\(]+)\)/);
-					if (matches) {
-						let { groups } = matches;
-						if (groups) {
-							let { url } = groups;
-							ret.image = String(url).trim();
-						}
-					}
-				} else {
-					ret.color = color ?? ret.color;
-				}
-				break;
-			}
-		}
-		return ret;
-	}
-
-	protected normalizeBorder(border?: TSkittleBorderValue): ISkittleBorder {
-		var ret: ISkittleBorder = {
-			color: 'transparent',
-			style: 'solid',
-			width: 0,
-		};
-		switch (typeof border) {
-			case 'object': {
-				ret.color = border.color;
-				ret.style = border.style;
-				ret.width = border.width;
-				break;
-			}
-			case 'string': {
-				var [width, style, color] = border.split(' ');
-				ret.color = color ?? ret.color;
-				ret.style = style ?? ret.style;
-				ret.width = parseInt(width ?? ret.width);
-				break;
-			}
-		}
-		return ret;
-	}
-
-	protected normalizeBoxShadow(
-		boxShadow?: TSkittleShadowValue
-	): ISkittleShadow {
-		var ret: ISkittleShadow = {
-			x: 0,
-			y: 0,
-			blur: 0,
-			color: 'transparent',
-		};
-		switch (typeof boxShadow) {
-			case 'object': {
-				ret.blur = boxShadow.blur;
-				ret.color = boxShadow.color;
-				ret.x = boxShadow.x;
-				ret.y = boxShadow.y;
-				break;
-			}
-			case 'string': {
-				var [x, y, blur, color] = boxShadow.split(' ');
-				ret.blur = parseInt(blur ?? ret.blur);
-				ret.color = color ?? ret.color;
-				ret.x = parseInt(x ?? ret.x);
-				ret.y = parseInt(y ?? ret.y);
-				break;
-			}
-		}
-		return ret;
-	}
-
 	protected normalizeTransform(
-		transform?: TSkittleTransformValue,
-		origin: TSkittleTransformOriginValue = 'center'
+		transform: ISkittleTransform
 	): Matrix {
-		var ret: Matrix = new DOMMatrix();
-		switch (typeof transform) {
-			case 'object': {
-				ret = this.normalizeTransformObject(transform);
-				break;
+		if (isAffineMatrix(transform)) {
+			return <unknown>transform as Matrix;
+		}
+
+		var ret: Matrix[] = [
+			new DOMMatrix(),
+		];
+		if (transform) {
+			if (typeof transform.scale == 'number') {
+				ret.push(scale(transform.scale, transform.scale));
 			}
-			case 'string': {
-				ret = this.normalizeTransformString(transform);
-				break;
+
+			if (transform.rotate) {
+				ret.push(rotateDEG(transform.rotate));
+			}
+
+			if (typeof transform.translate == 'object') {
+				ret.push(translate(transform.translate.x, transform.translate.y));
 			}
 		}
-		return ret;
-	}
-
-	protected normalizeTransformObject(
-		transform: ISkittleTransform,
-		transformOrigin: TSkittleTransformOriginValue = 'center'
-	): Matrix {
-		var ret: Matrix[] = [];
-		if (typeof transform.scale == 'object') {
-			ret.push(scale(transform.scale.x, transform.scale.y));
-		} else if (typeof transform.scale == 'number') {
-			ret.push(scale(transform.scale, transform.scale));
-		}
-
-		if (transform.rotate) {
-			ret.push(rotateDEG(transform.rotate));
-		}
-
-		if (typeof transform.translate == 'object') {
-			ret.push(translate(transform.translate.x, transform.translate.y));
-		}
-		return compose(...ret);
-	}
-
-	protected normalizeTransformString(
-		transform: string,
-		transformOrigin: TSkittleTransformOriginValue = 'center'
-	): Matrix {
-		var ret: Matrix[] = [];
-		transform.split(' ').forEach((val) => {
-			let matches = val.match(/(?<key>\w+)\((?<val>\w+)\)/);
-			if (matches) {
-				let { groups } = matches;
-				if (groups) {
-					let { key, val } = groups;
-					switch (key) {
-						case 'rotate': {
-							ret.push(rotateDEG(parseInt(val)));
-							break;
-						}
-						case 'scale': {
-							let s = parseInt(val);
-							ret.push(scale(s, s));
-							break;
-						}
-						case 'translate': {
-							let [x,y] = val.split(',');
-							ret.push(translate(parseInt(x), parseInt(y)));
-							break;
-						}
-					}
-				}
-			}
-		});
 		return compose(...ret);
 	}
 
 	setStyle(style: ISkittleStyle) {
-		this.background = this.normalizeBackground(style.background);
-		this.border = this.normalizeBorder(style.border);
-		this.shadow = this.normalizeBoxShadow(style.boxShadow);
-		this.transform = this.normalizeTransform(
-			style.transform,
-			style.transformOrigin
-		);
+		if (typeof style.background == 'object') {
+			this.background = style.background;
+		}
+		if (typeof style.border == 'object') {
+			this.border = style.border;
+		}
+		if (typeof style.shadow == 'object') {
+			this.shadow = style.shadow;
+		}
+		this.transform = this.normalizeTransform(style.transform ?? {});
 	}
 }
