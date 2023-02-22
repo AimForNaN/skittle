@@ -39,12 +39,12 @@ export default abstract class StyledShape extends Shape {
 					ctx.fillStyle = pattern;
 				} else {
 					console.warn(
-						`Failed to create pattern from ${background.image}`
+						`Failed to create pattern from "${background.image}". Make sure image loaded correctly.`
 					);
 				}
 			} else {
 				console.warn(
-					`Failed to pull image from cache: ${background.image}`
+					`Failed to draw image "${background.image}". Make sure image loaded correctly.`
 				);
 			}
 		} else if (background.color) {
