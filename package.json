@@ -9,7 +9,8 @@
 		"url": "https://github.com/truefusion/skittle.git"
 	},
 	"files": [
-		"dist/*"
+		"dist/*.js",
+		"dist/*.cjs"
 	],
 	"publishConfig": {
 		"access": "public"
