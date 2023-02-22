@@ -33,6 +33,9 @@ export default abstract class StyledShape extends Shape {
 					background.repeat ? 'repeat' : 'no-repeat'
 				);
 				if (pattern) {
+					if (typeof background.size == 'number') {
+						pattern.setTransform(compose(scale(background.size)));
+					}
 					ctx.fillStyle = pattern;
 				} else {
 					console.warn(
