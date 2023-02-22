@@ -8,6 +8,8 @@ import StyledShape from './shapes/SkittleStyledShape';
 Renderer.registerShape('rect', Rect);
 Renderer.registerShape('image', Image);
 
+type TSkittleAnyShape = ISkittleShape | Shape;
+
 export default class Layer {
 	canvas: TSkittleCanvasTarget;
 	Renderer: Renderer;
