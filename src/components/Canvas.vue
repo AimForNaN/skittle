@@ -1,85 +1,93 @@
-<script setup>
-	import { onMounted, provide, ref, watch } from 'vue';
+<script>
+	import { h, ref, watch } from 'vue';
 	import Skittle from '../plugin';
 
-	const $emit = defineEmits(['mousedown']);
-	const $props = defineProps({
-		scale: {
-			type: Number,
-			default: 1,
+	export default {
+		props: {
+			scale: {
+				type: Number,
+				default: 1,
+			},
+			rotation: {
+				type: Number,
+				default: 0,
+			},
+			x: {
+				type: Number,
+				default: 0,
+			},
+			y: {
+				type: Number,
+				default: 0,
+			},
 		},
-		rotation: {
-			type: Number,
-			default: 0,
-		},
-		x: {
-			type: Number,
-			default: 0,
-		},
-		y: {
-			type: Number,
-			default: 0,
-		},
-	});
-	const $canvas = ref(null);
-	const $stage = new Skittle.Layer();
+		setup($props, { expose, slots: $slots }) {
+			const $stage = new Skittle.Layer();
+			const $el = ref(null);
 
-	function addShape(shape) {
-		$stage.addShape(shape);
-		draw();
-	}
-	function draw(preloadImages = true) {
-		if (preloadImages) {
-			$stage.preloadImages().then(($stage) => {
-				$stage.draw();
+			function draw() {
+				$stage.preloadImages().then((stage) => {
+					stage.draw();
+				});
+			}
+			function pullChildren(parent) {
+				return parent.reduce((ret, shape) => {
+					var { children, props, type } = shape;
+					var { __name } = type;
+					if (__name == 'Shape') {
+						if (props) {
+							let { config } = props;
+							if (config) {
+								ret.push(config);
+							}
+						}
+					} else {
+						if (Array.isArray(children) && children.length) {
+							ret = ret.concat(pullChildren(children));
+						}
+					}
+					return ret;
+				}, []);
+			}
+			function resize() {
+				var rect = $el.value.parentElement.getBoundingClientRect();
+				$stage.resize(rect.width, rect.height);
+				draw();
+			}
+
+			expose({
+				$el,
+				draw,
+				resize,
 			});
-		} else {
-			$stage.draw();
+
+			watch($el, (v) => {
+				$stage.target(v);
+				resize();
+				draw();
+			});
+
+			return () => {
+				var children = $slots.default ? $slots.default(): [];
+				children = pullChildren(children);
+				$stage.setShapes(children);
+
+				var r = $stage.Renderer;
+				r.resetTransform();
+				r.rotate($props.rotation);
+				r.scale($props.scale);
+				r.translate($props.x, $props.y);
+
+				return h('canvas', {
+					class: 'canvas-layer',
+					ref: $el,
+				});
+			};
 		}
 	}
-	function onMouseDown(e) {
-		$emit('mousedown', e);
-	}
-	function removeShape(shape) {
-		$stage.removeShape(shape);
-	}
-	function resize() {
-		var rect = $canvas.value.parentElement.getBoundingClientRect();
-		$stage.resize(rect.width, rect.height);
-	}
-
-	watch($props, () => {
-		var r = $stage.Renderer;
-		r.resetTransform();
-		r.scale($props.scale, $props.scale);
-		r.rotate($props.rotation);
-		r.translate($props.x, $props.y);
-		draw();
-	}, {
-		immediate: true,
-	});
-
-	defineExpose({
-		draw,
-		resize,
-		stage: $stage,
-	});
-	provide('addShape', addShape);
-	provide('removeShape', removeShape);
-
-	onMounted(() => {
-		$stage.target($canvas.value);
-		resize();
-	});
 </script>
 
-<template>
-	<canvas class="canvas-layer" ref="$canvas" @mousedown="onMouseDown">
-		<slot></slot>
-	</canvas>
-</template>
-
-<style lang="less">
+<style>
 	.canvas-layer {
 		bottom: 0;
 		left: 0;
