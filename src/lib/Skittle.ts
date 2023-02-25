@@ -23,12 +23,19 @@ export default class Layer {
 	}
 
 	addShape(shape: TSkittleAnyShape): Layer {
-		this.Shapes.add(shape);
+		if (Renderer.isValidShape(shape)) {
+			if (typeof shape.visible == 'undefined') {
+				shape.visible = true;
+			}
+			this.Shapes.add(shape);
+		}
 		return this;
 	}
 
 	addShapes(shapes: TSkittleAnyShape[]): Layer {
-		this.Shapes = new Set([...this.Shapes, ...shapes]);
+		shapes.forEach((shape) => {
+			this.addShape(shape);
+		});
 		return this;
 	}
 
@@ -41,9 +48,11 @@ export default class Layer {
 
 		var { context } = this;
 		this.forEach((shape) => {
-			context.save();
-			this.Renderer.draw(shape, context);
-			context.restore();
+			if (shape.visible) {
+				context.save();
+				this.Renderer.draw(shape, context);
+				context.restore();
+			}
 		});
 		return this;
 	}
@@ -70,14 +79,18 @@ export default class Layer {
 		this.canvas.height = h;
 	}
 
-	isPointInShape(x: number, y: number, shape: Shape): boolean {
+	isPointInShape(x: number, y: number, shape: TSkittleAnyShape): boolean {
 		var layer = new Layer();
 		layer.resize(this.width, this.height);
 
 		var { context } = layer;
-		this.Renderer.draw(shape, context);
+		var sh = Renderer.shapeFromObject(shape as ISkittleShape);
+		if (sh) {
+			this.Renderer.draw(sh, context);
+			return context.isPointInPath(sh.createPath(), x, y);
+		}
 
-		return context.isPointInPath(shape.createPath(), x, y);
+		return false;
 	}
 
 	preloadImages() {
@@ -121,7 +134,8 @@ export default class Layer {
 	}
 
 	setShapes(shapes: TSkittleAnyShape[]): Layer {
-		this.Shapes = new Set(shapes);
+		this.Shapes.clear();
+		this.addShapes(shapes);
 		return this;
 	}
 

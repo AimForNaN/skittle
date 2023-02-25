@@ -1,4 +1,4 @@
-import type Shape from './shapes/SkittleShape';
+import Shape from './shapes/SkittleShape';
 import StyledShape from './shapes/SkittleStyledShape';
 import { compose, rotateDEG, scale, translate, type Matrix } from 'transformation-matrix';
 
@@ -19,6 +19,10 @@ export default class Renderer {
 		}
 		shape.draw(context);
 		return this;
+	}
+
+	static isValidShape(shape: any): boolean {
+		return shape instanceof Shape || Renderer.Shapes.has(shape.type);
 	}
 
 	static registerShape(name: string, shape: TSkittleShapeConstructor<Shape>) {
@@ -42,6 +46,10 @@ export default class Renderer {
 	}
 
 	static shapeFromObject(shape: ISkittleShape): Shape | null {
+		if (shape instanceof Shape) {
+			return shape;
+		}
+
 		var factory = Renderer.Shapes.get(shape.type);
 		return factory ? factory.prototype.fromObject(shape) : null;
 	}

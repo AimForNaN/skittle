@@ -33,6 +33,7 @@ type TSkittleShapeConstructor<T extends SkittleShape> = {
 
 interface ISkittleShape {
 	type: string;
+	visible: boolean;
 }
 
 interface ISkittleStyle {
