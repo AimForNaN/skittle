@@ -31,7 +31,9 @@ $skittle.addShape({
 	width: 100,
 	height: 100,
 	style: {
-		background: 'black',
+		background: {
+			color: 'black',
+		},
 	},
 }).draw();
 
