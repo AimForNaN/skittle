@@ -39,6 +39,7 @@
 	function onMouseDown(e) {
 		var stage = $canvas.value.stage;
 		var shape = stage.shapeAtPoint(e.offsetX, e.offsetY);
+		console.info(rects.includes(shape));
 		hit.x = e.offsetX - 5;
 		hit.y = e.offsetY - 5;
 		hit.style.background.color = shape ? 'cyan' : 'red';
