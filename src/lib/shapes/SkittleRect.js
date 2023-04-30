@@ -1,20 +1,14 @@
-import StyledShape from './SkittleStyledShape';
-import { Origin } from '../common';
-import { compose, translate, type Matrix } from 'transformation-matrix';
+import StyledShape from './SkittleStyledShape.js';
+import { Origin } from '../common.js';
+import { compose, translate } from 'transformation-matrix';
 
 export default class Rect extends StyledShape {
-	x: number;
-	y: number;
-	width: number;
-	height: number;
+	x = 0;
+	y = 0;
+	width = 0;
+	height = 0;
 
-	constructor(
-		x: number,
-		y: number,
-		width: number,
-		height: number,
-		style: ISkittleStyle
-	) {
+	constructor(x, y, width, height, style) {
 		super();
 		this.x = x;
 		this.y = y;
@@ -23,13 +17,13 @@ export default class Rect extends StyledShape {
 		this.setStyle(style);
 	}
 
-	createPath(): Path2D {
+	createPath() {
 		var path = new Path2D();
 		path.rect(0, 0, this.width, this.height);
 		return path;
 	}
 
-	fromObject(shape: TSkittleShape): StyledShape | null {
+	fromObject(shape) {
 		if (shape.type == 'rect') {
 			return new Rect(
 				shape.x,
@@ -42,8 +36,8 @@ export default class Rect extends StyledShape {
 		return null;
 	}
 
-	protected normalizeTransform(transform: ISkittleTransform): Matrix {
-		var ret: Matrix[] = [];
+	normalizeTransform(transform) {
+		var ret = [];
 
 		switch (transform.origin) {
 			case Origin.BottomLeft: {

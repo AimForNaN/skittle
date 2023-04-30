@@ -13,6 +13,14 @@ dist
 dist-ssr
 coverage
 *.local
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+*.lock
 
 /cypress/videos/
 /cypress/screenshots/

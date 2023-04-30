@@ -1,9 +1,13 @@
 <script>
-	import { h, ref, watch } from 'vue';
+	import { h, ref, toRaw, unref, watch } from 'vue';
 	import Skittle from '../plugin';
 
 	export default {
 		props: {
+			autoResize: {
+				type: Boolean,
+				default: true,
+			},
 			scale: {
 				type: Number,
 				default: 1,
@@ -21,7 +25,7 @@
 				default: 0,
 			},
 		},
-		setup($props, { expose, slots: $slots }) {
+		setup($props, { emit, expose, slots: $slots }) {
 			const $stage = new Skittle.Layer();
 			const $el = ref(null);
 
@@ -57,20 +61,30 @@
 
 			expose({
 				$el,
+				stage: $stage,
 				draw,
 				resize,
+				toUrl() {
+					return $stage.toUrl('image/png', 0.75);
+				},
 			});
 
 			watch($el, (v) => {
 				$stage.target(v);
-				resize();
+				if ($props.autoResize) {
+					resize();
+				}
 				draw();
 			});
 
 			return () => {
 				var children = $slots.default ? $slots.default(): [];
 				children = pullChildren(children);
-				$stage.setShapes(children);
+				$stage.setShapes(children.map((item) => {
+					item = unref(item);
+					item = toRaw(item);
+					return item;
+				}));
 
 				var r = $stage.Renderer;
 				r.resetTransform();

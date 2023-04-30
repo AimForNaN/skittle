@@ -5,7 +5,7 @@ import HitDetection from './views/HitDetection.vue';
 import Image from './views/Image.vue';
 import Rects from './views/Rects.vue';
 
-export const routes: any[] = [
+export const routes = [
 	{
 		label: 'Animation',
 		path: '/',

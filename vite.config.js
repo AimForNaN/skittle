@@ -19,7 +19,7 @@ export default defineConfig(({ command }) => {
 		return {
 			build: {
 				lib: {
-					entry: resolve(__dirname, 'src/plugin.ts'),
+					entry: resolve(__dirname, 'src/plugin.js'),
 					name: 'Skittle',
 					fileName: 'skittle',
 				},
