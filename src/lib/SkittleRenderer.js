@@ -1,6 +1,13 @@
 import Shape from './shapes/SkittleShape.js';
 import StyledShape from './shapes/SkittleStyledShape.js';
-import { compose, rotateDEG, scale, translate } from 'transformation-matrix';
+import {
+	applyToPoint,
+	compose,
+	isAffineMatrix,
+	rotateDEG,
+	scale,
+	translate,
+} from 'transformation-matrix';
 
 export default class Renderer {
 	static #Shapes = new Map();
@@ -8,8 +15,7 @@ export default class Renderer {
 
 	applyTransform(ctx) {
 		if (Renderer.isValidRenderingContext(ctx)) {
-			var t = this.#transform;
-			ctx.transform(t.a, t.b, t.c, t.d, t.e, t.f);
+			ctx.setTransform(this.#transform);
 		} else {
 			console.warn('Unsupported rendering context provided!', ctx);
 		}
@@ -65,7 +71,9 @@ export default class Renderer {
 	}
 
 	setTransform(transform) {
-		this.#transform = transform;
+		if (isAffineMatrix(transform)) {
+			this.#transform = transform;
+		}
 	}
 
 	static shapeFromObject(shape) {
@@ -75,6 +83,10 @@ export default class Renderer {
 
 		var factory = Renderer.#Shapes.get(shape.type);
 		return factory ? factory.prototype.fromObject(shape) : null;
+	}
+
+	transformPoint(x, y) {
+		return applyToPoint(this.#transform, { x, y });
 	}
 
 	translate(x, y) {

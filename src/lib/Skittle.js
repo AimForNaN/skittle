@@ -169,6 +169,10 @@ export default class Layer {
 		return this;
 	}
 
+	transformPoint(x, y) {
+		return this.Renderer.transformPoint(x, y);
+	}
+
 	toUrl(type = 'image/jpeg', quality = 0.9) {
 		return new Promise((resolve, reject) => {
 			if (this.#canvas instanceof HTMLCanvasElement) {
@@ -213,7 +217,6 @@ export default class Layer {
 
 	wipe() {
 		var { context } = this;
-		context.resetTransform();
 		context.clearRect(0, 0, this.width, this.height);
 	}
 }

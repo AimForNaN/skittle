@@ -4,6 +4,7 @@ import Animation from './views/Animation.vue';
 import HitDetection from './views/HitDetection.vue';
 import Image from './views/Image.vue';
 import Rects from './views/Rects.vue';
+import TransformPoint from './views/TransformPoint.vue';
 
 export const routes = [
 	{
@@ -25,6 +26,11 @@ export const routes = [
 		label: 'Hit Detection',
 		path: '/hit-detection',
 		component: HitDetection,
+	},
+	{
+		label: 'Transform Point',
+		path: '/transform-point',
+		component: TransformPoint,
 	},
 ];
 
