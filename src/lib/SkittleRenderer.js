@@ -22,11 +22,15 @@ export default class Renderer {
 	}
 
 	draw(shape, ctx) {
+		this.applyTransform(ctx);
 		if (shape instanceof StyledShape) {
-			this.applyTransform(ctx);
 			shape.applyStyle(ctx);
 		}
-		shape.draw(ctx);
+		if (shape instanceof Shape) {
+			shape.draw(ctx);
+		} else if (shape instanceof Function) {
+			shape(ctx);
+		}
 		return this;
 	}
 
@@ -49,7 +53,14 @@ export default class Renderer {
 	}
 
 	static isValidShape(sh) {
-		return sh instanceof Shape || Renderer.#Shapes.has(sh.type);
+		switch (true) {
+			case sh instanceof Shape:
+			case sh instanceof Function:
+			case Renderer.#Shapes.has(sh.type): {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	static registerShape(name, sh) {
@@ -78,6 +89,9 @@ export default class Renderer {
 
 	static shapeFromObject(shape) {
 		if (shape instanceof Shape) {
+			return shape;
+		}
+		if (shape instanceof Function) {
 			return shape;
 		}
 

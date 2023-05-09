@@ -47,7 +47,7 @@ export default class Layer {
 
 		var { context } = this;
 		this.forEach((shape) => {
-			if (shape.visible) {
+			if (shape.visible || shape instanceof Function) {
 				var sh = Renderer.shapeFromObject(shape);
 				if (sh) {
 					context.save();

@@ -5,6 +5,7 @@ import HitDetection from './views/HitDetection.vue';
 import Image from './views/Image.vue';
 import Rects from './views/Rects.vue';
 import TransformPoint from './views/TransformPoint.vue';
+import RenderFunction from './views/RenderFunction.vue';
 
 export const routes = [
 	{
@@ -31,6 +32,11 @@ export const routes = [
 		label: 'Transform Point',
 		path: '/transform-point',
 		component: TransformPoint,
+	},
+	{
+		label: 'Render Function',
+		path: '/render-function',
+		component: RenderFunction,
 	},
 ];
 
