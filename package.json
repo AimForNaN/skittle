@@ -1,6 +1,6 @@
 {
 	"name": "@truefusion/skittle",
-	"version": "0.15.0",
+	"version": "0.16.0",
 	"description": "API-agnostic, HTML5 canvas library.",
 	"main": "./dist/skittle.js",
 	"type": "module",
