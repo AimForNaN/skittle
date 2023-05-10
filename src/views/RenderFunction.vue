@@ -12,19 +12,14 @@
 	function renderFunc(ctx) {
 		if (ctx instanceof CanvasRenderingContext2D) {
 			ctx.beginPath();
-			ctx.arc(pos.x, pos.y, 5, 0, 2 * Math.PI, false);
-			ctx.fillStyle = 'black';
+			ctx.arc(pos.x, pos.y, 20, 0, 2 * Math.PI, false);
+			ctx.fillStyle = '#FF000088';
 			ctx.fill();
 		}
 	}
 	function onMousemove(e) {
-		var {
-			offsetX,
-			offsetY,
-		} = e;
-
-		pos.x = offsetX;
-		pos.y = offsetY;
+		pos.x = e.offsetX;
+		pos.y = e.offsetY;
 
 		var canvas = unref($canvas);
 		if (canvas) {

@@ -5,7 +5,6 @@
 	import Shape from '../components/Shape.vue';
 
 	const $canvas = ref(null);
-	const $ruler = ref(null);
 	const timeline = anime.timeline({
 		// delay: 500,
 		direction: 'alternate',
@@ -17,9 +16,6 @@
 			if ($canvas.value) {
 				$canvas.value.draw();
 			}
-			if ($ruler.value) {
-				$ruler.value.draw();
-			}
 		},
 	});
 	const pos = {
@@ -27,7 +23,7 @@
 		y: 150,
 	};
 	const origin = {
-		x: -50,
+		x: 0,
 		y: 0,
 	};
 	const rect = {
@@ -41,14 +37,18 @@
 			},
 			transform: {
 				origin,
-				rotate: 15,
 				scale: 0.25,
 			},
 		},
 	};
+	function onMousemove(e) {
+		origin.x = e.offsetX;
+		origin.y = e.offsetY;
+	}
 	function ruler(ctx) {
 		if (ctx instanceof CanvasRenderingContext2D) {
-			ctx.rect(pos.x + origin.x, pos.y + origin.y, 5, 5);
+			ctx.beginPath();
+			ctx.rect(origin.x, origin.y, 5, 5);
 			ctx.fillStyle = 'red';
 			ctx.fill();
 		}
@@ -57,17 +57,12 @@
 	timeline.add({
 		targets: rect.style.transform,
 		scale: 2,
-	}).add({
-		targets: origin,
-		x: 50,
-	}, 0);
+	});
 </script>
 
 <template>
-	<Canvas ref="$canvas">
+	<Canvas ref="$canvas" @mousemove="onMousemove">
 		<Shape :config="rect"></Shape>
-	</Canvas>
-	<Canvas ref="$ruler">
 		<Shape :config="ruler"></Shape>
 	</Canvas>
 </template>
