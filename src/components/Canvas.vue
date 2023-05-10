@@ -30,9 +30,7 @@
 			const $el = ref(null);
 
 			function draw() {
-				$stage.preloadImages().then((stage) => {
-					stage.draw();
-				});
+				$stage.draw();
 			}
 			function pullChildren(parent) {
 				return parent.reduce((ret, shape) => {
@@ -85,6 +83,9 @@
 					item = toRaw(item);
 					return item;
 				}));
+				$stage.preloadImages().then((stage) => {
+					stage.draw();
+				});
 
 				var r = $stage.Renderer;
 				r.resetTransform();
