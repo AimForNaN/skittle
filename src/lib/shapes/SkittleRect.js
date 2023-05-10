@@ -39,44 +39,62 @@ export default class Rect extends StyledShape {
 	normalizeTransform(transform) {
 		var ret = [];
 
-		switch (transform.origin) {
-			case Origin.BottomLeft: {
-				ret.push(translate(0, this.height));
-				break;
+		if (typeof transform.origin == 'string') {
+			switch (transform.origin) {
+				case Origin.BottomLeft: {
+					ret.push(translate(0, this.height));
+					break;
+				}
+				case Origin.BottomRight: {
+					ret.push(translate(this.width, this.height));
+					break;
+				}
+				case Origin.Center: {
+					ret.push(translate(this.width / 2, this.height / 2));
+					break;
+				}
+				case Origin.TopRight: {
+					ret.push(translate(this.width, 0));
+					break;
+				}
 			}
-			case Origin.BottomRight: {
-				ret.push(translate(this.width, this.height));
-				break;
-			}
-			case Origin.Center: {
-				ret.push(translate(this.width / 2, this.height / 2));
-				break;
-			}
-			case Origin.TopRight: {
-				ret.push(translate(this.width, 0));
-				break;
+		} else if (typeof transform.origin == 'object') {
+			if (
+				typeof transform.origin.x == 'number' &&
+				typeof transform.origin.y == 'number'
+			) {
+				ret.push(translate(transform.origin.x, transform.origin.y));
 			}
 		}
 
 		ret.push(translate(this.x, this.y));
 		ret.push(super.normalizeTransform(transform));
 
-		switch (transform.origin) {
-			case Origin.BottomLeft: {
-				ret.push(translate(0, -this.height));
-				break;
+		if (typeof transform.origin == 'string') {
+			switch (transform.origin) {
+				case Origin.BottomLeft: {
+					ret.push(translate(0, -this.height));
+					break;
+				}
+				case Origin.BottomRight: {
+					ret.push(translate(-this.width, -this.height));
+					break;
+				}
+				case Origin.Center: {
+					ret.push(translate(this.width / -2, this.height / -2));
+					break;
+				}
+				case Origin.TopRight: {
+					ret.push(translate(-this.width, 0));
+					break;
+				}
 			}
-			case Origin.BottomRight: {
-				ret.push(translate(-this.width, -this.height));
-				break;
-			}
-			case Origin.Center: {
-				ret.push(translate(this.width / -2, this.height / -2));
-				break;
-			}
-			case Origin.TopRight: {
-				ret.push(translate(-this.width, 0));
-				break;
+		} else if (typeof transform.origin == 'object') {
+			if (
+				typeof transform.origin.x == 'number' &&
+				typeof transform.origin.y == 'number'
+			) {
+				ret.push(translate(-transform.origin.x, -transform.origin.y));
 			}
 		}
 

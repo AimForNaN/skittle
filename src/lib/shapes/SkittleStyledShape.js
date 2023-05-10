@@ -163,6 +163,13 @@ export default class StyledShape extends Shape {
 		if (transform) {
 			if (typeof transform.scale == 'number') {
 				ret.push(scale(transform.scale, transform.scale));
+			} else if (typeof transform.scale == 'object') {
+				if (
+					typeof transform.scale.x == 'number' &&
+					typeof transform.scale.y == 'number'
+				) {
+					ret.push(scale(transform.scale.x, transform.scale.y));
+				}
 			}
 
 			if (transform.rotate) {

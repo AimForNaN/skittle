@@ -3,15 +3,21 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 import Animation from './views/Animation.vue';
 import HitDetection from './views/HitDetection.vue';
 import Image from './views/Image.vue';
+import Origin from './views/Origin.vue';
 import Rects from './views/Rects.vue';
-import TransformPoint from './views/TransformPoint.vue';
 import RenderFunction from './views/RenderFunction.vue';
+import TransformPoint from './views/TransformPoint.vue';
 
 export const routes = [
 	{
 		label: 'Animation',
 		path: '/',
 		component: Animation,
+	},
+	{
+		label: 'Origin',
+		path: '/origin',
+		component: Origin,
 	},
 	{
 		label: 'Rect',
