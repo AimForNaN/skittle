@@ -35,8 +35,8 @@ export const routes = [
 		component: HitDetection,
 	},
 	{
-		label: 'Transform Point',
-		path: '/transform-point',
+		label: 'Map to Canvas',
+		path: '/map-to-canvas',
 		component: TransformPoint,
 	},
 	{

@@ -9,20 +9,26 @@ import {
 	translate,
 } from 'transformation-matrix';
 
+/**
+ * @typedef RenderContext
+ * @type {CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D}
+ */
+
+/**
+ * @typedef RenderTarget
+ * @type {HTMLCanvasElement | OffscreenCanvas}
+ */
+
 export default class Renderer {
 	static #Shapes = new Map();
-	#transform = new DOMMatrix();
 
-	applyTransform(ctx) {
-		if (Renderer.isValidRenderingContext(ctx)) {
-			ctx.setTransform(this.#transform);
-		} else {
-			console.warn('Unsupported rendering context provided!', ctx);
-		}
-	}
-
-	draw(shape, ctx) {
-		this.applyTransform(ctx);
+	/**
+	 * @param {Shape} shape
+	 * @param {RenderContext} ctx
+	 * @param {DOMMatrix} t
+	 */
+	static draw(shape, ctx, t = new DOMMatrix()) {
+		Renderer.setTransform(ctx, t);
 		if (shape instanceof StyledShape) {
 			shape.applyStyle(ctx);
 		}
@@ -31,9 +37,12 @@ export default class Renderer {
 		} else if (shape instanceof Function) {
 			shape(ctx);
 		}
-		return this;
 	}
 
+	/**
+	 * @param {RenderContext} ctx
+	 * @returns {boolean}
+	 */
 	static isValidRenderingContext(ctx) {
 		switch (true) {
 			case ctx instanceof CanvasRenderingContext2D:
@@ -43,6 +52,10 @@ export default class Renderer {
 		return false;
 	}
 
+	/**
+	 * @param {RenderTarget} target
+	 * @returns {boolean}
+	 */
 	static isValidRenderTarget(target) {
 		switch (true) {
 			case target instanceof HTMLCanvasElement:
@@ -63,30 +76,54 @@ export default class Renderer {
 		return false;
 	}
 
+	/**
+	 * Register a shape.
+	 * @param {String} name
+	 * @param {Shape} sh The definition of the shape.
+	 * @returns {boolean} If shape was successfully registered.
+	 * @see {@link shapeFromObject}
+	 */
 	static registerShape(name, sh) {
 		if (sh.prototype instanceof Shape) {
 			Renderer.#Shapes.set(name, sh);
+			return true;
+		}
+		console.warn('Could not register shape!', name);
+		return false;
+	}
+
+	static rotate(deg, t = new DOMMatrix()) {
+		return compose(rotateDEG(deg), t);
+	}
+
+	/**
+	 * Scale matrix.
+	 * @param {number} x
+	 * @param {number} y
+	 * @param {DOMMatrix} [t] Matrix to scale.
+	 * @returns {import('transformation-matrix').Matrix}
+	 */
+	static scale(x, y, t = new DOMMatrix()) {
+		return compose(scale(x, y), t);
+	}
+
+	/**
+	 * @param {CanvasRenderingContext2D} ctx
+	 * @param {DOMMatrix} [t]
+	 */
+	static setTransform(ctx, t = new DOMMatrix()) {
+		if (Renderer.isValidRenderingContext(ctx)) {
+			ctx.setTransform(t);
+		} else {
+			console.warn('Unsupported rendering context provided! Could not set transformation!', ctx);
 		}
 	}
 
-	resetTransform() {
-		this.#transform = new DOMMatrix();
-	}
-
-	rotate(deg) {
-		this.#transform = compose(rotateDEG(deg), this.#transform);
-	}
-
-	scale(x, y) {
-		this.#transform = compose(scale(x, y), this.#transform);
-	}
-
-	setTransform(transform) {
-		if (isAffineMatrix(transform)) {
-			this.#transform = transform;
-		}
-	}
-
+	/**
+	 * Create registered shape from object, if any.
+	 * @param {Object} shape
+	 * @returns {Shape|null}
+	 */
 	static shapeFromObject(shape) {
 		if (shape instanceof Shape) {
 			return shape;
@@ -99,11 +136,25 @@ export default class Renderer {
 		return factory ? factory.prototype.fromObject(shape) : null;
 	}
 
-	transformPoint(x, y) {
-		return applyToPoint(this.#transform, { x, y });
+	/**
+	 * Transform point.
+	 * @param {number} x
+	 * @param {number} y
+	 * @param {DOMMatrix} [t] Matrix used to transform point.
+	 * @returns {{ x: number, y: number }}
+	 */
+	static transformPoint(x, y, t = new DOMMatrix()) {
+		return applyToPoint(t, { x, y });
 	}
 
-	translate(x, y) {
-		this.#transform = compose(translate(x, y), this.#transform);
+	/**
+	 * Translate matrix.
+	 * @param {number} x
+	 * @param {number} y
+	 * @param {DOMMatrix} [t] Matrix to translate.
+	 * @returns {import('transformation-matrix').Matrix}
+	 */
+	static translate(x, y, t = new DOMMatrix()) {
+		return compose(translate(x, y), t);
 	}
 }

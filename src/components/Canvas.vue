@@ -26,11 +26,11 @@
 			},
 		},
 		setup($props, { emit, expose, slots: $slots }) {
-			const $stage = new Skittle.Layer();
+			const stage = new Skittle.Layer();
 			const $el = ref(null);
 
 			function draw() {
-				$stage.draw();
+				stage.draw();
 			}
 			function pullChildren(parent) {
 				return parent.reduce((ret, shape) => {
@@ -53,22 +53,22 @@
 			}
 			function resize() {
 				var rect = $el.value.parentElement.getBoundingClientRect();
-				$stage.resize(rect.width, rect.height);
+				stage.resize(rect.width, rect.height);
 				draw();
 			}
 
 			expose({
 				$el,
-				stage: $stage,
+				stage,
 				draw,
 				resize,
 				toUrl() {
-					return $stage.toUrl('image/png', 0.75);
+					return stage.toUrl('image/png', 0.75);
 				},
 			});
 
 			watch($el, (v) => {
-				$stage.target(v);
+				stage.target(v);
 				if ($props.autoResize) {
 					resize();
 				}
@@ -78,20 +78,19 @@
 			return () => {
 				var children = $slots.default ? $slots.default(): [];
 				children = pullChildren(children);
-				$stage.setShapes(children.map((item) => {
+				stage.resetTransform();
+				stage.rotate($props.rotation);
+				stage.scale($props.scale);
+				stage.translate($props.x, $props.y);
+				stage.setShapes(children.map((item) => {
 					item = unref(item);
 					item = toRaw(item);
 					return item;
 				}));
-				$stage.preloadImages().then((stage) => {
+				stage.preloadImages().then((stage) => {
 					stage.draw();
 				});
 
-				var r = $stage.Renderer;
-				r.resetTransform();
-				r.rotate($props.rotation);
-				r.scale($props.scale);
-				r.translate($props.x, $props.y);
 
 				return h('canvas', {
 					class: 'canvas-layer',

@@ -1,22 +1,21 @@
-import ImageCache from './ImageCache.js';
-import Image from './shapes/SkittleImage.js';
-import Rect from './shapes/SkittleRect.js';
-import Renderer from './SkittleRenderer.js';
-import StyledShape from './shapes/SkittleStyledShape.js';
+import ImageCache from './ImageCache';
+import Image from './shapes/SkittleImage';
+import Rect from './shapes/SkittleRect';
+import Renderer from './SkittleRenderer';
+import StyledShape from './shapes/SkittleStyledShape';
+import { isAffineMatrix } from 'transformation-matrix';
 
 Renderer.registerShape('rect', Rect);
 Renderer.registerShape('image', Image);
 
 export default class Layer {
 	#canvas;
-	Renderer;
-	#Shapes = new Set();
+	#shapes = new Set();
+	#transform = new DOMMatrix();
 
 	constructor(canvas) {
 		this.#canvas = new OffscreenCanvas(0, 0);
 		this.target(canvas);
-
-		this.Renderer = new Renderer();
 	}
 
 	addShape(shape) {
@@ -24,7 +23,7 @@ export default class Layer {
 			if (typeof shape.visible == 'undefined') {
 				shape.visible = true;
 			}
-			this.#Shapes.add(shape);
+			this.#shapes.add(shape);
 		}
 		return this;
 	}
@@ -51,7 +50,7 @@ export default class Layer {
 				var sh = Renderer.shapeFromObject(shape);
 				if (sh) {
 					context.save();
-					this.Renderer.draw(sh, context);
+					Renderer.draw(sh, context, this.#transform);
 					context.restore();
 				} else {
 					console.warn('Unsupported shape!', shape);
@@ -62,14 +61,13 @@ export default class Layer {
 	}
 
 	forEach(fn) {
-		this.#Shapes.forEach(fn);
+		this.#shapes.forEach(fn);
 		return this;
 	}
 
 	get height() {
 		return this.#canvas ? this.#canvas.height : 0;
 	}
-
 	set height(h) {
 		this.#canvas.height = h;
 	}
@@ -81,13 +79,21 @@ export default class Layer {
 		var { context } = layer;
 		var sh = Renderer.shapeFromObject(shape);
 		if (sh) {
-			this.Renderer.draw(sh, context);
+			Renderer.draw(sh, context, this.#transform);
 			return context.isPointInPath(sh.createPath(), x, y);
 		}
 
 		return false;
 	}
 
+	mapPointToCanvas(x, y) {
+		return Renderer.transformPoint(x, y, this.#transform);
+	}
+
+	/**
+	 * Load all images from all shapes and store them to cache.
+	 * @returns {Promise}
+	 */
 	preloadImages() {
 		return new Promise((resolve, reject) => {
 			var queue = [];
@@ -117,26 +123,70 @@ export default class Layer {
 	}
 
 	static registerShape(name, shape) {
-		Renderer.registerShape(name, shape);
+		return Renderer.registerShape(name, shape);
 	}
 
 	removeShape(shape) {
-		this.#Shapes.delete(shape);
+		this.#shapes.delete(shape);
 		return this;
 	}
 
+	resetTransform() {
+		this.#transform = new DOMMatrix();
+	}
+
+	/**
+	 * Resize canvas element.
+	 * @param {number} width Width in pixels
+	 * @param {number} height Height in pixels.
+	 * @returns {this}
+	 */
 	resize(width, height) {
 		this.height = height;
 		this.width = width;
 		return this;
 	}
 
+	/**
+	 * @param {number} deg Angle in degrees.
+	 * @returns {this}
+	 */
+	rotate(deg) {
+		this.#transform = Renderer.rotate(deg, this.#transform);
+		return this;
+	}
+
+	/**
+	 * @param {number} x
+	 * @param {number} y
+	 * @returns {this}
+	 */
+	scale(x, y) {
+		this.#transform = Renderer.scale(x, y, this.#transform);
+		return this;
+	}
+
 	setShapes(shapes) {
-		this.#Shapes.clear();
+		this.#shapes.clear();
 		this.addShapes(shapes);
 		return this;
 	}
 
+	/**
+	 * @param {DOMMatrix} t
+	 */
+	setTransform(t) {
+		if (isAffineMatrix(t)) {
+			this.#transform = t;
+		}
+	}
+
+	/**
+	 * Get shape at point relative to canvas element (e.g. MouseEvent.offsetX, MouseEvent.offsetY).
+	 * @param {number} x
+	 * @param {number} y
+	 * @returns {Shape}
+	 */
 	shapeAtPoint(x, y) {
 		var hit = [];
 		this.forEach((shape) => {
@@ -150,6 +200,11 @@ export default class Layer {
 		return first;
 	}
 
+	/**
+	 * Set render target.
+	 * @param {import('./SkittleRenderer').RenderTarget | String} canvas
+	 * @returns {this}
+	 */
 	target(canvas) {
 		if (typeof canvas == 'string') {
 			let el = document.querySelector(canvas);
@@ -167,10 +222,6 @@ export default class Layer {
 		}
 
 		return this;
-	}
-
-	transformPoint(x, y) {
-		return this.Renderer.transformPoint(x, y);
 	}
 
 	toUrl(type = 'image/jpeg', quality = 0.9) {
@@ -207,14 +258,26 @@ export default class Layer {
 		});
 	}
 
+	/**
+	 * @param {number} x
+	 * @param {number} y
+	 * @returns {this}
+	 */
+	translate(x, y) {
+		this.#transform = Renderer.translate(x, y, this.#transform);
+		return this;
+	}
+
 	get width() {
 		return this.#canvas?.width || 0;
 	}
-
 	set width(w) {
 		this.#canvas.width = w;
 	}
 
+	/**
+	 * Clears entire canvas, wiping it clean.
+	 */
 	wipe() {
 		var { context } = this;
 		context.clearRect(0, 0, this.width, this.height);
