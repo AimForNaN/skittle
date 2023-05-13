@@ -33,7 +33,7 @@
 		var { offsetX, offsetY } = e;
 		var canvas = unref($canvas);
 		if (canvas) {
-			let p = canvas.stage.transformPoint(offsetX, offsetY);
+			let p = canvas.stage.mapPointToCanvas(offsetX, offsetY);
 			cursor.x = p.x;
 			cursor.y = p.y;
 			canvas.draw();
