@@ -5,8 +5,8 @@ import {
 	scale,
 	translate,
 } from 'transformation-matrix';
-import ImageCache from '../ImageCache.js';
-import Shape from './SkittleShape.js';
+import ImageCache from '../ImageCache';
+import Shape from './SkittleShape';
 import Renderer from '../SkittleRenderer';
 
 export default class StyledShape extends Shape {

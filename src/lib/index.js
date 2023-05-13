@@ -1,8 +1,8 @@
-export { default as Image } from './shapes/SkittleImage.js';
+export { default as Image } from './shapes/SkittleImage';
 export { default as ImageCache } from './ImageCache';
-export { default as Layer } from './Skittle.js';
-export { default as Rect } from './shapes/SkittleRect.js';
-export { default as Shape } from './shapes/SkittleShape.js';
-export { default as StyledShape } from './shapes/SkittleStyledShape.js';
+export { default as Layer } from './Skittle';
+export { default as Rect } from './shapes/SkittleRect';
+export { default as Shape } from './shapes/SkittleShape';
+export { default as StyledShape } from './shapes/SkittleStyledShape';
 
-export * from './common.js';
+export * from './common';

@@ -1,5 +1,5 @@
-import Shape from './shapes/SkittleShape.js';
-import StyledShape from './shapes/SkittleStyledShape.js';
+import Shape from './shapes/SkittleShape';
+import StyledShape from './shapes/SkittleStyledShape';
 import {
 	applyToPoint,
 	compose,

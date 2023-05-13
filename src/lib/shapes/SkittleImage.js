@@ -1,6 +1,6 @@
-import ImageCache from '../ImageCache.js';
+import ImageCache from '../ImageCache';
 import Renderer from '../SkittleRenderer';
-import Rect from './SkittleRect.js';
+import Rect from './SkittleRect';
 
 export default class Image extends Rect {
 	src;

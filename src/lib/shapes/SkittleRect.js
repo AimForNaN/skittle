@@ -1,5 +1,5 @@
-import StyledShape from './SkittleStyledShape.js';
-import { Origin } from '../common.js';
+import StyledShape from './SkittleStyledShape';
+import { Origin } from '../common';
 import { compose, translate } from 'transformation-matrix';
 
 export default class Rect extends StyledShape {
