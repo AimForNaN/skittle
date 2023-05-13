@@ -41,11 +41,40 @@
 			},
 		},
 	};
+	const rect2 = {
+		type: 'rect',
+		...pos,
+		width: 100,
+		height: 50,
+		style: {
+			border: {
+				color: 'blue',
+				width: 1,
+			},
+			transform: {
+				origin,
+				scale: 0.25,
+			},
+		},
+	};
+	const rect3 = {
+		type: 'rect',
+		x: 0,
+		y: 0,
+		width: 100,
+		height: 50,
+		style: {
+			border: {
+				color: 'blue',
+				width: 1,
+			},
+		},
+	};
 	function onMousemove(e) {
 		origin.x = e.offsetX;
 		origin.y = e.offsetY;
 	}
-	function ruler(ctx) {
+	function originRenderer(ctx) {
 		if (ctx instanceof CanvasRenderingContext2D) {
 			ctx.beginPath();
 			ctx.rect(origin.x, origin.y, 5, 5);
@@ -63,6 +92,8 @@
 <template>
 	<Canvas ref="$canvas" @mousemove="onMousemove">
 		<Shape :config="rect"></Shape>
-		<Shape :config="ruler"></Shape>
+		<Shape :config="rect2"></Shape>
+		<Shape :config="rect3"></Shape>
+		<Shape :config="originRenderer"></Shape>
 	</Canvas>
 </template>
