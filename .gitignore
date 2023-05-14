@@ -22,8 +22,8 @@ coverage
 !.yarn/versions
 *.lock
 
-/cypress/videos/
-/cypress/screenshots/
+**/.vitepress/cache
+**/.vitepress/dist
 
 # Editor directories and files
 .vscode/*
