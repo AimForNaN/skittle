@@ -28,16 +28,13 @@ export default class Image extends Rect {
 	}
 
 	fromObject(shape) {
-		if (shape.type == 'image') {
-			return new Image(
-				shape.src,
-				shape.x,
-				shape.y,
-				shape.width,
-				shape.height,
-				shape.style
-			);
-		}
-		return null;
+		return new Image(
+			shape.src,
+			shape.x,
+			shape.y,
+			shape.width,
+			shape.height,
+			shape.style
+		);
 	}
 }

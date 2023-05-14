@@ -23,16 +23,13 @@ export default class Rect extends StyledShape {
 	}
 
 	fromObject(shape) {
-		if (shape.type == 'rect') {
-			return new Rect(
-				shape.x,
-				shape.y,
-				shape.width,
-				shape.height,
-				shape.style
-			);
-		}
-		return null;
+		return new Rect(
+			shape.x,
+			shape.y,
+			shape.width,
+			shape.height,
+			shape.style
+		);
 	}
 
 	normalizeTransform(transform) {
