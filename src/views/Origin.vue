@@ -48,8 +48,8 @@
 		height: 50,
 		style: {
 			border: {
-				color: 'blue',
-				width: 1,
+				color: 'red',
+				width: 1 / 0.25,
 			},
 			transform: {
 				origin,
@@ -71,8 +71,8 @@
 		},
 	};
 	function onMousemove(e) {
-		origin.x = e.offsetX;
-		origin.y = e.offsetY;
+		origin.x = e.offsetX - 100;
+		origin.y = e.offsetY - 100;
 	}
 	function originRenderer(ctx) {
 		if (ctx instanceof CanvasRenderingContext2D) {
@@ -90,7 +90,7 @@
 </script>
 
 <template>
-	<Canvas ref="$canvas" @mousemove="onMousemove">
+	<Canvas :x="100" :y="100" ref="$canvas" @mousemove="onMousemove">
 		<Shape :config="rect"></Shape>
 		<Shape :config="rect2"></Shape>
 		<Shape :config="rect3"></Shape>

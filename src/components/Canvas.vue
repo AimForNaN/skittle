@@ -91,7 +91,6 @@
 					stage.draw();
 				});
 
-
 				return h('canvas', {
 					class: 'canvas-layer',
 					ref: $el,
