@@ -97,3 +97,35 @@ $skittle.addShape(function (ctx) {
 :::warning
 Render functions lack hit-detection support!
 :::
+
+### Registering render functions
+
+Skittle gives you the option to register render functions as shapes.
+Let us modify the previous example.
+
+```js
+Renderer.registerShape('circle', function (ctx, obj) {
+	if (Renderer.isValidRenderingContext(ctx)) {
+		ctx.fillStyle = obj.style.background.color;
+		ctx.lineWidth = obj.style.border.width;
+		ctx.beginPath();
+		ctx.arc(obj.x, obj.y, obj.radius, 0, Math.PI * 2);
+		ctx.stroke();
+	}
+});
+
+$skittle.addShape({
+	type: 'circle',
+	x: 100,
+	y: 100,
+	radius: 20,
+	style: {
+		background: {
+			color: 'crimson',
+		},
+		border: {
+			width: 1,
+		},
+	},
+}).draw();
+```
