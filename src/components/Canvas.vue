@@ -1,6 +1,6 @@
 <script>
 	import { h, ref, toRaw, unref, watch } from 'vue';
-	import Skittle from '../plugin';
+	import * as Skittle from '../plugin';
 
 	export default {
 		props: {
