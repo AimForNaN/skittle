@@ -3,7 +3,7 @@
 	import anime from 'animejs/lib/anime.es.js';
 	import Canvas from '../components/Canvas.vue';
 	import Shape from '../components/Shape.vue';
-	import Skittle from '../plugin';
+	import * as Skittle from '../plugin';
 
 	const $canvas = ref(null);
 	const timeline = anime.timeline({
