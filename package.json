@@ -19,7 +19,10 @@
 		"dev": "vite",
 		"build": "vite build",
 		"preview": "vite preview",
-		"release": "np --yolo --no-2fa --no-yarn"
+		"release": "np --yolo --no-2fa --no-yarn",
+		"docs:dev": "vitepress dev docs",
+		"docs:build": "vitepress build docs",
+		"docs:preview": "vitepress preview docs"
 	},
 	"keywords": [
 		"html5",
@@ -31,6 +34,7 @@
 		"animejs": "^3.2.1",
 		"less": "^4.1.3",
 		"vite": "^4.3.3",
+		"vitepress": "^1.0.0-alpha.75",
 		"vue": "^3.2.47",
 		"vue-router": "^4.1.6"
 	},
