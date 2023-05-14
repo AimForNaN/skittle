@@ -9,12 +9,11 @@ export default class Rect extends StyledShape {
 	height = 0;
 
 	constructor(x, y, width, height, style) {
-		super();
+		super(style);
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
-		this.setStyle(style);
 	}
 
 	createPath() {
