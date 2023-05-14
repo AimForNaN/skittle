@@ -65,6 +65,10 @@ export default class Renderer {
 		return false;
 	}
 
+	/**
+	 * @param {Object} sh
+	 * @returns {boolean}
+	 */
 	static isValidShape(sh) {
 		switch (true) {
 			case sh instanceof Shape:
@@ -77,7 +81,7 @@ export default class Renderer {
 	}
 
 	/**
-	 * Register a shape.
+	 * Register a shape. Can be used to override a pre-existing shape.
 	 * @param {String} name
 	 * @param {Shape} sh The definition of the shape.
 	 * @returns {boolean} If shape was successfully registered.

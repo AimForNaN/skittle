@@ -13,11 +13,18 @@ export default class Layer {
 	#shapes = new Set();
 	#transform = new DOMMatrix();
 
+	/**
+	 * @param {import('./SkittleRenderer').RenderTarget | String} canvas
+	 */
 	constructor(canvas) {
 		this.#canvas = new OffscreenCanvas(0, 0);
 		this.target(canvas);
 	}
 
+	/**
+	 * @param {Object} shape
+	 * @returns {this}
+	 */
 	addShape(shape) {
 		if (Renderer.isValidShape(shape)) {
 			if (typeof shape.visible == 'undefined') {
