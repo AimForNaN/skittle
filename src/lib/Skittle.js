@@ -1,12 +1,14 @@
 import ImageCache from './ImageCache';
 import Image from './shapes/SkittleImage';
+import Circle from './shapes/SkittleCircle';
 import Rect from './shapes/SkittleRect';
 import Renderer from './SkittleRenderer';
 import StyledShape from './shapes/SkittleStyledShape';
 import { isAffineMatrix } from 'transformation-matrix';
 
-Renderer.registerShape('rect', Rect);
+Renderer.registerShape('circle', Circle);
 Renderer.registerShape('image', Image);
+Renderer.registerShape('rect', Rect);
 
 export default class Layer {
 	#canvas;

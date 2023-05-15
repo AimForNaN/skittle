@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
 
 import Animation from './views/Animation.vue';
+import Circle from './views/Circle.vue';
 import HitDetection from './views/HitDetection.vue';
 import Image from './views/Image.vue';
 import Origin from './views/Origin.vue';
@@ -10,24 +11,29 @@ import TransformPoint from './views/TransformPoint.vue';
 
 export const routes = [
 	{
-		label: 'Animation',
+		label: 'Rect',
 		path: '/',
+		component: Rects,
+	},
+	{
+		label: 'Circle',
+		path: '/circle',
+		component: Circle,
+	},
+	{
+		label: 'Image',
+		path: '/image',
+		component: Image,
+	},
+	{
+		label: 'Animation',
+		path: '/animation',
 		component: Animation,
 	},
 	{
 		label: 'Origin',
 		path: '/origin',
 		component: Origin,
-	},
-	{
-		label: 'Rect',
-		path: '/rect',
-		component: Rects,
-	},
-	{
-		label: 'Image',
-		path: '/image',
-		component: Image,
 	},
 	{
 		label: 'Hit Detection',
