@@ -21,6 +21,23 @@
 		},
 		{
 			type: 'rect',
+			x: 250,
+			y: 50,
+			width: 200,
+			height: 200,
+			style: {
+				background: {
+					color: 'black',
+				},
+				opacity: 0.5,
+				transform: {
+					origin: 'center',
+					rotate: 45,
+				},
+			},
+		},
+		{
+			type: 'rect',
 			x: 300,
 			y: 300,
 			width: 200,

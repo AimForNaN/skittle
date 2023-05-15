@@ -12,6 +12,7 @@ import Renderer from '../SkittleRenderer';
 export default class StyledShape extends Shape {
 	background = {};
 	border = {};
+	opacity = 1;
 	shadow = {};
 	transform = new DOMMatrix();
 
@@ -88,6 +89,12 @@ export default class StyledShape extends Shape {
 		}
 	}
 
+	applyOpacity(ctx) {
+		if (Renderer.isValidRenderingContext(ctx)) {
+			ctx.globalAlpha = this.opacity;
+		}
+	}
+
 	applyShadow(ctx) {
 		if (Renderer.isValidRenderingContext(ctx)) {
 			StyledShape.clearShadow(ctx);
@@ -115,6 +122,7 @@ export default class StyledShape extends Shape {
 
 	applyStyle(ctx) {
 		if (Renderer.isValidRenderingContext(ctx)) {
+			this.applyOpacity(ctx);
 			this.applyBackground(ctx);
 			this.applyBorder(ctx);
 			this.applyShadow(ctx);
@@ -191,6 +199,9 @@ export default class StyledShape extends Shape {
 		}
 		if (typeof style.border == 'object') {
 			this.border = style.border;
+		}
+		if (Number.isFinite(style.opacity)) {
+			this.opacity = style.opacity;
 		}
 		if (typeof style.shadow == 'object') {
 			this.shadow = style.shadow;
