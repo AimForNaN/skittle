@@ -2,34 +2,37 @@
 	import { ref, unref } from 'vue';
 	import Canvas from '../components/Canvas.vue';
 	import Shape from '../components/Shape.vue';
+	import { Renderer } from "../plugin";
 
 	const $canvas = ref(null);
-	const pos = {
+	const shape = {
+		type: 'render-function',
 		x: 0,
 		y: 0,
 	};
 
-	function renderFunc(ctx) {
-		if (ctx instanceof CanvasRenderingContext2D) {
-			ctx.beginPath();
-			ctx.arc(pos.x, pos.y, 20, 0, 2 * Math.PI, false);
-			ctx.fillStyle = '#FF000088';
-			ctx.fill();
-		}
-	}
 	function onMousemove(e) {
-		pos.x = e.offsetX;
-		pos.y = e.offsetY;
+		shape.x = e.offsetX;
+		shape.y = e.offsetY;
 
 		var canvas = unref($canvas);
 		if (canvas) {
 			canvas.draw();
 		}
 	}
+
+	Renderer.registerShape('render-function', function (ctx, obj) {
+		if (Renderer.isValidRenderingContext(ctx)) {
+			ctx.beginPath();
+			ctx.arc(obj.x, obj.y, 20, 0, 2 * Math.PI, false);
+			ctx.fillStyle = '#FF000088';
+			ctx.fill();
+		}
+	});
 </script>
 
 <template>
 	<Canvas ref="$canvas" @mousemove="onMousemove">
-		<Shape :config="renderFunc"></Shape>
+		<Shape :config="shape"></Shape>
 	</Canvas>
 </template>
