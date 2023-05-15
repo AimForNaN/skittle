@@ -88,9 +88,12 @@ export default class Renderer {
 	 * @see {@link shapeFromObject}
 	 */
 	static registerShape(name, sh) {
-		if (sh.prototype instanceof Shape) {
-			Renderer.#Shapes.set(name, sh);
-			return true;
+		switch (true) {
+			case sh.prototype instanceof Shape:
+			case sh instanceof Function: {
+				Renderer.#Shapes.set(name, sh);
+				return true;
+			}
 		}
 		console.warn('Could not register shape!', name);
 		return false;
@@ -137,7 +140,15 @@ export default class Renderer {
 		}
 
 		var factory = Renderer.#Shapes.get(shape.type);
-		return factory ? factory.prototype.fromObject(shape) : null;
+		if (factory instanceof Shape) {
+			return factory.prototype.fromObject(shape);
+		}
+		if (factory instanceof Function) {
+			return function (ctx) {
+				factory(ctx, shape);
+			}
+		}
+		return null;
 	}
 
 	/**
