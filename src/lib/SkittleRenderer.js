@@ -3,7 +3,6 @@ import StyledShape from './shapes/SkittleStyledShape';
 import {
 	applyToPoint,
 	compose,
-	isAffineMatrix,
 	rotateDEG,
 	scale,
 	translate,
@@ -152,6 +151,10 @@ export default class Renderer {
 			};
 		}
 		return null;
+	}
+
+	static transform(...t) {
+		return compose(...t);
 	}
 
 	/**
