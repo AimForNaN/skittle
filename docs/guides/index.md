@@ -17,6 +17,8 @@ It seems to support custom and complex shapes.
 It seems to have everything that I need and that skittle provides.
 So, why not just use origami?
 Simply put, I wanted a more object-oriented approach to dealing with the canvas API.
+I needed exposure to deeper, underlying parts and one that I could easily extend at my choosing.
+Just the right mix between high level and low level.
 Skittle also doesn't require a pre-existing canvas to instantiate.
 Skittle scratches my itch and floats my boat.
 

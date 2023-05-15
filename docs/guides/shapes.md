@@ -7,6 +7,7 @@ The name of the shape also represents its type.
 Once registered, a shape can be referenced according to its type.
 
 Currently, only the following shapes are supported:
+ - Circle
  - Rect
  - Image
 
