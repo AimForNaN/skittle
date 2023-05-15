@@ -37,7 +37,7 @@ $ yarn add @truefusion/skittle
 
 Skittle assumes every canvas to be its own layer.
 As such, every canvas is handled by the `Layer` class, each `Layer` representing one canvas or render target.
-A render target is an object that provides a render context to draw on, assuming it is supported by Skittle.
+A render target is an object that provides a render context to draw on, assuming it is supported by skittle.
 A render target can be specified in the `Layer`'s constructor.
 
 ```js

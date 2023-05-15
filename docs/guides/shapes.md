@@ -11,6 +11,8 @@ Currently, only the following shapes are supported:
  - Rect
  - Image
 
+Any other shapes will have to be created through skittle's API.
+
 ## Creating custom shapes
 
 Shapes can either extend from `Shape` or `StyledShape`.
