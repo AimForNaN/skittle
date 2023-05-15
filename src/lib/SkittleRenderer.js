@@ -122,7 +122,10 @@ export default class Renderer {
 		if (Renderer.isValidRenderingContext(ctx)) {
 			ctx.setTransform(t);
 		} else {
-			console.warn('Unsupported rendering context provided! Could not set transformation!', ctx);
+			console.warn(
+				'Unsupported rendering context provided! Could not set transformation!',
+				ctx
+			);
 		}
 	}
 
@@ -146,7 +149,7 @@ export default class Renderer {
 		if (factory instanceof Function) {
 			return function (ctx) {
 				factory(ctx, shape);
-			}
+			};
 		}
 		return null;
 	}

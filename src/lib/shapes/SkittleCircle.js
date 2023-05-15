@@ -19,11 +19,6 @@ export default class Circle extends StyledShape {
 	}
 
 	fromObject(shape) {
-		return new Circle(
-			shape.x,
-			shape.y,
-			shape.radius,
-			shape.style
-		);
+		return new Circle(shape.x, shape.y, shape.radius, shape.style);
 	}
 }
