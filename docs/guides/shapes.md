@@ -17,6 +17,8 @@ Any other shapes will have to be created through skittle's API.
 
 Shapes can either extend from `Shape` or `StyledShape`.
 `StyledShape` conveniently provides basic styling options to your shape.
+Only a couple of methods need to be overridden at the minimum.
+The rest will be automatically handled by skittle.
 
 ::: code-group
 ```js [circle.js]
