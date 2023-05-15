@@ -4,6 +4,7 @@
 	"description": "API-agnostic, HTML5 canvas library.",
 	"main": "./dist/skittle.js",
 	"type": "module",
+	"homepage": "https://truefusion.github.io/skittle/",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/truefusion/skittle.git"
