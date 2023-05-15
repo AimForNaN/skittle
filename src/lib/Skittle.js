@@ -27,7 +27,7 @@ export default class Layer {
 	 */
 	addShape(shape) {
 		if (Renderer.isValidShape(shape)) {
-			if (typeof shape.visible == 'undefined') {
+			if (!shape.hasOwnProperty('visible')) {
 				shape.visible = true;
 			}
 			this.#shapes.add(shape);
