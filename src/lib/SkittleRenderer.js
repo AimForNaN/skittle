@@ -140,7 +140,7 @@ export default class Renderer {
 		}
 
 		var factory = Renderer.#Shapes.get(shape.type);
-		if (factory instanceof Shape) {
+		if (factory.prototype instanceof Shape) {
 			return factory.prototype.fromObject(shape);
 		}
 		if (factory instanceof Function) {
