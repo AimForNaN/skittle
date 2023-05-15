@@ -9,18 +9,21 @@ Skittle mostly only cares about rendering.
 As such, things like animations and pointer events are left in the hands of the developer.
 Nevertheless, we provide basic examples on ways to deal with things like animations and hit detection.
 
-### Why not just use origami?
+### Differences between origami
 
-Origami seems to be compatible with web components and allows for easily changing render targets.
-It seems to support animations.
-It seems to support custom and complex shapes.
-It seems to have everything that I need and that skittle provides.
-So, why not just use origami?
-Simply put, I wanted a more object-oriented approach to dealing with the canvas API.
-I needed exposure to deeper, underlying parts and one that I could easily extend at my choosing.
-Just the right mix between high level and low level.
-Skittle also doesn't require a pre-existing canvas to instantiate.
-Skittle scratches my itch and floats my boat.
+| Feature | skittle | origami |
+|---|---|---|
+| ES6 module | :white_check_mark: | :x: |
+| CommonJS module | :white_check_mark: | :x: |
+| Object-oriented | :white_check_mark: | :x: |
+| Easily extendable | :white_check_mark: | :x: |
+| CSS notation | :x: | :white_check_mark: |
+| Custom shapes | :white_check_mark: | :white_check_mark: |
+| Web components compatible | :white_check_mark: | :white_check_mark: |
+| Supports animations | :white_check_mark: | :white_check_mark: |
+| Constructor requires existing canvas | :x: | :white_check_mark: |
+| Affine transformations | :white_check_mark: | :white_check_mark: |
+| Composite operations | :x: | :white_check_mark: |
 
 ## Installation
 
