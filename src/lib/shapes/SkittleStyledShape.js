@@ -162,6 +162,44 @@ export default class StyledShape extends Shape {
 		return null;
 	}
 
+	normalizeOrigin(transform, sign = 1) {
+		if (typeof transform.origin == 'object') {
+			if (
+				typeof transform.origin.x == 'number' &&
+				typeof transform.origin.y == 'number'
+			) {
+				return translate(transform.origin.x * sign, transform.origin.y * sign);
+			}
+		}
+		return new DOMMatrix();
+	}
+
+	normalizeRotation(transform) {
+		if (typeof transform.rotate == 'number') {
+			return rotateDEG(transform.rotate);
+		}
+		return new DOMMatrix();
+	}
+
+	normalizeScale(transform) {
+		if (typeof transform.scale == 'number') {
+			return scale(transform.scale, transform.scale);
+		} else if (typeof transform.scale == 'object') {
+			if (
+				typeof transform.scale.x == 'number' &&
+				typeof transform.scale.y == 'number'
+			) {
+				return scale(transform.scale.x, transform.scale.y);
+			}
+		} else if (Array.isArray(transform.scale)) {
+			let [x, y] = transform.scale;
+			if (typeof x == 'number' && typeof y == 'number') {
+				return scale(x, y);
+			}
+		}
+		return new DOMMatrix();
+	}
+
 	normalizeTransform(transform) {
 		if (isAffineMatrix(transform)) {
 			return transform;
@@ -169,28 +207,27 @@ export default class StyledShape extends Shape {
 
 		var ret = [new DOMMatrix()];
 		if (transform) {
-			if (typeof transform.scale == 'number') {
-				ret.push(scale(transform.scale, transform.scale));
-			} else if (typeof transform.scale == 'object') {
-				if (
-					typeof transform.scale.x == 'number' &&
-					typeof transform.scale.y == 'number'
-				) {
-					ret.push(scale(transform.scale.x, transform.scale.y));
-				}
-			}
-
-			if (transform.rotate) {
-				ret.push(rotateDEG(transform.rotate));
-			}
-
-			if (typeof transform.translate == 'object') {
-				ret.push(
-					translate(transform.translate.x, transform.translate.y)
-				);
-			}
+			ret = [
+				this.normalizeOrigin(transform),
+				this.normalizeTranslate(transform),
+				this.normalizeRotation(transform),
+				this.normalizeScale(transform),
+				this.normalizeOrigin(transform, -1),
+			];
 		}
 		return compose(...ret);
+	}
+
+	normalizeTranslate(transform) {
+		if (typeof transform.translate == 'object') {
+			if (
+				typeof transform.translate.x == 'number' &&
+				typeof transform.translate.y == 'number'
+			) {
+				return translate(transform.translate.x, transform.translate.y);
+			}
+		}
+		return new DOMMatrix();
 	}
 
 	setStyle(style) {

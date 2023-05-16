@@ -1,6 +1,6 @@
 import StyledShape from './SkittleStyledShape';
 import { Origin } from '../common';
-import { compose, translate } from 'transformation-matrix';
+import { compose, isAffineMatrix, translate } from 'transformation-matrix';
 
 export default class Rect extends StyledShape {
 	x = 0;
@@ -33,67 +33,38 @@ export default class Rect extends StyledShape {
 		);
 	}
 
-	normalizeTransform(transform) {
-		var ret = [];
-
+	normalizeOrigin(transform, sign = 1) {
 		if (typeof transform.origin == 'string') {
 			switch (transform.origin) {
 				case Origin.BottomLeft: {
-					ret.push(translate(0, this.height));
-					break;
+					return translate(0, this.height * sign);
 				}
 				case Origin.BottomRight: {
-					ret.push(translate(this.width, this.height));
-					break;
+					return translate(this.width * sign, this.height * sign);
 				}
 				case Origin.Center: {
-					ret.push(translate(this.width / 2, this.height / 2));
-					break;
+					return translate(
+						(this.width / 2) * sign,
+						(this.height / 2) * sign
+					);
 				}
 				case Origin.TopRight: {
-					ret.push(translate(this.width, 0));
-					break;
+					return translate(this.width * sign, 0);
 				}
 			}
-		} else if (typeof transform.origin == 'object') {
-			if (
-				typeof transform.origin.x == 'number' &&
-				typeof transform.origin.y == 'number'
-			) {
-				ret.push(translate(transform.origin.x, transform.origin.y));
-			}
 		}
+		return super.normalizeOrigin(transform, sign);
+	}
+
+	normalizeTransform(transform) {
+		if (isAffineMatrix(transform)) {
+			return transform;
+		}
+
+		var ret = [];
 
 		ret.push(translate(this.x, this.y));
 		ret.push(super.normalizeTransform(transform));
-
-		if (typeof transform.origin == 'string') {
-			switch (transform.origin) {
-				case Origin.BottomLeft: {
-					ret.push(translate(0, -this.height));
-					break;
-				}
-				case Origin.BottomRight: {
-					ret.push(translate(-this.width, -this.height));
-					break;
-				}
-				case Origin.Center: {
-					ret.push(translate(this.width / -2, this.height / -2));
-					break;
-				}
-				case Origin.TopRight: {
-					ret.push(translate(-this.width, 0));
-					break;
-				}
-			}
-		} else if (typeof transform.origin == 'object') {
-			if (
-				typeof transform.origin.x == 'number' &&
-				typeof transform.origin.y == 'number'
-			) {
-				ret.push(translate(-transform.origin.x, -transform.origin.y));
-			}
-		}
 
 		return compose(...ret);
 	}
