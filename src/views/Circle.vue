@@ -16,6 +16,12 @@
 					color: 'black',
 					width: 1,
 				},
+				shadow: {
+					x: 5,
+					y: 5,
+					blur: 0,
+					color: '#999',
+				},
 			},
 		},
 	];
