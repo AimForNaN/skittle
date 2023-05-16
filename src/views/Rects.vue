@@ -2,44 +2,11 @@
 	import Canvas from "../components/Canvas.vue";
 	import Shape from "../components/Shape.vue";
 
-	const rects = [
+	const shapes = [
 		{
 			type: 'rect',
-			x: 50,
-			y: 50,
-			width: 200,
-			height: 200,
-			style: {
-				background: {
-					color: 'black',
-				},
-				transform: {
-					origin: 'center',
-					rotate: 45,
-				},
-			},
-		},
-		{
-			type: 'rect',
-			x: 250,
-			y: 50,
-			width: 200,
-			height: 200,
-			style: {
-				background: {
-					color: 'black',
-				},
-				opacity: 0.5,
-				transform: {
-					origin: 'center',
-					rotate: 45,
-				},
-			},
-		},
-		{
-			type: 'rect',
-			x: 300,
-			y: 300,
+			x: 150,
+			y: 150,
 			width: 200,
 			height: 200,
 			style: {
@@ -64,6 +31,6 @@
 
 <template>
 	<Canvas>
-		<Shape :config="rect" v-for="rect in rects"></Shape>
+		<Shape :config="shape" v-for="shape in shapes"></Shape>
 	</Canvas>
 </template>

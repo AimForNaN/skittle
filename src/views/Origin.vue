@@ -1,16 +1,15 @@
 <script setup>
-	import { ref } from 'vue';
+	import { reactive, ref } from 'vue';
 	import anime from 'animejs/lib/anime.es.js';
 	import Canvas from '../components/Canvas.vue';
 	import Shape from '../components/Shape.vue';
+	import { Renderer } from '../lib';
 
 	const $canvas = ref(null);
 	const timeline = anime.timeline({
-		// delay: 500,
 		direction: 'alternate',
-		duration: 3000,
+		duration: 2000,
 		easing: 'linear',
-		// endDelay: 500,
 		loop: true,
 		update() {
 			if ($canvas.value) {
@@ -18,82 +17,121 @@
 			}
 		},
 	});
-	const pos = {
+	const pos = reactive({
 		x: 150,
 		y: 150,
-	};
-	const origin = {
+	});
+	const origin = reactive({
 		x: 0,
 		y: 0,
-	};
-	const rect = {
-		type: 'rect',
-		...pos,
-		width: 100,
-		height: 50,
-		style: {
-			background: {
-				color: 'black',
-			},
-			transform: {
-				origin,
-				scale: 0.25,
-			},
-		},
-	};
-	const rect2 = {
-		type: 'rect',
-		...pos,
-		width: 100,
-		height: 50,
-		style: {
-			border: {
-				color: 'red',
-				width: 1 / 0.25,
-			},
-			transform: {
-				origin,
-				scale: 0.25,
-			},
-		},
-	};
-	const rect3 = {
-		type: 'rect',
-		x: 0,
-		y: 0,
-		width: 100,
-		height: 50,
-		style: {
-			border: {
-				color: 'blue',
-				width: 1,
-			},
-		},
+	});
+	const transform = {
+		scale: 1,
 	};
 	function onMousemove(e) {
-		origin.x = e.offsetX - 100;
-		origin.y = e.offsetY - 100;
+		origin.x = e.offsetX - pos.x;
+		origin.y = e.offsetY - pos.y;
+	}
+	function shapesRenderer(ctx) {
+		const shapes = [
+			{
+				type: 'rect',
+				...pos,
+				width: 100,
+				height: 50,
+				style: {
+					background: {
+						color: 'black',
+					},
+					opacity: 0.5,
+					transform: {
+						origin,
+						scale: transform.scale,
+					},
+				},
+			},
+			{
+				type: 'circle',
+				...pos,
+				radius: 50,
+				style: {
+					background: {
+						color: 'black',
+					},
+					opacity: 0.25,
+					transform: {
+						origin,
+						scale: transform.scale,
+					},
+				},
+			},
+			{
+				type: 'rect',
+				...pos,
+				width: 100,
+				height: 50,
+				style: {
+					border: {
+						color: 'red',
+						width: 1,
+					},
+				},
+			},
+			{
+				type: 'circle',
+				...pos,
+				radius: 50,
+				style: {
+					border: {
+						color: 'red',
+						width: 1,
+					},
+				},
+			},
+		];
+		shapes.forEach((shape) => {
+			shape = Renderer.shapeFromObject(shape);
+			Renderer.draw(shape, ctx);
+		});
 	}
 	function originRenderer(ctx) {
-		if (ctx instanceof CanvasRenderingContext2D) {
-			ctx.beginPath();
-			ctx.rect(origin.x, origin.y, 5, 5);
-			ctx.fillStyle = 'red';
-			ctx.fill();
-		}
+		var shapes = [
+			{
+				type: 'circle',
+				x: origin.x + pos.x,
+				y: origin.y + pos.y,
+				radius: 3,
+				style: {
+					background: {
+						color: 'red',
+					},
+				},
+			},
+		];
+		shapes.forEach((shape) => {
+			shape = Renderer.shapeFromObject(shape);
+			Renderer.draw(shape, ctx);
+		});
 	}
 
 	timeline.add({
-		targets: rect.style.transform,
+		targets: transform,
 		scale: 2,
 	});
 </script>
 
 <template>
-	<Canvas :x="100" :y="100" ref="$canvas" @mousemove="onMousemove">
-		<Shape :config="rect"></Shape>
-		<Shape :config="rect2"></Shape>
-		<Shape :config="rect3"></Shape>
+	<Canvas ref="$canvas" @mousemove="onMousemove">
+		<Shape :config="shapesRenderer"></Shape>
 		<Shape :config="originRenderer"></Shape>
 	</Canvas>
+	<div class="box">origin: {{ origin }}</div>
 </template>
+
+<style>
+	.box {
+		padding: 0.25rem;
+		pointer-events: none;
+		position: absolute;
+	}
+</style>

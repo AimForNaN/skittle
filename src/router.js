@@ -7,6 +7,7 @@ import Image from './views/Image.vue';
 import Origin from './views/Origin.vue';
 import Rects from './views/Rects.vue';
 import RenderFunction from './views/RenderFunction.vue';
+import Transform from './views/Transform.vue';
 import TransformPoint from './views/TransformPoint.vue';
 
 export const routes = [
@@ -26,14 +27,19 @@ export const routes = [
 		component: Image,
 	},
 	{
-		label: 'Animation',
-		path: '/animation',
-		component: Animation,
+		label: 'Transform',
+		path: '/transform',
+		component: Transform,
 	},
 	{
 		label: 'Origin',
 		path: '/origin',
 		component: Origin,
+	},
+	{
+		label: 'Animation',
+		path: '/animation',
+		component: Animation,
 	},
 	{
 		label: 'Hit Detection',
