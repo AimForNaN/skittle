@@ -230,7 +230,7 @@ export default class StyledShape extends Shape {
 		return new DOMMatrix();
 	}
 
-	setStyle(style) {
+	setStyle(style = {}) {
 		if (typeof style.background == 'object') {
 			this.background = style.background;
 		}
