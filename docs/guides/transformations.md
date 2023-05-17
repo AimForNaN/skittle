@@ -41,6 +41,11 @@ At the very least, `normalizeTransform` should be overridden.
 import { Renderer, StyledShape } from '@truefusion/skittle';
 
 class CustomShape extends StyledShape {
+	constructor(style) {
+		super();
+		this.setStyle(style);
+	}
+
 	normalizeTransform(transform) {
 		var t = [
 			super.normalizeTransform(transform),
