@@ -27,7 +27,7 @@ export default class ImageCache {
 		return new Promise((resolve, reject) => {
 			if (typeof src == 'string') {
 				var img = new Image();
-				img.crossOrigin = 'Anonymous';
+				img.crossOrigin = 'anonymous';
 				img.addEventListener('load', () => {
 					ImageCache.add(src, img);
 					resolve(img);
