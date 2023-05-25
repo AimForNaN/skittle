@@ -5,11 +5,10 @@
 
 	const $canvas = ref(null);
 	const cursor = {
-		type: 'rect',
+		type: 'circle',
 		x: 0,
 		y: 0,
-		width: 10,
-		height: 10,
+		radius: 5,
 		style: {
 			background: {
 				color: 'red',

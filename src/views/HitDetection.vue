@@ -6,11 +6,10 @@
 	const $canvas = ref(null);
 	const $hitCanvas = ref(null);
 	const hit = {
-		type: 'rect',
+		type: 'circle',
 		x: 0,
 		y: 0,
-		width: 10,
-		height: 10,
+		radius: 5,
 		style: {
 			background: {
 				color: 'red',
@@ -39,8 +38,8 @@
 	function onMouseDown(e) {
 		var stage = $canvas.value.stage;
 		var shape = stage.shapeAtPoint(e.offsetX, e.offsetY);
-		hit.x = e.offsetX - 5;
-		hit.y = e.offsetY - 5;
+		hit.x = e.offsetX;
+		hit.y = e.offsetY;
 		hit.style.background.color = shape ? 'cyan' : 'red';
 		$hitCanvas.value.draw();
 	}
