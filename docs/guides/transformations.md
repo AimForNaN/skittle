@@ -51,5 +51,5 @@ $skittle.addShape({
 ```
 
 :::info NOTE
-If you want to support a different transformation order or a different interface, you'll have to define your own filter.
+If you want to support a different transformation order or a different interface, you'll have to define your own filter or manually adjust the context at draw time.
 :::
