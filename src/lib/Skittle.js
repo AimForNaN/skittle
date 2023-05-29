@@ -1,6 +1,7 @@
 import ImageCache from './ImageCache';
 import Renderer from './SkittleRenderer';
-import { Circle, Image, Rect, Shape } from './shapes';
+import { Circle, Image, Rect } from './shapes';
+import Shape from './shapes/SkittleShape';
 import { isAffineMatrix } from 'transformation-matrix';
 
 Renderer.registerShape('circle', Circle);
