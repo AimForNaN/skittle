@@ -19,8 +19,11 @@ export default class Layer {
 	 * @param {import('./SkittleRenderer').RenderTarget | String} canvas
 	 */
 	constructor(canvas) {
-		this.#canvas = new OffscreenCanvas(0, 0);
-		this.target(canvas);
+		if (canvas) {
+			this.target(canvas);
+		} else {
+			this.#canvas = new OffscreenCanvas(0, 0);
+		}
 	}
 
 	/**
