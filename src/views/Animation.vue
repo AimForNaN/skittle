@@ -15,7 +15,7 @@
 		loop: true,
 		update() {
 			if ($canvas.value) {
-				$canvas.value.draw(false);
+				$canvas.value.draw();
 			}
 		},
 	});
