@@ -23,11 +23,6 @@ The `createPath` method must return a `Path2D` instance.
 import { Shape } from '@truefusion/skittle';
 
 export default class CustomShape extends Shape {
-	constructor(obj) {
-		super();
-		// Handle obj...
-	}
-
 	createPath() {
 		var path = new Path2D();
 		// Create path...
