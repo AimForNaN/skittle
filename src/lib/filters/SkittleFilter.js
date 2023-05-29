@@ -9,6 +9,6 @@ export default class Filter {
 	 * @param {import('../shapes/SkittleShape').default} shape
 	 */
 	apply(ctx, shape) {
-		throw new Error('Trying to call abstract method Filter.apply!');
+		throw new Error('Trying to call abstract method "apply"!');
 	}
 }

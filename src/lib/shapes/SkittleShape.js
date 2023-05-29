@@ -28,8 +28,7 @@ export default class Shape {
 	 * @returns {Path2D}
 	 */
 	createPath() {
-		var path = new Path2D();
-		return path;
+		throw new Error('Trying to call abstract method "createPath"!');
 	}
 
 	/**
