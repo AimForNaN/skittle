@@ -2,7 +2,7 @@
 	import Animation from "../../src/views/Animation.vue";
 </script>
 
-# Hit detection
+# Animations
 
 <div class="example">
 	<Animation></Animation>

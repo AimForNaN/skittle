@@ -2,7 +2,7 @@
 	import Origin from "../../src/views/Origin.vue";
 </script>
 
-# Hit detection
+# Transform origin
 
 <div class="example">
 	<Origin></Origin>
