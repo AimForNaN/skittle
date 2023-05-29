@@ -52,7 +52,7 @@ canvas.id = 'canvas';
 document.body.appendChild(canvas);
 
 var $skittle = new Skittle.Layer(canvas);
-var $skittle = new Skittle.Layer('#canvas');
+// var $skittle = new Skittle.Layer('#canvas'); // Alternatively!
 ```
 
 By default, if no other render target is specified, each layer will start off with its own [offscreen canvas](https://developer.mozilla.org/en-US/docs/Web/API/OffscreenCanvas).
@@ -64,9 +64,13 @@ var $skittle = new Skittle.Layer(); // Defaults to OffscreenCanvas!
 Nevertheless, it is not necessary to construct multiple layers to handle multiple canvas elements.
 After constructing a new `Layer`, you can dynamically change render targets.
 
-```js
+::: code-group
+```js [HTMLCanvasElement]
 $skittle.target(canvas);
+```
+```js [Query selector]
 $skittle.target('#canvas');
 ```
+:::
 
 From here you can start working with shapes and issuing `draw` commands.
