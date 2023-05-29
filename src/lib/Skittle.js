@@ -1,9 +1,6 @@
 import ImageCache from './ImageCache';
-import Image from './shapes/SkittleImage';
-import Circle from './shapes/SkittleCircle';
-import Rect from './shapes/SkittleRect';
 import Renderer from './SkittleRenderer';
-import StyledShape from './shapes/SkittleStyledShape';
+import { Circle, Image, Rect, Shape } from './shapes';
 import { isAffineMatrix } from 'transformation-matrix';
 
 Renderer.registerShape('circle', Circle);
@@ -115,7 +112,7 @@ export default class Layer {
 				if (sh) {
 					if (sh instanceof Image) {
 						src = sh.src;
-					} else if (sh instanceof StyledShape) {
+					} else if (sh instanceof Shape) {
 						src = sh.image;
 					}
 				}

@@ -1,40 +1,26 @@
-import ImageCache from '../ImageCache';
-import Renderer from '../SkittleRenderer';
+import {
+	ImageFilter,
+	RectStyleFilter,
+	RemoveShadowFilter,
+	StrokeFilter,
+} from '../filters';
 import Rect from './SkittleRect';
 
 export default class Image extends Rect {
+	/** @type {string} */
 	src;
 
-	constructor(src, x, y, width, height, style) {
-		super(x, y, width, height, style);
+	constructor(shape) {
+		var { src, x, y, width, height, ...etc } = shape;
+		super(shape);
 		this.src = src;
-	}
 
-	draw(ctx) {
-		if (Renderer.isValidRenderingContext(ctx)) {
-			let path = this.createPath();
-			ctx.fill(path);
-
-			let img = ImageCache.get(this.src);
-			if (img) {
-				ctx.drawImage(img, 0, 0, this.width, this.height);
-			}
-
-			Image.clearShadow(ctx);
-			ctx.stroke(path);
-		} else {
-			console.warn('Unsupported rendering context provided!');
-		}
-	}
-
-	fromObject(shape) {
-		return new Image(
-			shape.src,
-			shape.x,
-			shape.y,
-			shape.width,
-			shape.height,
-			shape.style
+		this.clearFilters();
+		this.use(
+			new RectStyleFilter(shape),
+			new ImageFilter(etc),
+			new RemoveShadowFilter(etc),
+			new StrokeFilter(etc)
 		);
 	}
 }

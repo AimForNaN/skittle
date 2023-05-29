@@ -6,20 +6,35 @@ import {
 	translate,
 } from 'transformation-matrix';
 import ImageCache from '../ImageCache';
-import Shape from './SkittleShape';
 import Renderer from '../SkittleRenderer';
+import RemoveShadowFilter from './SkittleRemoveShadowFilter';
 
-export default class StyledShape extends Shape {
+/**
+ * @todo Maybe split into separate filters.
+ */
+export default class StyleFilter extends RemoveShadowFilter {
 	background = {};
 	border = {};
 	opacity = 1;
 	shadow = {};
 	transform = new DOMMatrix();
 
-	constructor(style) {
+	constructor({ style }) {
 		super();
 		if (style) {
 			this.setStyle(style);
+		}
+	}
+
+	apply(ctx) {
+		if (Renderer.isValidRenderingContext(ctx)) {
+			this.applyOpacity(ctx);
+			this.applyBackground(ctx);
+			this.applyBorder(ctx);
+			this.applyShadow(ctx);
+			this.applyTransform(ctx);
+		} else {
+			console.warn('Unsupported rendering context provided!', ctx);
 		}
 	}
 
@@ -97,7 +112,7 @@ export default class StyledShape extends Shape {
 
 	applyShadow(ctx) {
 		if (Renderer.isValidRenderingContext(ctx)) {
-			StyledShape.clearShadow(ctx);
+			StyleFilter.clearShadow(ctx);
 
 			var { shadow } = this;
 			if (shadow.x || shadow.y) {
@@ -120,40 +135,6 @@ export default class StyledShape extends Shape {
 		}
 	}
 
-	applyStyle(ctx) {
-		if (Renderer.isValidRenderingContext(ctx)) {
-			this.applyOpacity(ctx);
-			this.applyBackground(ctx);
-			this.applyBorder(ctx);
-			this.applyShadow(ctx);
-			this.applyTransform(ctx);
-		} else {
-			console.warn('Unsupported rendering context provided!', ctx);
-		}
-	}
-
-	static clearShadow(ctx) {
-		if (Renderer.isValidRenderingContext(ctx)) {
-			ctx.shadowColor = 'transparent';
-			ctx.shadowBlur = 0;
-			ctx.shadowOffsetX = 0;
-			ctx.shadowOffsetY = 0;
-		} else {
-			console.warn('Unsupported rendering context provided!', ctx);
-		}
-	}
-
-	draw(ctx) {
-		if (Renderer.isValidRenderingContext(ctx)) {
-			var path = this.createPath();
-			ctx.fill(path);
-			StyledShape.clearShadow(ctx);
-			ctx.stroke(path);
-		} else {
-			console.warn('Unsupported rendering context provided!', ctx);
-		}
-	}
-
 	get image() {
 		var { background } = this;
 		if (background && background.image) {
@@ -168,7 +149,10 @@ export default class StyledShape extends Shape {
 				typeof transform.origin.x == 'number' &&
 				typeof transform.origin.y == 'number'
 			) {
-				return translate(transform.origin.x * sign, transform.origin.y * sign);
+				return translate(
+					transform.origin.x * sign,
+					transform.origin.y * sign
+				);
 			}
 		}
 		return new DOMMatrix();

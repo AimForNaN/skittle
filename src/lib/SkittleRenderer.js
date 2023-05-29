@@ -1,5 +1,4 @@
 import Shape from './shapes/SkittleShape';
-import StyledShape from './shapes/SkittleStyledShape';
 import {
 	applyToPoint,
 	compose,
@@ -7,6 +6,11 @@ import {
 	scale,
 	translate,
 } from 'transformation-matrix';
+
+/**
+ * @typedef Matrix
+ * @type {import('transformation-matrix').Matrix}
+ */
 
 /**
  * @typedef RenderContext
@@ -19,18 +23,16 @@ import {
  */
 
 export default class Renderer {
+	/** @type Map<string,Shape> */
 	static #Shapes = new Map();
 
 	/**
 	 * @param {Shape} shape
 	 * @param {RenderContext} ctx
-	 * @param {DOMMatrix} t
+	 * @param {DOMMatrix|Matrix} t
 	 */
 	static draw(shape, ctx, t = new DOMMatrix()) {
 		Renderer.setTransform(ctx, t);
-		if (shape instanceof StyledShape) {
-			shape.applyStyle(ctx);
-		}
 		if (shape instanceof Shape) {
 			shape.draw(ctx);
 		} else if (shape instanceof Function) {
@@ -106,7 +108,7 @@ export default class Renderer {
 	 * Scale matrix.
 	 * @param {number} x
 	 * @param {number} y
-	 * @param {DOMMatrix} [t] Matrix to scale.
+	 * @param {DOMMatrix|Matrix} [t] Matrix to scale.
 	 * @returns {import('transformation-matrix').Matrix}
 	 */
 	static scale(x, y, t = new DOMMatrix()) {
@@ -115,7 +117,7 @@ export default class Renderer {
 
 	/**
 	 * @param {CanvasRenderingContext2D} ctx
-	 * @param {DOMMatrix} [t]
+	 * @param {DOMMatrix|Matrix} [t]
 	 */
 	static setTransform(ctx, t = new DOMMatrix()) {
 		if (Renderer.isValidRenderingContext(ctx)) {
@@ -143,7 +145,7 @@ export default class Renderer {
 
 		var factory = Renderer.#Shapes.get(shape.type);
 		if (factory.prototype instanceof Shape) {
-			return factory.prototype.fromObject(shape);
+			return new factory(shape);
 		}
 		if (factory instanceof Function) {
 			return function (ctx) {
@@ -153,6 +155,11 @@ export default class Renderer {
 		return null;
 	}
 
+	/**
+	 * Combine transformation matrices.
+	 * @param  {...DOMMatrix|Matrix} t
+	 * @returns {Matrix}
+	 */
 	static transform(...t) {
 		return compose(...t);
 	}
@@ -161,7 +168,7 @@ export default class Renderer {
 	 * Transform point.
 	 * @param {number} x
 	 * @param {number} y
-	 * @param {DOMMatrix} [t] Matrix used to transform point.
+	 * @param {DOMMatrix|Matrix} [t] Matrix used to transform point.
 	 * @returns {{ x: number, y: number }}
 	 */
 	static transformPoint(x, y, t = new DOMMatrix()) {
@@ -172,8 +179,8 @@ export default class Renderer {
 	 * Translate matrix.
 	 * @param {number} x
 	 * @param {number} y
-	 * @param {DOMMatrix} [t] Matrix to translate.
-	 * @returns {import('transformation-matrix').Matrix}
+	 * @param {DOMMatrix|Matrix} [t] Matrix to translate.
+	 * @returns {Matrix}
 	 */
 	static translate(x, y, t = new DOMMatrix()) {
 		return compose(translate(x, y), t);

@@ -54,7 +54,6 @@
 			function resize() {
 				var rect = $el.value.parentElement.getBoundingClientRect();
 				stage.resize(rect.width, rect.height);
-				draw();
 			}
 
 			expose({
@@ -72,7 +71,6 @@
 				if ($props.autoResize) {
 					resize();
 				}
-				draw();
 			});
 
 			return () => {
