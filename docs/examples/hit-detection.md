@@ -7,3 +7,5 @@
 <div class="example">
 	<HitDetection></HitDetection>
 </div>
+
+<<< @/../src/views/HitDetection.vue

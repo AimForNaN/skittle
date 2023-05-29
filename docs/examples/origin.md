@@ -7,3 +7,5 @@
 <div class="example">
 	<Origin></Origin>
 </div>
+
+<<< @/../src/views/Origin.vue

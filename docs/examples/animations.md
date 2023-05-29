@@ -7,3 +7,5 @@
 <div class="example">
 	<Animation></Animation>
 </div>
+
+<<< @/../src/views/Animation.vue
