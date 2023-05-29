@@ -45,15 +45,6 @@ export default class Shape {
 	}
 
 	/**
-	 * Create Shape from arbitrary object.
-	 * @param {Object} shape Object representing the shape.
-	 * @returns {Shape}
-	 */
-	static fromObject(shape) {
-		return new this(shape);
-	}
-
-	/**
 	 * Add filters.
 	 * @param {...SkittleFilter} filters
 	 */
