@@ -17,6 +17,7 @@ export default defineConfig({
 				items: [
 					{ text: 'Getting started', link: '/guides/' },
 					{ text: 'Shapes', link: '/guides/shapes' },
+					{ text: 'Filters', link: '/guides/filters' },
 					{ text: 'Transformations', link: '/guides/transformations' },
 				],
 			},

@@ -8,45 +8,38 @@ Once registered, a shape can be referenced according to its type.
 
 Currently, only the following shapes are supported:
  - Circle
- - Rect
  - Image
+ - Rect
 
 Any other shapes will have to be created through skittle's API.
 
 ## Creating custom shapes
 
-Shapes can either extend from `Shape` or `StyledShape`.
-`StyledShape` conveniently provides basic styling options to your shape.
-Only a couple of methods need to be overridden at the minimum.
-The rest will be automatically handled by skittle.
+All shapes must extend from the `Shape` class and implement the `createPath` method.
+The `createPath` method must return a `Path2D` instance.
 
 ::: code-group
-```js [circle.js]
-import { StyledShape } from '@truefusion/skittle';
+```js [custom-shape.js]
+import { Shapes } from '@truefusion/skittle';
+const { Shape } = Shapes;
 
-export default class Circle extends StyledShape {
-	x;
-	y;
-	radius;
-
-	constructor(x, y, radius, style) {
-		super(style);
-		this.x = x;
-		this.y = y;
-		this.radius = radius;
+export default class CustomShape extends Shape {
+	constructor(obj) {
+		super();
+		// Handle obj...
 	}
 
 	createPath() {
 		var path = new Path2D();
-		path.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+		// Create path...
 		return path;
-	}
-
-	static fromObject(obj) {
-		return new Circle(obj.x, obj.y, obj.radius, obj.style);
 	}
 }
 ```
+:::
+
+::: info NOTE
+The `createPath` method is also used for hit detection.
 :::
 
 ## Registering a shape
@@ -55,9 +48,9 @@ All shape definitions are registered through the `Renderer` class.
 
 ```js
 import { Renderer } from '@truefusion/skittle';
-import Circle from './circle.js';
+import CustomShape from './custom-shape.js';
 
-Renderer.registerShape('circle', Circle);
+Renderer.registerShape('custom', CustomShape);
 ```
 
 From that point on, skittle can match a shape's type to the registered name.
@@ -67,19 +60,7 @@ import { Layer } from '@truefusion/skittle';
 
 const $skittle = new Layer();
 $skittle.addShape({
-	type: 'circle',
-	x: 100,
-	y: 100,
-	radius: 10,
-	style: {
-		background: {
-			color: 'crimson',
-		},
-		border: {
-			color: 'red',
-			width: 1,
-		},
-	},
+	type: 'custom',
 }).draw();
 ```
 
@@ -89,12 +70,9 @@ It is not entirely necessary to register a new shape in order to render a custom
 Skittle supports the dynamic rendering of shapes through render functions.
 
 ```js
-$skittle.addShape(function (ctx) {
+$skittle.addShape(function (ctx, obj) {
 	if (Renderer.isValidRenderingContext(ctx)) {
-		ctx.lineWidth = 3;
-		ctx.beginPath();
-		ctx.arc(100, 100, 20, 0, Math.PI * 2);
-		ctx.stroke();
+		// Render shape...
 	}
 }).draw();
 ```
@@ -109,28 +87,14 @@ Skittle gives you the option to register render functions as shapes.
 Let us modify the previous example.
 
 ```js
-Renderer.registerShape('circle', function (ctx, obj) {
+Renderer.registerShape('custom', function (ctx, obj) {
 	if (Renderer.isValidRenderingContext(ctx)) {
-		ctx.fillStyle = obj.style.background.color;
-		ctx.lineWidth = obj.style.border.width;
-		ctx.beginPath();
-		ctx.arc(obj.x, obj.y, obj.radius, 0, Math.PI * 2);
-		ctx.stroke();
+		// Render shape...
 	}
 });
 
 $skittle.addShape({
-	type: 'circle',
-	x: 100,
-	y: 100,
-	radius: 20,
-	style: {
-		background: {
-			color: 'crimson',
-		},
-		border: {
-			width: 1,
-		},
-	},
+	type: 'custom',
+	// Other properties...
 }).draw();
 ```
