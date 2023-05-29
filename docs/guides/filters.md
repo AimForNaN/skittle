@@ -1,6 +1,7 @@
 # Filters
 
 Filters provide a modular way to make adjustments to the rendering contexts of shapes.
+In this way we can inherit traits from multiple sources without the need for multiple inheritance.
 Each shape can register its own filters to be applied at draw time, but they are not mandatory.
 
 Skittle provides several kinds of filters.
