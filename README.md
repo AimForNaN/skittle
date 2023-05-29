@@ -6,6 +6,22 @@ Skittle mostly only cares about rendering.
 Things like animations and pointer events are left in the hands of the developer.
 Nevertheless, we provide basic examples on ways to deal with things like animations and hit detection.
 
+```js
+import * as Skittle from '@truefusion/skittle';
+
+var $skittle = new Skittle.Layer();
+
+$skittle.addShape({
+	type: 'rect',
+	x: 0,
+	y: 0,
+	width: 100,
+	height: 100,
+});
+
+$skittle.draw();
+```
+
 ### Install
 
 ```sh

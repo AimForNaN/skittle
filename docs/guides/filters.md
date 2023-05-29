@@ -17,11 +17,12 @@ import { Filter } from '@truefusion/skittle';
 
 class CustomFilter extends Filter {
 	apply(ctx, shape) {
+		// Apply filter...
 	}
 }
 ```
 
-## Using filters
+## Consuming filters
 
 All shapes that extend from `Shape` can use the `use` method to register filters to itself.
 
