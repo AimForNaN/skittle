@@ -21,6 +21,14 @@ export default defineConfig({
 					{ text: 'Transformations', link: '/guides/transformations' },
 				],
 			},
+			{
+				text: 'Examples',
+				items: [
+					{ text: 'Animations', link: '/examples/animations' },
+					{ text: 'Hit detection', link: '/examples/hit-detection' },
+					{ text: 'Transform origin', link: '/examples/origin' },
+				],
+			},
 		],
 
 		socialLinks: [

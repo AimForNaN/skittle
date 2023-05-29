@@ -3,6 +3,16 @@
  * https://github.com/vuejs/vitepress/blob/main/src/client/theme-default/styles/vars.css
  */
 
+.example {
+	border: 1px solid #e5e7eb;
+	border-radius: 0.25rem;
+	height: 500px;
+	margin: 1rem 0;
+	overflow: hidden;
+	padding: 1rem;
+	position: relative;
+}
+
 /**
  * Colors
  * -------------------------------------------------------------------------- */
