@@ -2,6 +2,7 @@
 
 Filters provide a modular way to make adjustments to the rendering contexts of shapes.
 Each shape can register its own filters to be applied at draw time, but they are not mandatory.
+
 Skittle provides several kinds of filters.
 
 <<< @/../src/lib/filters/index.js
@@ -11,8 +12,7 @@ Skittle provides several kinds of filters.
 All filters must extend from the `Filter` class and implement the `apply` method.
 
 ```js
-import { Filters } from '@truefusion/skittle';
-const { Filter } = Filters;
+import { Filter } from '@truefusion/skittle';
 
 class CustomFilter extends Filter {
 	apply(ctx, shape) {
@@ -25,9 +25,9 @@ class CustomFilter extends Filter {
 All shapes that extend from `Shape` can use the `use` method to register filters to itself.
 
 ```js
-import { Filters, Shapes } from '@truefusion/skittle';
+import { Shape } from '@truefusion/skittle'; // [!code --]
+import { Filters, Shape } from '@truefusion/skittle'; // [!code ++]
 const { FillFilter, StrokeFilter, StyleFilter } = Filters; // [!code ++]
-const { Shape } = Shapes;
 
 export default class CustomShape extends Shape {
 	constructor(obj) {
@@ -47,10 +47,9 @@ If you desire to work without filters, you will have to override the `draw` meth
 Albeit, filters can still be used even then.
 
 ```js
-import { Filters, Shapes } from '@truefusion/skittle'; // [!code --]
-import { Shapes } from '@truefusion/skittle'; // [!code ++]
+import { Filters, Shape } from '@truefusion/skittle'; // [!code --]
+import { Shape } from '@truefusion/skittle'; // [!code ++]
 const { FillFilter, StrokeFilter, StyleFilter } = Filters; // [!code --]
-const { Shape } = Shapes;
 
 export default class CustomShape extends Shape {
 	constructor(obj) {

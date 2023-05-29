@@ -1,4 +1,3 @@
-export {default as Filter} from './SkittleFilter';
 export {default as FillFilter} from './SkittleFillFilter';
 export {default as ImageFilter} from './SkittleImageFilter';
 export {default as RectStyleFilter} from './SkittleRectStyleFilter';

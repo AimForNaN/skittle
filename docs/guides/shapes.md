@@ -7,9 +7,9 @@ The name of the shape also represents its type.
 Once registered, a shape can be referenced according to its type.
 
 Currently, only the following shapes are supported:
- - Circle
- - Image
- - Rect
+
+<<< @/../src/lib/shapes/index.js
+
 
 Any other shapes will have to be created through skittle's API.
 
@@ -20,8 +20,7 @@ The `createPath` method must return a `Path2D` instance.
 
 ::: code-group
 ```js [custom-shape.js]
-import { Shapes } from '@truefusion/skittle';
-const { Shape } = Shapes;
+import { Shape } from '@truefusion/skittle';
 
 export default class CustomShape extends Shape {
 	constructor(obj) {
