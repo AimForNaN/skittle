@@ -92,3 +92,24 @@ $skittle.addShape({
 	// Other properties...
 }).draw();
 ```
+
+## Images
+
+If a custom shape plans on making use of one or more images, they must inform skittle of the images it plans on using.
+The shape will need to override the getter `images` and return an array of all image sources.
+Skittle will use this list when preloading images.
+
+```js
+import { Shape } from '@truefusion/skittle';
+
+export default class CustomShape extends Shape {
+	/**
+	 * @returns {string[]}
+	 */
+	get images() {
+		return [
+			// Image sources...
+		];
+	}
+}
+```
