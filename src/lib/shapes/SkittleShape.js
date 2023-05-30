@@ -1,5 +1,6 @@
 import Renderer from '../SkittleRenderer';
 import SkittleFilter from '../filters/SkittleFilter';
+import StyleFilter from '../filters/SkittleStyleFilter';
 
 /**
  * @abstract
@@ -42,6 +43,20 @@ export default class Shape {
 		} else {
 			console.warn('Unsupported rendering context provided!', ctx);
 		}
+	}
+
+	get images() {
+		var ret = [];
+		var style = Array.from(this.Filters).find((f) => {
+			return f instanceof StyleFilter;
+		});
+		if (style) {
+			let { image } = style;
+			if (image) {
+				ret.push(image);
+			}
+		}
+		return ret;
 	}
 
 	/**

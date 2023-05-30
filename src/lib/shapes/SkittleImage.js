@@ -23,4 +23,12 @@ export default class Image extends Rect {
 			new StrokeFilter(etc)
 		);
 	}
+
+	get images() {
+		var images = super.images;
+		if (this.src) {
+			images.push(this.src);
+		}
+		return images;
+	}
 }

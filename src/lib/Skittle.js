@@ -108,17 +108,15 @@ export default class Layer {
 		return new Promise((resolve, reject) => {
 			var queue = [];
 			this.forEach((shape) => {
-				let src = null;
+				let images = [];
 				let sh = Renderer.shapeFromObject(shape);
-				if (sh) {
-					if (sh instanceof Image) {
-						src = sh.src;
-					} else if (sh instanceof Shape) {
-						src = sh.image;
-					}
+				if (sh instanceof Shape) {
+					images = sh.images;
 				}
-				if (src) {
-					queue.push(ImageCache.queueImage(src));
+				if (images.length) {
+					images.forEach((img) => {
+						queue.push(ImageCache.queueImage(img));
+					});
 				}
 			});
 			Promise.allSettled(queue).then((results) => {
