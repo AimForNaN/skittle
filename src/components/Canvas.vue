@@ -74,17 +74,19 @@
 			});
 
 			return () => {
-				var children = $slots.default ? $slots.default(): [];
+				var children = $slots.default ? $slots.default() : [];
 				children = pullChildren(children);
 				stage.resetTransform();
 				stage.rotate($props.rotation);
 				stage.scale($props.scale);
 				stage.translate($props.x, $props.y);
-				stage.setShapes(children.map((item) => {
-					item = unref(item);
-					item = toRaw(item);
-					return item;
-				}));
+				stage.setShapes(
+					children.map((item) => {
+						item = unref(item);
+						item = toRaw(item);
+						return item;
+					})
+				);
 				stage.preloadImages().then((stage) => {
 					stage.draw();
 				});
@@ -94,8 +96,8 @@
 					ref: $el,
 				});
 			};
-		}
-	}
+		},
+	};
 </script>
 
 <style>
