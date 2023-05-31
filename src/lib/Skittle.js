@@ -262,6 +262,23 @@ export default class Layer {
 		});
 	}
 
+	/**
+	 * Equivalent to `context.getImageData()`.
+	 * @param {number} x
+	 * @param {number} y
+	 * @param {number} width
+	 * @param {number} height
+	 */
+	toData(x, y, width, height) {
+		var { context } = this;
+		return context.getImageData(x, y, width, height);
+	}
+
+	/**
+	 * @param {string} type Mime type.
+	 * @param {number} quality Image quality.
+	 * @returns {Promise}
+	 */
 	toUrl(type = 'image/jpeg', quality = 0.9) {
 		return new Promise((resolve, reject) => {
 			this.toBlob(type, quality).then((blob) => {
