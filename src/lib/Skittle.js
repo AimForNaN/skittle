@@ -47,6 +47,9 @@ export default class Layer {
 		return this;
 	}
 
+	/**
+	 * @returns {CanvasRenderingContext2D|OffscreenCanvasRenderingContext2D}
+	 */
 	get context() {
 		return this.#canvas.getContext('2d');
 	}
