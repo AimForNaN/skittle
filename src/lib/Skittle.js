@@ -233,14 +233,12 @@ export default class Layer {
 	}
 
 	toUrl(type = 'image/jpeg', quality = 0.9) {
-		return new Promise((resolve, reject) => {
+		const blobP = new Promise((resolve, reject) => {
 			if (this.#canvas instanceof HTMLCanvasElement) {
 				this.#canvas.toBlob(
 					(blob) => {
 						if (blob) {
-							var obj = URL.createObjectURL(blob);
 							resolve(obj);
-							URL.revokeObjectURL(obj);
 						} else {
 							reject('Failed to convert to blob!');
 						}
@@ -255,14 +253,21 @@ export default class Layer {
 						quality,
 					})
 					.then((blob) => {
-						var obj = URL.createObjectURL(blob);
-						resolve(obj);
-						URL.revokeObjectURL(obj);
+						resolve(blob);
 					})
 					.catch(reject);
 			} else {
 				reject('Unsupported canvas!');
 			}
+		});
+		return new Promise((resolve, reject) => {
+			blobP.then((blob) => {
+				var reader = new FileReader();
+				reader.addEventListener('load', () => {
+					resolve(reader.result);
+				});
+				reader.readAsDataURL(blob);
+			});
 		});
 	}
 

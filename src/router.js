@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 
 import Animation from './views/Animation.vue';
 import Circle from './views/Circle.vue';
+import DataUrl from './views/DataUrl.vue';
 import HitDetection from './views/HitDetection.vue';
 import Image from './views/Image.vue';
 import Origin from './views/Origin.vue';
@@ -25,6 +26,11 @@ export const routes = [
 		label: 'Image',
 		path: '/image',
 		component: Image,
+	},
+	{
+		label: 'Data URI',
+		path: '/data-uri',
+		component: DataUrl,
 	},
 	{
 		label: 'Transform',
