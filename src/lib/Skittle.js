@@ -232,8 +232,8 @@ export default class Layer {
 		return this;
 	}
 
-	toUrl(type = 'image/jpeg', quality = 0.9) {
-		const blobP = new Promise((resolve, reject) => {
+	toBlob(type = 'image/jpeg', quality = 0.9) {
+		return new Promise((resolve, reject) => {
 			if (this.#canvas instanceof HTMLCanvasElement) {
 				this.#canvas.toBlob(
 					(blob) => {
@@ -260,8 +260,11 @@ export default class Layer {
 				reject('Unsupported canvas!');
 			}
 		});
+	}
+
+	toUrl(type = 'image/jpeg', quality = 0.9) {
 		return new Promise((resolve, reject) => {
-			blobP.then((blob) => {
+			this.toBlob(type, quality).then((blob) => {
 				var reader = new FileReader();
 				reader.addEventListener('load', () => {
 					resolve(reader.result);
