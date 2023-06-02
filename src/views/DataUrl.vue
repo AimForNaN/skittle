@@ -2,15 +2,19 @@
 	import { shallowRef } from 'vue';
 	import { Layer } from '../lib';
 
-	const src = shallowRef('');
+	const pattern = shallowRef('');
+	const section = shallowRef('');
 	const img = {
-		type: 'image',
-		src: '/350x150.png',
+		type: 'rect',
 		x: 0,
 		y: 0,
-		width: 350,
-		height: 150,
+		width: 700,
+		height: 300,
 		style: {
+			background: {
+				image: '/350x150.png',
+				repeat: true,
+			},
 			border: {
 				color: 'black',
 				style: 'solid',
@@ -26,15 +30,23 @@
 	};
 	const $skittle = new Layer();
 	$skittle.addShape(img);
-	$skittle.resize(350,150);
+	$skittle.resize(700, 300);
 	$skittle.preloadImages().then((stage) => {
 		stage.draw();
 		stage.toUrl().then((data) => {
-			src.value = data;
+			pattern.value = data;
+		});
+
+		var data = stage.toData(350, 150, 350, 150);
+		stage.resize(350, 150);
+		stage.context.putImageData(data, 0, 0);
+		stage.toUrl().then((data) => {
+			section.value = data;
 		});
 	});
 </script>
 
 <template>
-	<img :src="src" style="margin: 1rem;">
+	<img :src="pattern" style="margin: 1rem" />
+	<img :src="section" style="margin: 1rem" />
 </template>
