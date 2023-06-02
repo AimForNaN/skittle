@@ -91,7 +91,7 @@ export default class Layer {
 
 		var { context } = layer;
 		var sh = Renderer.shapeFromObject(shape);
-		if (sh) {
+		if (sh instanceof Shape) {
 			Renderer.draw(sh, context, this.#transform);
 			return context.isPointInPath(sh.createPath(), x, y);
 		}
@@ -273,8 +273,7 @@ export default class Layer {
 	 * @param {number} height
 	 */
 	toData(x, y, width, height) {
-		var { context } = this;
-		return context.getImageData(x, y, width, height);
+		return this.context.getImageData(x, y, width, height);
 	}
 
 	/**
