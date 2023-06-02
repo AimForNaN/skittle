@@ -40,6 +40,16 @@ export default class Renderer {
 		}
 	}
 
+	static isArbitraryShape(sh) {
+		switch (true) {
+			case sh instanceof Shape:
+			case sh instanceof Function: {
+				return false;
+			}
+		}
+		return typeof sh == 'object';
+	}
+
 	/**
 	 * @param {RenderContext} ctx
 	 * @returns {boolean}

@@ -30,8 +30,10 @@ export default class Layer {
 	 */
 	addShape(shape) {
 		if (Renderer.isValidShape(shape)) {
-			if (!shape.hasOwnProperty('visible')) {
-				shape.visible = true;
+			if (Renderer.isArbitraryShape(shape)) {
+				if (!('visible' in shape)) {
+					shape.visible = true;
+				}
 			}
 			this.#shapes.add(shape);
 		}
