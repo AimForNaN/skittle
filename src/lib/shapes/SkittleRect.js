@@ -17,12 +17,13 @@ export default class Rect extends Shape {
 	height;
 
 	constructor(shape) {
-		var { x, y, width, height, ...etc } = shape;
+		var { x, y, width, height, visible, ...etc } = shape;
 		super();
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
+		this.visible = visible;
 
 		this.use(
 			new RectStyleFilter(shape),

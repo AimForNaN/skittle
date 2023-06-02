@@ -14,11 +14,13 @@ export default class Circle extends Shape {
 	/** @type {number} */
 	radius;
 
-	constructor({ x, y, radius, ...etc }) {
+	constructor(shape) {
+		var { x, y, radius, visible, ...etc } = shape;
 		super();
 		this.x = x;
 		this.y = y;
 		this.radius = radius;
+		this.visible = visible;
 
 		this.use(
 			new ShapeStyleFilter({ x, y, ...etc }),

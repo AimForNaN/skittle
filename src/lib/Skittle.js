@@ -87,15 +87,29 @@ export default class Layer {
 		this.#canvas.height = h;
 	}
 
-	isPointInShape(x, y, shape) {
+	/**
+	 * @param {number} x
+	 * @param {number} y
+	 * @param {Object} shape
+	 * @param {boolean} includeHidden
+	 * @returns {boolean}
+	 */
+	isPointInShape(x, y, shape, includeHidden = false) {
 		var layer = new Layer();
 		layer.resize(this.width, this.height);
+
+		var visible = [true];
+		if (includeHidden) {
+			visible.push(false);
+		}
 
 		var { context } = layer;
 		var sh = Renderer.shapeFromObject(shape);
 		if (sh instanceof Shape) {
-			Renderer.draw(sh, context, this.#transform);
-			return context.isPointInPath(sh.createPath(), x, y);
+			if (visible.includes(shape.visible)) {
+				Renderer.draw(sh, context, this.#transform);
+				return context.isPointInPath(sh.createPath(), x, y);
+			}
 		}
 
 		return false;
@@ -198,12 +212,13 @@ export default class Layer {
 	 * Get shape at point relative to canvas element (e.g. MouseEvent.offsetX, MouseEvent.offsetY).
 	 * @param {number} x
 	 * @param {number} y
+	 * @param {boolean} includeHidden
 	 * @returns {Shape}
 	 */
-	shapeAtPoint(x, y) {
+	shapeAtPoint(x, y, includeHidden = false) {
 		var hit = [];
 		this.forEach((shape) => {
-			if (this.isPointInShape(x, y, shape)) {
+			if (this.isPointInShape(x, y, shape, includeHidden)) {
 				hit.push(shape);
 			}
 		});
