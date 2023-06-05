@@ -23,7 +23,7 @@ export default class Rect extends Shape {
 		this.y = y;
 		this.width = width;
 		this.height = height;
-		this.visible = visible;
+		this.visible = visible ?? true;
 
 		this.use(
 			new RectStyleFilter(shape),

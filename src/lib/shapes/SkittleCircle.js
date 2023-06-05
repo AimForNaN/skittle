@@ -20,7 +20,7 @@ export default class Circle extends Shape {
 		this.x = x;
 		this.y = y;
 		this.radius = radius;
-		this.visible = visible;
+		this.visible = visible ?? true;
 
 		this.use(
 			new ShapeStyleFilter({ x, y, ...etc }),
