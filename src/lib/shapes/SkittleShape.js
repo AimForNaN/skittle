@@ -8,6 +8,8 @@ import StyleFilter from '../filters/SkittleStyleFilter';
 export default class Shape {
 	/** @type {SkittleFilter[]} */
 	Filters = new Set();
+	/** @type {import('../Skittle').default} */
+	layer = null;
 	/** @type {boolean} */
 	#visible = true;
 
