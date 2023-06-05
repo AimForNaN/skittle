@@ -123,7 +123,7 @@ export default class Layer {
 
 	/**
 	 * Load all images from all shapes and store them to cache.
-	 * @returns {Promise}
+	 * @returns {Promise<Layer>}
 	 */
 	preloadImages() {
 		return new Promise((resolve, reject) => {
