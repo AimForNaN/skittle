@@ -34,8 +34,6 @@ export default class Layer {
 				if (!('visible' in shape)) {
 					shape.visible = true;
 				}
-			} else if (shape instanceof Shape) {
-				shape.layer = this;
 			}
 			this.#shapes.add(shape);
 		}
