@@ -19,6 +19,9 @@ export default class StyleFilter extends RemoveShadowFilter {
 	shadow = {};
 	transform = new DOMMatrix();
 
+	/**
+	 * @todo Implement dynamic handling of styles.
+	 */
 	constructor({ style }) {
 		super();
 		if (style) {

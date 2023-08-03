@@ -14,7 +14,7 @@ type Point {
 
 type Transform {
 	rotate: number,
-	scale: number | Point | Array<number>,
+	scale: number | number[] | Point,
 	translate: Point,
 	origin: Point,
 }
