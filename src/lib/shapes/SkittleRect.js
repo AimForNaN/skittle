@@ -35,7 +35,7 @@ export default class Rect extends Shape {
 
 	createPath() {
 		var path = new Path2D();
-		path.rect(0, 0, this.width, this.height);
+		path.rect(this.x, this.y, this.width, this.height);
 		return path;
 	}
 }

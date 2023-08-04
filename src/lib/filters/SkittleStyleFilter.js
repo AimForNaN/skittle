@@ -50,7 +50,7 @@ export default class StyleFilter extends RemoveShadowFilter {
 				if (ImageCache.has(background.image)) {
 					let pattern = ctx.createPattern(
 						ImageCache.get(background.image),
-						background.repeat ? 'repeat' : 'no-repeat'
+						background.repeat ?? 'repeat'
 					);
 					if (pattern) {
 						if (typeof background.size == 'number') {

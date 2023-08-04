@@ -20,7 +20,7 @@
 					x: 5,
 					y: 5,
 					blur: 0,
-					color: '#999',
+					color: '#000',
 				},
 			},
 		},
@@ -33,7 +33,7 @@
 			style: {
 				background: {
 					image: '/350x150.png',
-					repeat: true,
+					repeat: 'repeat',
 				},
 				border: {
 					color: 'black',
@@ -44,7 +44,7 @@
 					x: 5,
 					y: 5,
 					blur: 0,
-					color: '#999',
+					color: '#000',
 				},
 			},
 		},
@@ -57,7 +57,7 @@
 			style: {
 				background: {
 					image: '/350x150.png',
-					repeat: true,
+					repeat: 'repeat',
 					size: 0.5,
 				},
 				border: {
@@ -69,7 +69,7 @@
 					x: 5,
 					y: 5,
 					blur: 0,
-					color: '#999',
+					color: '#000',
 				},
 			},
 		},

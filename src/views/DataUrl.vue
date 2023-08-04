@@ -13,7 +13,7 @@
 		style: {
 			background: {
 				image: '/350x150.png',
-				repeat: true,
+				repeat: 'repeat',
 			},
 			border: {
 				color: 'black',

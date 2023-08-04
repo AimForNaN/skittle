@@ -28,6 +28,7 @@ export default class ShapeStyleFilter extends StyleFilter {
 
 		ret.push(translate(this.x, this.y));
 		ret.push(super.normalizeTransform(transform));
+		ret.push(translate(-this.x, -this.y));
 
 		return compose(...ret);
 	}
