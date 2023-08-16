@@ -53,6 +53,7 @@
 			}
 			function resize() {
 				var rect = $el.value.parentElement.getBoundingClientRect();
+				console.log(rect);
 				stage.resize(rect.width, rect.height);
 			}
 
@@ -67,7 +68,7 @@
 			});
 
 			watch($el, (v) => {
-				stage.target(v);
+				stage.target = v;
 				if ($props.autoResize) {
 					resize();
 				}
@@ -76,11 +77,14 @@
 			return () => {
 				var children = $slots.default ? $slots.default() : [];
 				children = pullChildren(children);
-				stage.resetTransform();
-				stage.rotate($props.rotation);
-				stage.scale($props.scale);
-				stage.translate($props.x, $props.y);
-				stage.setShapes(
+
+				var t = new DOMMatrix();
+				Skittle.Utils.rotate($props.rotation, t);
+				Skittle.Utils.scale($props.scale, t);
+				Skittle.Utils.translate($props.x, $props.y, t);
+				stage.transform = t;
+
+				stage.shapes = new Set(
 					children.map((item) => {
 						item = unref(item);
 						item = toRaw(item);

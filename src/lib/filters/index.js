@@ -1,7 +1,5 @@
-export {default as FillFilter} from './SkittleFillFilter';
-export {default as ImageFilter} from './SkittleImageFilter';
-export {default as RectStyleFilter} from './SkittleRectStyleFilter';
-export {default as RemoveShadowFilter} from './SkittleRemoveShadowFilter';
-export {default as ShapeStyleFilter} from './SkittleShapeStyleFilter';
-export {default as StrokeFilter} from './SkittleStrokeFilter';
-export {default as StyleFilter} from './SkittleStyleFilter';
+export {default as ClearShadow} from './clear-shadow';
+export {default as Fill} from './fill';
+export {default as Image} from './image';
+export {default as Stroke} from './stroke';
+export {default as Style} from './style';

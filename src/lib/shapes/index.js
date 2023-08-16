@@ -1,3 +1,3 @@
-export { default as Circle } from './SkittleCircle';
-export { default as Image } from './SkittleImage';
-export { default as Rect } from './SkittleRect';
+export { default as Circle } from './circle';
+export { default as Image } from './image';
+export { default as Rect } from './rect';
