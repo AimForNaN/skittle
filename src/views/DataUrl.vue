@@ -13,7 +13,6 @@
 		style: {
 			background: {
 				image: '/350x150.png',
-				repeat: 'repeat',
 			},
 			border: {
 				color: 'black',
@@ -29,7 +28,7 @@
 		},
 	};
 	const $skittle = new Layer();
-	$skittle.addShape(img);
+	$skittle.shapes.add(img);
 	$skittle.resize(700, 300);
 	$skittle.preloadImages().then((stage) => {
 		stage.draw();

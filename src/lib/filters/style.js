@@ -1,31 +1,17 @@
 import {
 	compose,
 	isAffineMatrix,
-	rotateDEG,
 	scale,
 	translate,
 } from 'transformation-matrix';
 import ImageCache from '../image-cache';
-import ClearShadowFilter from './clear-shadow';
+import Renderer from '../renderers/2d';
+import normalizeTransform from '../utils/normalize-transform';
 
-export function applyAll(style, ctx) {
-	if (typeof style != 'object') {
-		return;
-	}
-
-	applyOpacity(style.opacity, ctx);
-	applyBackground(style.background, ctx);
-	applyBorder(style.border, ctx);
-	applyShadow(style.shadow, ctx);
-	applyTransform(style.transform, ctx);
-}
-
-export function applyBackground(background, ctx) {
+export function applyBackground(background, ctx, shape) {
 	if (typeof background != 'object') {
 		return;
 	}
-
-	ctx.fillStyle = 'transparent';
 
 	if (background.image) {
 		if (ImageCache.has(background.image)) {
@@ -34,11 +20,14 @@ export function applyBackground(background, ctx) {
 				background.repeat ?? 'repeat'
 			);
 			if (pattern) {
-				if (typeof background.size == 'number') {
-					pattern.setTransform(
-						compose(scale(background.size))
-					);
+				let t = new DOMMatrix();
+				if (shape) {
+					t = compose(t, translate(shape.x, shape.y));
 				}
+				if (typeof background.size == 'number') {
+					t = compose(t, scale(background.size));
+				}
+				pattern.setTransform(t);
 				ctx.fillStyle = pattern;
 			} else {
 				console.warn(
@@ -61,10 +50,8 @@ export function applyBorder(border, ctx) {
 	}
 
 	if (Renderer.isValidRenderingContext(ctx)) {
-		ctx.strokeStyle = 'transparent';
-
 		if (border.width) {
-			ctx.strokeStyle = border.color;
+			ctx.strokeStyle = border.color ?? 'black';
 			ctx.lineWidth = border.width;
 
 			switch (border.style) {
@@ -105,14 +92,26 @@ export function applyShadow(shadow, ctx) {
 	ctx.shadowOffsetY = shadow.y ?? 0;
 }
 
-export function applyTransform(t, ctx) {
-	if (!isAffineMatrix(t)) {
+export function applyTransform(transform, ctx) {
+	if (typeof transform != 'object') {
 		return;
 	}
 
+	var t = normalizeTransform(transform);
 	ctx.transform(t.a, t.b, t.c, t.d, t.e, t.f);
 }
 
 export default function (ctx, shape) {
-	applyAll(shape.style, ctx);
+	ctx.fillStyle = 'transparent';
+	ctx.strokeStyle = 'transparent';
+
+	if (typeof shape.style != 'object') {
+		return;
+	}
+
+	applyOpacity(shape.style.opacity, ctx);
+	applyBackground(shape.style.background, ctx, shape);
+	applyBorder(shape.style.border, ctx);
+	applyShadow(shape.style.shadow, ctx);
+	applyTransform(shape.style.transform, ctx);
 }

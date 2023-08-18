@@ -15,7 +15,7 @@ export default class ImageCache {
 		return ImageCache.#cache.has(src);
 	}
 
-	static queueImage(src) {
+	static queue(src) {
 		if (src === null) {
 			return Promise.resolve();
 		}
@@ -28,6 +28,9 @@ export default class ImageCache {
 			if (typeof src == 'string') {
 				var img = new Image();
 				img.crossOrigin = 'anonymous';
+				img.addEventListener('error', () => {
+					console.warn('Failed to load resource.', img.src);
+				});
 				img.addEventListener('load', () => {
 					ImageCache.add(src, img);
 					resolve(img);

@@ -22,6 +22,9 @@
 					blur: 0,
 					color: '#000',
 				},
+				transform: {
+					rotate: 5,
+				},
 			},
 		},
 		{
@@ -45,6 +48,9 @@
 					y: 5,
 					blur: 0,
 					color: '#000',
+				},
+				transform: {
+					rotate: 5,
 				},
 			},
 		},
@@ -70,6 +76,9 @@
 					y: 5,
 					blur: 0,
 					color: '#000',
+				},
+				transform: {
+					rotate: 5,
 				},
 			},
 		},

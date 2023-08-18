@@ -37,15 +37,15 @@ export default class Renderer2d extends Renderer {
 	 */
 	draw(shape) {
 		var path = null;
-		var { context } = this;
-		context.save();
 
 		var renderer = Registry.get(shape.type);
 		if (renderer instanceof Function) {
+			let { context } = this;
+			context.save();
 			path = renderer.call(shape, context);
+			context.restore();
 		}
 
-		context.restore();
 		return path;
 	}
 

@@ -53,7 +53,6 @@
 			}
 			function resize() {
 				var rect = $el.value.parentElement.getBoundingClientRect();
-				console.log(rect);
 				stage.resize(rect.width, rect.height);
 			}
 

@@ -2,8 +2,8 @@ import ImageCache from './image-cache';
 import Renderer from './renderers/renderer';
 import Renderer2d from './renderers/2d';
 import { Circle, Image, Rect } from './shapes';
-import Shape from './shapes/shape';
 import Registry from './registry';
+import pullImages from './utils/pull-images';
 import transformPoint from './utils/transform-point';
 import { isAffineMatrix } from 'transformation-matrix';
 
@@ -66,20 +66,6 @@ export default class Layer {
 	}
 
 	/**
-	 * @param {Object} sh
-	 * @returns {boolean}
-	 */
-	static isArbitraryShape(sh) {
-		switch (true) {
-			case sh instanceof Shape:
-			case sh instanceof Function: {
-				return false;
-			}
-		}
-		return sh instanceof Object;
-	}
-
-	/**
 	 * @param {number} x
 	 * @param {number} y
 	 * @param {Object} shape
@@ -108,20 +94,16 @@ export default class Layer {
 	preloadImages() {
 		return new Promise((resolve, reject) => {
 			var queue = [];
-			this.forEach((shape) => {
-				let images = [];
-				if (images.length) {
-					images.forEach((img) => {
-						queue.push(ImageCache.queueImage(img));
-					});
+
+			for (let shape of this.shapes) {
+				let images = pullImages(shape);
+
+				for (let src of images) {
+					queue.push(ImageCache.queue(src));
 				}
-			});
-			Promise.allSettled(queue).then((results) => {
-				results.forEach((result) => {
-					if (result.status != 'fulfilled') {
-						console.warn('Failed to load resource.');
-					}
-				});
+			}
+
+			Promise.allSettled(queue).then(() => {
 				resolve(this);
 			});
 		});
@@ -213,7 +195,7 @@ export default class Layer {
 	 * @param {number} height
 	 */
 	toData(x, y, width, height) {
-		return this.renderer.getImageData(x, y, width, height);
+		return this.context.getImageData(x, y, width, height);
 	}
 
 	/**
