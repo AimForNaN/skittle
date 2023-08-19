@@ -4,10 +4,6 @@ import {
 } from 'transformation-matrix';
 
 export default function (s) {
-	if (isAffineMatrix(s)) {
-		return s;
-	}
-
 	if (typeof s == 'number') {
 		return scale(s, s);
 	} 

@@ -29,18 +29,26 @@ export default class Layer {
 		}
 	}
 
+	/**
+	 */
 	[Symbol.iterator]() {
 		return this.shapes[Symbol.iterator]();
 	}
 
+	/**
+	 */
 	clear() {
 		this.renderer.clear();
 	}
 
+	/**
+	 */
 	get context() {
 		return this.renderer.context;
 	}
 
+	/**
+	 */
 	draw() {
 		this.clear();
 
@@ -53,11 +61,15 @@ export default class Layer {
 		return this;
 	}
 
+	/**
+	 */
 	forEach(fn) {
 		this.shapes.forEach(fn);
 		return this;
 	}
 
+	/**
+	 */
 	get height() {
 		this.renderer.height;
 	}
@@ -82,6 +94,8 @@ export default class Layer {
 		return path ? context.isPointInPath(path, x, y) : false;
 	}
 
+	/**
+	 */
 	mapPointToCanvas(x, y) {
 		var t = this.context.getTransform();
 		return transformPoint(x, y, t);
@@ -121,7 +135,6 @@ export default class Layer {
 		return this;
 	}
 
-
 	/**
 	 * Get shape at point relative to canvas element (e.g. MouseEvent.offsetX, MouseEvent.offsetY).
 	 * @param {number} x
@@ -150,6 +163,8 @@ export default class Layer {
 		return first;
 	}
 
+	/**
+	 */
 	get target() {
 		return this.renderer.target;
 	}
@@ -157,6 +172,8 @@ export default class Layer {
 		this.renderer.target = target;
 	}
 
+	/**
+	 */
 	toBlob(type = 'image/jpeg', quality = 0.9) {
 		return new Promise((resolve, reject) => {
 			var { target } = this.renderer;
@@ -215,6 +232,8 @@ export default class Layer {
 		});
 	}
 
+	/**
+	 */
 	get transform() {
 		return this.renderer.transform;
 	}
@@ -224,6 +243,8 @@ export default class Layer {
 		}
 	}
 
+	/**
+	 */
 	get width() {
 		this.renderer.width;
 	}

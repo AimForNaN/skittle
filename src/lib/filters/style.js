@@ -92,12 +92,12 @@ export function applyShadow(shadow, ctx) {
 	ctx.shadowOffsetY = shadow.y ?? 0;
 }
 
-export function applyTransform(transform, ctx) {
+export function applyTransform(transform, ctx, shape) {
 	if (typeof transform != 'object') {
 		return;
 	}
 
-	var t = normalizeTransform(transform);
+	var t = normalizeTransform(transform, shape);
 	ctx.transform(t.a, t.b, t.c, t.d, t.e, t.f);
 }
 
@@ -113,5 +113,12 @@ export default function (ctx, shape) {
 	applyBackground(shape.style.background, ctx, shape);
 	applyBorder(shape.style.border, ctx);
 	applyShadow(shape.style.shadow, ctx);
-	applyTransform(shape.style.transform, ctx);
+
+	var t = compose(translate(shape.x, shape.y));
+	applyTransform(t, ctx);
+
+	applyTransform(shape.style.transform, ctx, shape);
+
+	t = compose(translate(-shape.x, -shape.y));
+	applyTransform(t, ctx);
 }
