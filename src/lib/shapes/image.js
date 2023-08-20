@@ -13,7 +13,7 @@ export default function (ctx) {
 		path.rect(this.x, this.y, this.width, this.height);
 	}
 
-	if (ctx && Renderer.isValidRenderingContext(ctx)) {
+	if (Renderer.isValidRenderingContext(ctx)) {
 		Style(ctx, this);
 		Image(ctx, this);
 		ClearShadow(ctx);

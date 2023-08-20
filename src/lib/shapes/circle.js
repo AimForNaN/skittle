@@ -13,7 +13,7 @@ export default function (ctx) {
 		path.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
 	}
 
-	if (ctx && Renderer.isValidRenderingContext(ctx)) {
+	if (Renderer.isValidRenderingContext(ctx)) {
 		Style(ctx, this);
 		Fill(ctx, path);
 		ClearShadow(ctx);

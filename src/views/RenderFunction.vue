@@ -2,7 +2,7 @@
 	import { ref, unref } from 'vue';
 	import Canvas from '../components/Canvas.vue';
 	import Shape from '../components/Shape.vue';
-	import { Renderer } from "../plugin";
+	import { Registry, Renderer2d } from "../plugin";
 
 	const $canvas = ref(null);
 	const shape = {
@@ -21,13 +21,16 @@
 		}
 	}
 
-	Renderer.registerShape('render-function', function (ctx, obj) {
-		if (Renderer.isValidRenderingContext(ctx)) {
-			ctx.beginPath();
-			ctx.arc(obj.x, obj.y, 20, 0, 2 * Math.PI, false);
+	Registry.set('render-function', function (ctx) {
+		var path = new Path2D();
+		path.arc(this.x, this.y, 20, 0, 2 * Math.PI, false);
+
+		if (Renderer2d.isValidRenderingContext(ctx)) {
 			ctx.fillStyle = '#FF000088';
-			ctx.fill();
+			ctx.fill(path);
 		}
+
+		return path;
 	});
 </script>
 

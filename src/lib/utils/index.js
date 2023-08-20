@@ -1,3 +1,11 @@
+export {default as normalizeOrigin} from './normalize-origin';
+export {default as normalizeRotation} from './normalize-rotation';
+export {default as normalizeScale} from './normalize-scale';
+export {default as normalizeTransform} from './normalize-transform';
+export {default as normalizeTranslate} from './normalize-translate';
+export {default as pullImages} from './pull-images';
 export {default as rotate} from './rotate';
 export {default as scale} from './scale';
+export {default as transformPoint} from './transform-point';
+export {default as transform} from './transform';
 export {default as translate} from './translate';

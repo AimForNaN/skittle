@@ -68,6 +68,13 @@
 
 			watch($el, (v) => {
 				stage.target = v;
+
+				var t = new DOMMatrix();
+				t = Skittle.Utils.rotate($props.rotation, t);
+				t = Skittle.Utils.scale($props.scale, $props.scale, t);
+				t = Skittle.Utils.translate($props.x, $props.y, t);
+				stage.transform = t;
+
 				if ($props.autoResize) {
 					resize();
 				}
@@ -77,12 +84,6 @@
 				var children = $slots.default ? $slots.default() : [];
 				children = pullChildren(children);
 
-				var t = new DOMMatrix();
-				Skittle.Utils.rotate($props.rotation, t);
-				Skittle.Utils.scale($props.scale, t);
-				Skittle.Utils.translate($props.x, $props.y, t);
-				stage.transform = t;
-
 				stage.shapes = new Set(
 					children.map((item) => {
 						item = unref(item);
@@ -90,9 +91,7 @@
 						return item;
 					})
 				);
-				stage.preloadImages().then((stage) => {
-					stage.draw();
-				});
+				stage.preloadImages().then(draw);
 
 				return h('canvas', {
 					class: 'canvas-layer',

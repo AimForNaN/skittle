@@ -54,7 +54,9 @@ export default class Layer {
 
 		for (let shape of this) {
 			if (shape.visible !== false) {
+				this.saveState();
 				this.renderer.draw(shape);
+				this.restoreState();
 			}
 		}
 
@@ -71,7 +73,7 @@ export default class Layer {
 	/**
 	 */
 	get height() {
-		this.renderer.height;
+		return this.renderer.height;
 	}
 	set height(v) {
 		this.renderer.height = v;
@@ -89,9 +91,8 @@ export default class Layer {
 		layer.resize(this.width, this.height);
 		layer.renderer.transform = this.renderer.transform;
 
-		var { context } = layer.renderer;
 		var path = layer.renderer.draw(shape);
-		return path ? context.isPointInPath(path, x, y) : false;
+		return path ? layer.context.isPointInPath(path, x, y) : false;
 	}
 
 	/**
@@ -133,6 +134,14 @@ export default class Layer {
 		this.height = height;
 		this.width = width;
 		return this;
+	}
+
+	restoreState() {
+		this.renderer.restoreState();
+	}
+
+	saveState() {
+		this.renderer.saveState();
 	}
 
 	/**
@@ -246,7 +255,7 @@ export default class Layer {
 	/**
 	 */
 	get width() {
-		this.renderer.width;
+		return this.renderer.width;
 	}
 	set width(v) {
 		this.renderer.width = v;

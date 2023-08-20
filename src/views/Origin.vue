@@ -3,7 +3,6 @@
 	import anime from 'animejs/lib/anime.es.js';
 	import Canvas from '../components/Canvas.vue';
 	import Shape from '../components/Shape.vue';
-	import { Renderer } from '../lib';
 
 	const $canvas = ref(null);
 	const timeline = anime.timeline({
@@ -90,8 +89,7 @@
 			},
 		];
 		shapes.forEach((shape) => {
-			shape = Renderer.shapeFromObject(shape);
-			Renderer.draw(shape, ctx);
+			$canvas.value.stage.renderer.draw(shape, ctx);
 		});
 	}
 	function originRenderer(ctx) {
@@ -109,8 +107,7 @@
 			},
 		];
 		shapes.forEach((shape) => {
-			shape = Renderer.shapeFromObject(shape);
-			Renderer.draw(shape, ctx);
+			$canvas.value.stage.renderer.draw(shape, ctx);
 		});
 	}
 

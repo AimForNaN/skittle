@@ -20,12 +20,13 @@ import {
 
 export default class Renderer2d extends Renderer {
 	#target = new OffscreenCanvas(0,0);
+	#transform = new DOMMatrix();
 
 	/**
 	 * Clear the canvas.
 	 */
 	clear() {
-		this.context.clearRect(0, 0, this.width, this.height);
+		this.context.reset();
 	}
 
 	get context() {
@@ -38,12 +39,22 @@ export default class Renderer2d extends Renderer {
 	draw(shape) {
 		var path = null;
 
-		var renderer = Registry.get(shape.type);
+		var renderer = Registry.get(shape.type) || shape;
 		if (renderer instanceof Function) {
 			let { context } = this;
-			context.save();
+			context.setTransform(this.#transform);
 			path = renderer.call(shape, context);
-			context.restore();
+		}
+
+		return path;
+	}
+
+	getPath(shape) {
+		var path = null;
+
+		var renderer = Registry.get(shape.type) || shape;
+		if (renderer instanceof Function) {
+			path = renderer.call(shape);
 		}
 
 		return path;
@@ -53,7 +64,7 @@ export default class Renderer2d extends Renderer {
 		return this.#target.height;
 	}
 	set height(h) {
-		this.#target.height = h;
+		this.#target.height = h ?? 0;
 	}
 
 	/**
@@ -63,8 +74,9 @@ export default class Renderer2d extends Renderer {
 	static isValidRenderingContext(ctx) {
 		switch (true) {
 			case ctx instanceof CanvasRenderingContext2D:
-			case ctx instanceof OffscreenCanvasRenderingContext2D:
+			case ctx instanceof OffscreenCanvasRenderingContext2D: {
 				return true;
+			}
 		}
 		console.warn('Unsupported rendering context provided!', ctx);
 		return false;
@@ -77,11 +89,20 @@ export default class Renderer2d extends Renderer {
 	static isValidRenderTarget(target) {
 		switch (true) {
 			case target instanceof HTMLCanvasElement:
-			case target instanceof OffscreenCanvas:
+			case target instanceof OffscreenCanvas: {
 				return true;
+			}
 		}
 		console.warn('Unsupported rendering target provided!', target);
 		return false;
+	}
+
+	restoreState() {
+		this.context.restore();
+	}
+
+	saveState() {
+		this.context.save();
 	}
 
 	get target() {
@@ -92,19 +113,17 @@ export default class Renderer2d extends Renderer {
 			canvas = document.querySelector(canvas);
 		}
 
-		if (canvas) {
-			if (Renderer2d.isValidRenderTarget(canvas)) {
-				this.#target = canvas;
-			}
+		if (Renderer2d.isValidRenderTarget(canvas)) {
+			this.#target = canvas;
 		}
 	}
 
 	get transform() {
-		return this.context.getTransform();
+		return this.#transform;
 	}
 	set transform(transform) {
 		if (isAffineMatrix(transform)) {
-			this.context.setTransform(transform);
+			this.#transform = transform;
 		}
 	}
 
@@ -112,6 +131,6 @@ export default class Renderer2d extends Renderer {
 		return this.#target.width;
 	}
 	set width(w) {
-		this.#target.width = w;
+		this.#target.width = w ?? 0;
 	}
 }
