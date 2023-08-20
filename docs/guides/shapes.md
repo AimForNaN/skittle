@@ -1,115 +1,73 @@
 # Shapes
 
-A shape represents a pre-defined object to be drawn onto the canvas.
-All shapes must be registered with skittle in order to trigger the rendering of the shape.
-The name of the shape is provided upon registration.
-The name of the shape also represents its type.
-Once registered, a shape can be referenced according to its type.
+A shape in skittle is an object that contains metadata on how the shape is to be rendered.
+Skittle reserves the `type` property for all shapes.
+The `type` property stores what render function to be used during render time.
+As such, Skittle requires the `type` property to be specified for all shapes.
 
-Currently, only the following shapes are supported:
+```ts
+interface Shape {
+    type: string,
+}
+```
+
+## Rendering shapes 
+
+Skittle uses render functions to render shapes.
+Currently, skittle only provides a few render functions.
 
 <<< @/../src/lib/shapes/index.js
 
-
-Any other shapes will have to be created through skittle's API.
-
-## Creating custom shapes
-
-All shapes must extend from the `Shape` class and implement the `createPath` method.
-The `createPath` method must return a `Path2D` instance.
-
-::: code-group
-```js [custom-shape.js]
-import { Shape } from '@truefusion/skittle';
-
-export default class CustomShape extends Shape {
-	createPath() {
-		var path = new Path2D();
-		// Create path...
-		return path;
-	}
-}
-```
-:::
-
-::: info NOTE
-The `createPath` method is also used for hit detection.
-:::
-
-## Registering a shape
-
-All shape definitions are registered through the `Renderer` class.
+They can be accessed by importing `Shapes`:
 
 ```js
-import { Renderer } from '@truefusion/skittle';
-import CustomShape from './custom-shape.js';
-
-Renderer.registerShape('custom', CustomShape);
+import { Shapes } from '@truefusion/skittle';
 ```
 
-From that point on, skittle can match a shape's type to the registered name.
+In the meantime, any other render functions will have to be created yourself. 
 
-```js
-import { Layer } from '@truefusion/skittle';
+## Custom render functions
 
-const $skittle = new Layer();
-$skittle.addShape({
-	type: 'custom',
-}).draw();
+Skittle gives you the option to register new render functions.
+Render functions take in one parameter, which is the rendering context of the canvas.
+The metadata of shapes can be accessed with `this`.
+All render functions must return a [Path2D](https://developer.mozilla.org/en-US/docs/Web/API/Path2D/Path2D) object.
+Path information is used for hit detection.
+
+```ts
+function (ctx?: RenderingContext): Path2D; 
 ```
 
-## Render functions
-
-It is not entirely necessary to register a new shape in order to render a custom shape.
-Skittle supports the dynamic rendering of shapes through render functions.
-
-```js
-$skittle.addShape(function (ctx, obj) {
-	if (Renderer.isValidRenderingContext(ctx)) {
-		// Render shape...
-	}
-}).draw();
-```
-
-:::warning
-Render functions lack hit-detection support!
-:::
-
-### Registering render functions
-
-Skittle gives you the option to register render functions as shapes.
-Let us modify the previous example.
+The primary function of a render function is to return path information.
+As such, the rendering context is not always provided through the context parameter.
+When no context is provided, no rendering should occur.
 
 ```js
-Renderer.registerShape('custom', function (ctx, obj) {
-	if (Renderer.isValidRenderingContext(ctx)) {
-		// Render shape...
-	}
+import { Registry } from '@truefusion/skittle';
+
+Registry.set('custom', function (ctx) {
+    if (ctx) {
+        // Only draw when we have a rendering context!
+    }
+    return new Path2D();
 });
 
-$skittle.addShape({
+$skittle.shapes.add({
 	type: 'custom',
-	// Other properties...
-}).draw();
+});
+$skittle.draw();
 ```
 
-## Images
+## Dynamic shapes
 
-If a custom shape plans on making use of one or more images, they must inform skittle of the images it plans on using.
-The shape will need to override the getter `images` and return an array of all image sources.
-Skittle will use this list when preloading images.
+It is not entirely necessary to register a new render function in order to render a shape.
+Skittle supports using render functions as shapes.
 
 ```js
-import { Shape } from '@truefusion/skittle';
-
-export default class CustomShape extends Shape {
-	/**
-	 * @returns {string[]}
-	 */
-	get images() {
-		return [
-			// Image sources...
-		];
-	}
-}
+$skittle.shapes.add(function (ctx) {
+    if (ctx) {
+        // Only draw when we have a rendering context!
+    }
+    return new Path2D();
+});
 ```

@@ -1,11 +1,10 @@
 # Getting started
 
-Skittle is an API-agnostic, HTML5-canvas library inspired by [origami.js](https://raphamorim.io/origamijs/).
-Skittle was formed due to the lack of unopinionated canvas libraries.
-Unlike most other canvas libraries, skittle doesn't necessarily try to enforce a specification or methodology.
-This makes it compatible with things like web components, and gives you the freedom to work with any HTML5 canvas on your terms.
-Skittle mostly only cares about rendering.
-As such, things like animations and pointer events are left in the hands of the developer.
+Skittle is an API-agnostic, HTML5-canvas library that is highly unopinionated.
+Skittle is inspired by [origami.js](https://raphamorim.io/origamijs/).
+Skittle mostly only cares about rendering, which itself is not constrained to any, one methodolgy.
+All parts are by nature replacable.
+Since rendering is the main priority, things like animations and pointer events are left in the hands of the developer.
 Nevertheless, we provide basic examples on ways to deal with things like animations and hit detection.
 
 ### Differences between origami
@@ -41,7 +40,7 @@ $ yarn add @truefusion/skittle
 
 Skittle assumes every canvas to be its own layer.
 As such, every canvas is handled by the `Layer` class, each `Layer` representing one canvas or render target.
-A render target is an object that provides a render context to draw on, assuming it is supported by skittle.
+A render target is an object that provides a render context to draw on&mdash;assuming it is supported by skittle.
 A render target can be specified in the `Layer`'s constructor.
 
 ```js
@@ -66,10 +65,10 @@ After constructing a new `Layer`, you can dynamically change render targets.
 
 ::: code-group
 ```js [HTMLCanvasElement]
-$skittle.target(canvas);
+$skittle.target = canvas;
 ```
 ```js [Query selector]
-$skittle.target('#canvas');
+$skittle.target = '#canvas';
 ```
 :::
 

@@ -1,6 +1,6 @@
 # Transformations
 
-`StyleFilter` provides basic support for affine transformations.
+The `Style` provides basic support for affine transformations.
 By default, scale (S), rotation (R) and translate (T) and origin are supported.
 Rotations are measured in degrees.
 Transformations are done in **TRS** order.
@@ -15,8 +15,8 @@ type Point {
 type Transform {
 	rotate: number,
 	scale: number | number[] | Point,
-	translate: Point,
-	origin: Point,
+	translate: Point | number[],
+	origin: Point | number[],
 }
 
 interface StyledShape {
@@ -31,7 +31,7 @@ import * as Skittle from '@truefusion/skittle';
 
 var $skittle = new Skittle.Layer();
 
-$skittle.addShape({
+$skittle.shapes.add({
 	type: 'rect',
 	x: 0,
 	y: 0,
@@ -51,5 +51,5 @@ $skittle.addShape({
 ```
 
 :::info NOTE
-If you want to support a different transformation order or a different interface, you'll have to define your own filter or manually adjust the context at draw time.
+If you want to support a different transformation order or a different interface, you'll have to define your own render function. 
 :::

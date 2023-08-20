@@ -2,75 +2,25 @@
 
 Filters provide a modular way to make adjustments to the rendering contexts of shapes.
 In this way we can inherit traits from multiple sources without the need for multiple inheritance.
-Each shape can register its own filters to be applied at draw time, but they are not mandatory.
+Each render function dictates its own filters to be applied at draw time.
 
 Skittle provides several kinds of filters.
 
 <<< @/../src/lib/filters/index.js
 
-## Creating filters
-
-All filters must extend from the `Filter` class and implement the `apply` method.
+They can be accessed by importing `Filters`.
 
 ```js
-import { Filter } from '@truefusion/skittle';
-
-class CustomFilter extends Filter {
-	apply(ctx, shape) {
-		// Apply filter...
-	}
-}
+import { Filters } from '@truefusion/skittle';
 ```
 
-## Consuming filters
+## Custom filters
 
-All shapes that extend from `Shape` can use the `use` method to register filters to itself.
+Filters are simply functions that make adjustments to the rendering context of the canvas.
+All filters require that the first parameter be reserved for the rendering context of the canvas.
+Any additional parameters are left up to the developer.
+No registration is required for filters.
 
-```js
-import { Shape } from '@truefusion/skittle'; // [!code --]
-import { Filters, Shape } from '@truefusion/skittle'; // [!code ++]
-const { FillFilter, StrokeFilter, StyleFilter } = Filters; // [!code ++]
-
-export default class CustomShape extends Shape {
-	constructor(obj) {
-		super();
-		// Handle obj...
-
-		this.use( // [!code ++]
-			new StyleFilter(obj), // [!code ++]
-			new FillFilter(), // [!code ++]
-			new StrokeFilter() // [!code ++]
-		); // [!code ++]
-	}
-}
+```ts
+function (ctx: RenderingContext);
 ```
-
-If you desire to work without filters, you will have to override the `draw` method and draw the shape manually.
-Albeit, filters can still be used even then.
-
-```js
-import { Filters, Shape } from '@truefusion/skittle'; // [!code --]
-import { Shape } from '@truefusion/skittle'; // [!code ++]
-const { FillFilter, StrokeFilter, StyleFilter } = Filters; // [!code --]
-
-export default class CustomShape extends Shape {
-	constructor(obj) {
-		super();
-		// Handle obj...
-		// [!code --]
-		this.use( // [!code --]
-			new StyleFilter(obj), // [!code --]
-			new FillFilter(), // [!code --]
-			new StrokeFilter() // [!code --]
-		); // [!code --]
-	}
-
-	draw(ctx) { // [!code ++]
-		// Draw shape... // [!code ++]
-	} // [!code ++]
-}
-```
-
-::: info NOTE
-Remember, hit-detection support requires returning a `Path2D` instance from `createPath`. Nevertheless, it is not required to use `createPath` to render the shape.
-:::

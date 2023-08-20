@@ -29,7 +29,7 @@ import * as Skittle from '@truefusion/skittle';
 
 var $skittle = new Skittle.Layer();
 
-$skittle.addShape({
+$skittle.shapes.add({
 	type: 'rect',
 	x: 0,
 	y: 0,
