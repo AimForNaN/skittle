@@ -9,6 +9,9 @@
 		"type": "git",
 		"url": "https://github.com/truefusion/skittle.git"
 	},
+	"engines": {
+		"node": ">=16"
+	},
 	"files": [
 		"dist/*.js",
 		"dist/*.cjs"
