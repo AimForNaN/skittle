@@ -82,6 +82,16 @@ export default class Layer {
 	/**
 	 * @param {number} x
 	 * @param {number} y
+	 * @param {Path2D} path
+	 * @returns {boolean}
+	 */
+	isPointInPath(x, y, path) {
+		return this.context.isPointInPath(path, x, y);
+	}
+
+	/**
+	 * @param {number} x
+	 * @param {number} y
 	 * @param {Object} shape
 	 * @param {boolean} includeHidden
 	 * @returns {boolean}
@@ -92,7 +102,7 @@ export default class Layer {
 		layer.renderer.transform = this.renderer.transform;
 
 		var path = layer.renderer.draw(shape);
-		return path ? layer.context.isPointInPath(path, x, y) : false;
+		return path ? layer.isPointInPath(path, x, y) : false;
 	}
 
 	/**
