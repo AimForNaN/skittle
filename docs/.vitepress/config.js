@@ -35,4 +35,9 @@ export default defineConfig({
 			{ icon: 'github', link: 'https://github.com/truefusion/skittle' },
 		],
 	},
+	vite: {
+		ssr: {
+			noExternal: ['animejs/lib/anime.es.js'],
+		},
+	},
 });
