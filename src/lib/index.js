@@ -3,7 +3,6 @@ export { default as Layer } from './skittle';
 export { default as Registry } from './registry';
 export { default as Renderer } from './renderers/renderer';
 export { default as Renderer2d } from './renderers/2d';
-export { default as Shape } from './shapes/shape';
 export * as Filters from './filters/';
 export * as Shapes from './shapes/';
 export * as Utils from './utils/';
