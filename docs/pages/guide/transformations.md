@@ -1,6 +1,9 @@
-# Transformations
+---
+layout: ../../layouts/doc.astro
+title: Transformations
+---
 
-The `Style` provides basic support for affine transformations.
+The `Style` filter provides basic support for affine transformations.
 By default, scale (S), rotation (R) and translate (T) and origin are supported.
 Rotations are measured in degrees.
 Transformations are done in **TRS** order.

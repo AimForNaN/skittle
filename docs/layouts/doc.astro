@@ -1,0 +1,52 @@
+---
+import '../styles/base.css';
+
+const guides = [
+	{ href: '/guide/', label: 'Getting started' },
+	{ href: '/guide/renderers', label: 'Renderers' },
+	{ href: '/guide/shapes', label: 'Shapes' },
+	{ href: '/guide/filters', label: 'Filters' },
+	{ href: '/guide/transformations', label: 'Transformations' },
+	{ href: '/guide/hit-detection', label: 'Hit detection' },
+];
+
+const { frontmatter } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>{frontmatter.title} -- skittle</title>
+	</head>
+	<body>
+		<main class="container flex flex-col max-w-6xl mx-auto">
+			<header>
+				<nav class="flex gap-2 px-8">
+					<a class="font-medium py-4" href="/">skittle</a>
+				</nav>
+			</header>
+			<section class="flex">
+				<aside class="border-r flex-shrink-0 h-screen p-8 sticky top-0 w-64">
+					<nav class="flex flex-col gap-4">
+						<ul class="flex flex-col gap-2">
+							<li>
+								<b>Guide</b>
+							</li>
+						{guides.map(link => (
+							<li>
+								<a class="transition-colors hover:text-fuchsia-700" href={link.href}>{link.label}</a>
+							</li>
+						))}
+						</ul>
+					</nav>
+				</aside>
+				<article class="flex flex-col gap-8 pb-16 pt-8 px-16">
+					<h1>{frontmatter.title}</h1>
+					<slot />
+				</article>
+			</section>
+		</main>
+	</body>
+</html>
