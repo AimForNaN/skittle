@@ -41,9 +41,12 @@ export default class Renderer2d extends Renderer {
 
 		var renderer = Registry.get(shape.type) || shape;
 		if (renderer instanceof Function) {
-			let { context } = this;
-			context.setTransform(this.#transform);
-			path = renderer.call(shape, context);
+			let { context: ctx } = this;
+			ctx.setTransform(this.#transform);
+			path = renderer.call(shape, {
+				ctx,
+				draw: true,
+			});
 		}
 
 		return path;
@@ -54,7 +57,12 @@ export default class Renderer2d extends Renderer {
 
 		var renderer = Registry.get(shape.type) || shape;
 		if (renderer instanceof Function) {
-			path = renderer.call(shape);
+			let { context: ctx } = this;
+			ctx.setTransform(this.#transform);
+			path = renderer.call(shape, {
+				ctx,
+				draw: false,
+			});
 		}
 
 		return path;

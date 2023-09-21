@@ -97,12 +97,18 @@ export default class Layer {
 	 * @returns {boolean}
 	 */
 	isPointInShape(x, y, shape) {
-		var layer = new Layer();
-		layer.resize(this.width, this.height);
-		layer.renderer.transform = this.renderer.transform;
+		this.saveState();
+		var path = this.renderer.getPath(shape);
+		var hit = this.isPointInPath(x, y, path);
+		this.restoreState();
+		return hit;
+	}
 
-		var path = layer.renderer.draw(shape);
-		return path ? layer.isPointInPath(path, x, y) : false;
+	static get key() {
+		return Renderer.key;
+	}
+	static set key(v) {
+		Renderer.key = v;
 	}
 
 	/**
@@ -163,23 +169,19 @@ export default class Layer {
 	 */
 	shapeAtPoint(x, y, includeHidden = false) {
 		var hit = [];
+		var shapes = Array.from(this.shapes);
+		shapes.reverse();
 
 		var visible = [true, undefined];
 		if (includeHidden) {
 			visible.push(false);
 		}
 
-		this.forEach((shape) => {
+		return shapes.find((shape) => {
 			if (visible.includes(shape.visible)) {
-				if (this.isPointInShape(x, y, shape)) {
-					hit.push(shape);
-				}
+				return this.isPointInShape(x, y, shape);
 			}
 		});
-
-		hit.reverse();
-		var [first] = hit;
-		return first;
 	}
 
 	/**

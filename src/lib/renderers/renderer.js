@@ -1,4 +1,6 @@
 export default class Renderer {
+	static key = 'type';
+
 	clear() {
 		throw new Error('Trying to call abstract method!');
 	}
@@ -19,6 +21,14 @@ export default class Renderer {
 	}
 	set height(v) {
 		throw new Error('Trying to set abstract property!');
+	}
+
+	/**
+	 * @param {RenderContext} ctx
+	 * @returns {boolean}
+	 */
+	static isValidRenderingContext(ctx) {
+		throw new Error('Trying to access abstract static method!');
 	}
 
 	/**

@@ -21,13 +21,15 @@
 		}
 	}
 
-	Registry.set('render-function', function (ctx) {
+	Registry.set('render-function', function ({ ctx, draw }) {
 		var path = new Path2D();
 		path.arc(this.x, this.y, 20, 0, 2 * Math.PI, false);
 
-		if (Renderer2d.isValidRenderingContext(ctx)) {
-			ctx.fillStyle = '#FF000088';
-			ctx.fill(path);
+		if (draw) {
+			if (Renderer2d.isValidRenderingContext(ctx)) {
+				ctx.fillStyle = '#FF000088';
+				ctx.fill(path);
+			}
 		}
 
 		return path;
