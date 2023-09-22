@@ -10,7 +10,7 @@ As such, filters are only relevant within the context of render functions.
 
 Skittle provides several kinds of filters.
 
-<<< @/../src/lib/filters/index.js
+<<< @/src/lib/filters/index.js
 
 They can be accessed by importing `Filters`.
 

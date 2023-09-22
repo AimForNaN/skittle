@@ -6,7 +6,7 @@ title: Hit detection
 Skittle provides hit-detection methods for existing shapes, arbitrary shapes and arbitrary paths.
 An "existing shape" is a shape that is handled internally by a skittle instance. 
 An "arbitrary shape" is a shape not internally managed by a skittle instance.
-In the end, all shapes are resolved to arbitrary paths.
+In the end, all shapes are resolved to arbitrary paths,
 
 All shapes will be passed through a registered render function in order to obtain path information.
 The overhead of a render function can be avoided if path information is calculated by some other mean.

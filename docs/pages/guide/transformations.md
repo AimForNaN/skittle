@@ -53,6 +53,7 @@ $skittle.shapes.add({
 });
 ```
 
-:::info NOTE
+:::note
 If you want to support a different transformation order or a different interface, you'll have to define your own render function. 
 :::
+

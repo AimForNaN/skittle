@@ -19,7 +19,7 @@ This can be changed by adjusting the static `key` property for `Layer`.
 ```js
 import { Layer } from '@truefusion/skittle';
 
-Layer.key = 'name';
+Layer.key = 'name'; // defaults to 'type'!
 ```
 
 ## Rendering shapes 
@@ -27,7 +27,7 @@ Layer.key = 'name';
 Skittle uses render functions to render shapes.
 Currently, skittle only provides a few render functions.
 
-<<< @/../src/lib/shapes/index.js
+<<< @/src/lib/shapes/index.js
 
 They can be accessed by importing `Shapes`:
 
@@ -39,7 +39,6 @@ In the meantime, any other render functions will have to be created yourself.
 
 ## Custom render functions
 
-Skittle gives you the option to register new render functions.
 Render functions take in one parameter that provides basic context information.
 The metadata of shapes can be accessed with `this`.
 All render functions must return path information (e.g. [Path2D](https://developer.mozilla.org/en-US/docs/Web/API/Path2D/Path2D)).
@@ -55,7 +54,9 @@ function (ctx: Context): Path;
 ```
 
 The primary function of a render function is to return path information.
-This may seem counter-intuitive, but the type of path information returned should be relevant to the rendering context provided. 
+This may seem counter-intuitive, since the notion of rendering is typically associated with drawing.
+But the type of path information returned should be relevant to the rendering context provided. 
+Since both drawing and generating path information require a rendering context, having render functions return path information makes sense.
 
 ```js
 import { Registry, Renderer2d } from '@truefusion/skittle';
@@ -63,6 +64,7 @@ import { Registry, Renderer2d } from '@truefusion/skittle';
 Registry.set('custom', function ({ ctx, draw }) {
     if (Renderer2d.isValidRenderingContext(ctx)) {
         let path = new Path2D();
+        // Calculate path information...
 
         if (draw) {
             if (this.type == 'custom') {
