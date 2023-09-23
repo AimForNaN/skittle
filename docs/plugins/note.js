@@ -7,7 +7,7 @@ export default function () {
 			switch (node.name) {
 				case 'note': {
 					// TODO: Find a way this simplify this!
-					let p = h('p', { class: 'font-bold uppercase' }, 'Note');
+					let p = h('p', { class: 'font-bold uppercase' }, node.name);
 					p.data = {
 						hName: p.tagName,
 						hProperties: p.properties,

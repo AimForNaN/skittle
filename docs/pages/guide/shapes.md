@@ -33,9 +33,20 @@ They can be accessed by importing `Shapes`:
 
 ```js
 import { Shapes } from '@truefusion/skittle';
+
+const shape = {
+    type: 'rect',
+    x: 0,
+    y: 0,
+    width: 100,
+    height: 100,
+};
+Shapes.Rect.call(shape, $skittle.context);
 ```
 
-In the meantime, any other render functions will have to be created yourself. 
+:::note
+Until more render functions are implemented, any other render functions will have to be created yourself. 
+:::
 
 ## Custom render functions
 

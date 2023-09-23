@@ -23,17 +23,17 @@ $ npm install @truefusion/skittle --save
 
 Skittle assumes every canvas to be its own layer.
 As such, every canvas is handled by the `Layer` class, each `Layer` representing one canvas or render target.
-A render target is an object that provides a render context to draw on&mdash;assuming it is supported by skittle.
+A render target is an object that provides a render context to draw on&mdash;in our case that is always a canvas element.
 A render target can be specified in the `Layer`'s constructor.
 
 ```js
 import * as Skittle from '@truefusion/skittle';
 
-var canvas = document.createElement('canvas');
+const canvas = document.createElement('canvas');
 canvas.id = 'canvas';
 document.body.appendChild(canvas);
 
-var $skittle = new Skittle.Layer(canvas);
+const $skittle = new Skittle.Layer(canvas);
 // var $skittle = new Skittle.Layer('#canvas'); // Alternatively!
 ```
 
