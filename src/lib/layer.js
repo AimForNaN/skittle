@@ -71,15 +71,6 @@ export default class Layer {
 	}
 
 	/**
-	 */
-	get height() {
-		return this.renderer.height;
-	}
-	set height(v) {
-		this.renderer.height = v;
-	}
-
-	/**
 	 * @param {number} x
 	 * @param {number} y
 	 * @param {Path2D} path
@@ -114,8 +105,8 @@ export default class Layer {
 	/**
 	 */
 	mapPointToCanvas(x, y) {
-		var t = this.context.getTransform();
-		return transformPoint(x, y, t);
+		const { transform } = this.renderer;
+		return transformPoint(x, y, transform);
 	}
 
 	/**
@@ -147,8 +138,8 @@ export default class Layer {
 	 * @returns {this}
 	 */
 	resize(width, height) {
-		this.height = height;
-		this.width = width;
+		this.renderer.height = height;
+		this.renderer.width = width;
 		return this;
 	}
 
@@ -184,13 +175,8 @@ export default class Layer {
 		});
 	}
 
-	/**
-	 */
-	get target() {
-		return this.renderer.target;
-	}
-	set target(target) {
-		this.renderer.target = target;
+	set target(v) {
+		this.renderer.target = v;
 	}
 
 	/**
@@ -253,23 +239,10 @@ export default class Layer {
 		});
 	}
 
-	/**
-	 */
 	get transform() {
 		return this.renderer.transform;
 	}
-	set transform(t) {
-		if (isAffineMatrix(t)) {
-			this.renderer.transform = t;
-		}
-	}
-
-	/**
-	 */
-	get width() {
-		return this.renderer.width;
-	}
-	set width(v) {
-		this.renderer.width = v;
+	set transform(v) {
+		this.renderer.transform = v;
 	}
 }

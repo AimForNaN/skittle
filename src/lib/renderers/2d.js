@@ -68,13 +68,6 @@ export default class Renderer2d extends Renderer {
 		return path;
 	}
 
-	get height() {
-		return this.#target.height;
-	}
-	set height(h) {
-		this.#target.height = h ?? 0;
-	}
-
 	/**
 	 * @param {RenderContext} ctx
 	 * @returns {boolean}

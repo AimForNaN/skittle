@@ -17,10 +17,10 @@ export default class Renderer {
 	}
 
 	get height() {
-		throw new Error('Trying to access abstract property!');
+		return this.target.height;
 	}
 	set height(v) {
-		throw new Error('Trying to set abstract property!');
+		this.target.height = Number(v);
 	}
 
 	/**
@@ -31,17 +31,24 @@ export default class Renderer {
 		throw new Error('Trying to access abstract static method!');
 	}
 
-	/**
-	 * @param {Object} target
-	 */
-	target(target) {
-		throw new Error('Trying to call abstract method!');
+	get target() {
+		throw new Error('Trying to access abstract property!');
+	}
+	set target(v) {
+		throw new Error('Trying to set abstract property!');
+	}
+
+	get transform() {
+		throw new Error('Trying to access abstract property!');
+	}
+	set transform(transform) {
+		throw new Error('Trying to set abstract property!');
 	}
 
 	get width() {
-		throw new Error('Trying to access abstract property!');
+		return this.target.width;
 	}
 	set width(v) {
-		throw new Error('Trying to set abstract property!');
+		this.target.width = Number(v);
 	}
 }
