@@ -52,22 +52,26 @@ export default class Renderer2d extends Renderer {
 		return path;
 	}
 
-	getPath(shape) {
+	isPointInShape(x, y, shape) {
 		var path = null;
+		var renderer = Registry.get(shape.type) ?? shape;
 
-		var renderer = Registry.get(shape.type) || shape;
 		if (renderer instanceof Function) {
+			this.saveState();
 			let { context: ctx } = this;
 			ctx.setTransform(this.#transform);
 			path = renderer.call(shape, {
 				ctx,
 				draw: false,
 			});
+			let hit = this.context.isPointInPath(path, x, y)
+			this.restoreState();
+			return hit;
 		}
 
-		return path;
+		return false;
 	}
-
+	
 	/**
 	 * @param {RenderContext} ctx
 	 * @returns {boolean}

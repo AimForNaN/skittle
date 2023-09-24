@@ -29,34 +29,27 @@ export default class Layer {
 		}
 	}
 
-	/**
-	 */
 	[Symbol.iterator]() {
 		return this.shapes[Symbol.iterator]();
 	}
 
-	/**
-	 */
 	clear() {
 		this.renderer.clear();
+		return this;
 	}
 
-	/**
-	 */
 	get context() {
 		return this.renderer.context;
 	}
 
-	/**
-	 */
 	draw() {
 		this.clear();
 
 		for (let shape of this) {
 			if (shape.visible !== false) {
-				this.saveState();
+				this.renderer.saveState();
 				this.renderer.draw(shape);
-				this.restoreState();
+				this.renderer.restoreState();
 			}
 		}
 
@@ -73,26 +66,11 @@ export default class Layer {
 	/**
 	 * @param {number} x
 	 * @param {number} y
-	 * @param {Path2D} path
-	 * @returns {boolean}
-	 */
-	isPointInPath(x, y, path) {
-		return this.context.isPointInPath(path, x, y);
-	}
-
-	/**
-	 * @param {number} x
-	 * @param {number} y
 	 * @param {Object} shape
-	 * @param {boolean} includeHidden
 	 * @returns {boolean}
 	 */
 	isPointInShape(x, y, shape) {
-		this.saveState();
-		var path = this.renderer.getPath(shape);
-		var hit = this.isPointInPath(x, y, path);
-		this.restoreState();
-		return hit;
+		return this.renderer.isPointInShape(x, y, shape);
 	}
 
 	static get key() {
@@ -141,14 +119,6 @@ export default class Layer {
 		this.renderer.height = height;
 		this.renderer.width = width;
 		return this;
-	}
-
-	restoreState() {
-		this.renderer.restoreState();
-	}
-
-	saveState() {
-		this.renderer.saveState();
 	}
 
 	/**
