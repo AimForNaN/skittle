@@ -20,6 +20,14 @@ This can be changed by adjusting the static `key` property for `Layer`.
 import { Layer } from '@truefusion/skittle';
 
 Layer.key = 'name'; // defaults to 'type'!
+
+$skittle.shapes.add({
+    name: 'rect',
+    x: 0,
+    y: 0,
+    width: 100,
+    height: 100,
+});
 ```
 
 ## Rendering shapes 
@@ -52,7 +60,8 @@ Until more render functions are implemented, any other render functions will hav
 
 Render functions take in one parameter that provides basic context information.
 The metadata of shapes can be accessed with `this`.
-All render functions must return path information (e.g. [Path2D](https://developer.mozilla.org/en-US/docs/Web/API/Path2D/Path2D)).
+The primary function of a render function is to return path information.
+Therefore, all render functions must return path information (e.g. [Path2D](https://developer.mozilla.org/en-US/docs/Web/API/Path2D/Path2D)).
 Path information is also used for hit detection.
 
 ```ts
@@ -64,7 +73,6 @@ interface Context {
 function (ctx: Context): Path; 
 ```
 
-The primary function of a render function is to return path information.
 This may seem counter-intuitive, since the notion of rendering is typically associated with drawing.
 But the type of path information returned should be relevant to the rendering context provided. 
 Since both drawing and generating path information require a rendering context, having render functions return path information makes sense.
@@ -95,13 +103,14 @@ $skittle.draw();
 
 ## Dynamic shapes
 
-It is not entirely necessary to register a new render function in order to render a shape.
+It is not entirely necessary to register a new render function in order to render a custom shape.
 Skittle supports using render functions as shapes.
 In either case, path information must be returned.
 
 ```js
 $skittle.shapes.add(function ({ ctx }) {
     if (Renderer2d.isValidRenderingContext(ctx)) {
+        // Do some rendering...
         return new Path2D();
     }
 });

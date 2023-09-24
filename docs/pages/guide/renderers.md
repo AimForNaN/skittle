@@ -28,7 +28,7 @@ const $skittle = new Layer(canvas, renderer);
 
 ## Custom renderers
 
-All renderers must inherit from the `Renderer` abstract class.
+All renderers must inherit from the `Renderer` abstract class and implement any missing functionality.
 
 ```js
 import { Renderer } from '@truefusion/skittle';
