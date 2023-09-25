@@ -145,6 +145,9 @@ export default class Layer {
 		});
 	}
 
+	get target() {
+		return this.renderer.target;
+	}
 	set target(v) {
 		this.renderer.target = v;
 	}
