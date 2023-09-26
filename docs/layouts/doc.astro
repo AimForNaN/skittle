@@ -21,16 +21,16 @@ const { frontmatter } = Astro.props;
 		<title>{frontmatter.title} -- skittle</title>
 	</head>
 	<body>
-		<main class="container flex flex-col max-w-6xl mx-auto">
+		<main class="flex flex-col">
 			<header>
-				<nav class="flex gap-2 px-8">
+				<nav class="border-b flex gap-2 px-8">
 					<a class="font-medium py-4" href="/">skittle</a>
 					<span class="flex-1"></span>
 					<a class="py-4" href="https://github.com/AimForNaN/skittle">GitHub</a>
 				</nav>
 			</header>
 			<section class="flex">
-				<aside class="border-r flex-shrink-0 h-screen p-8 sticky top-0 w-64">
+				<aside class="border-r flex-shrink-0 h-screen p-8 sticky top-0 w-80">
 					<nav class="flex flex-col gap-4">
 						<ul class="flex flex-col gap-2">
 							<li>
@@ -44,7 +44,7 @@ const { frontmatter } = Astro.props;
 						</ul>
 					</nav>
 				</aside>
-				<article class="flex flex-col gap-8 pb-16 pt-8 px-16">
+				<article class="flex flex-col gap-8 max-w-4xl p-16">
 					<h1>{frontmatter.title}</h1>
 					<slot />
 				</article>
