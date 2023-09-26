@@ -1,26 +1,22 @@
 import {
 	ClearShadow,
 	Image,
+	Rect,
 	Stroke,
-	Style,
+	StyleShadow,
+	StyleTransform,
 } from '../filters';
 import Renderer2d from '../renderers/2d';
 
-export default function ({ ctx, draw }) {
+export default function (ctx) {
 	if (Renderer2d.isValidRenderingContext(ctx)) {
-		let path = new Path2D();
-
 		if (typeof this == 'object') {
-			path.rect(this.x, this.y, this.width, this.height);
-		}
-
-		Style(ctx, this);
-		if (draw) {
+			StyleTransform(ctx, this);
+			StyleShadow(ctx, this);
+			Rect(ctx, this);
 			Image(ctx, this);
 			ClearShadow(ctx);
-			Stroke(ctx, path);
+			Stroke(ctx, this);
 		}
-
-		return path;
 	}
 }

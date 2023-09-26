@@ -37,36 +37,27 @@ export default class Renderer2d extends Renderer {
 	 * @param {Object} shape
 	 */
 	draw(shape) {
-		var path = null;
-
-		var renderer = Registry.get(shape.type) || shape;
+		const type = shape[Renderer.key];
+		const renderer = Registry.get(type) || shape;
 		if (renderer instanceof Function) {
 			let { context: ctx } = this;
+			ctx.save();
 			ctx.setTransform(this.#transform);
-			path = renderer.call(shape, {
-				ctx,
-				draw: true,
-			});
+			renderer.call(shape, ctx);
+			ctx.restore();
 		}
-
-		return path;
 	}
 
 	isPointInShape(x, y, shape) {
-		var path = null;
-		var renderer = Registry.get(shape.type) ?? shape;
+		const type = shape[Renderer.key];
+		const renderer = Registry.get(type) ?? shape;
 
 		if (renderer instanceof Function) {
-			this.saveState();
-			let { context: ctx } = this;
+			let canvas = new OffscreenCanvas(this.width, this.height);
+			let ctx = canvas.getContext('2d');
 			ctx.setTransform(this.#transform);
-			path = renderer.call(shape, {
-				ctx,
-				draw: false,
-			});
-			let hit = this.context.isPointInPath(path, x, y)
-			this.restoreState();
-			return hit;
+			renderer.call(shape, ctx);
+			return ctx.isPointInPath(x, y);
 		}
 
 		return false;
@@ -102,14 +93,6 @@ export default class Renderer2d extends Renderer {
 		return false;
 	}
 
-	restoreState() {
-		this.context.restore();
-	}
-
-	saveState() {
-		this.context.save();
-	}
-
 	get target() {
 		return this.#target;
 	}
@@ -130,12 +113,5 @@ export default class Renderer2d extends Renderer {
 		if (isAffineMatrix(transform)) {
 			this.#transform = transform;
 		}
-	}
-
-	get width() {
-		return this.#target.width;
-	}
-	set width(w) {
-		this.#target.width = w ?? 0;
 	}
 }

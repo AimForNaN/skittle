@@ -1,9 +1,12 @@
+export {default as Circle} from './circle';
 export {default as ClearShadow} from './clear-shadow';
 export {default as Fill} from './fill';
 export {default as Image} from './image';
+export {default as Rect} from './rect';
 export {default as Stroke} from './stroke';
 export {default as Style} from './style';
 export {default as StyleBackground} from './style-background';
 export {default as StyleBorder} from './style-border';
 export {default as StyleOpacity} from './style-opacity';
 export {default as StyleShadow} from './style-shadow';
+export {default as StyleTransform} from './style-transform';

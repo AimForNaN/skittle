@@ -47,9 +47,7 @@ export default class Layer {
 
 		for (let shape of this) {
 			if (shape.visible !== false) {
-				this.renderer.saveState();
 				this.renderer.draw(shape);
-				this.renderer.restoreState();
 			}
 		}
 

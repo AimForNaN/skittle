@@ -2,7 +2,7 @@ import {
 	compose,
 	translate,
 } from 'transformation-matrix';
-import Renderer from '../renderers/2d';
+import Renderer2d from '../renderers/2d';
 import normalizeTransform from '../utils/normalize-transform';
 
 export default function (ctx, shape) {
@@ -10,7 +10,7 @@ export default function (ctx, shape) {
 		return;
 	}
 
-	if (Renderer.isValidRenderingContext(ctx)) {
+	if (Renderer2d.isValidRenderingContext(ctx)) {
 		if (typeof shape.style != 'object') {
 			return;
 		}
