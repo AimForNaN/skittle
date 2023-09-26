@@ -25,7 +25,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 20
       - name: Setup pages
         uses: actions/configure-pages@v3
       - name: Install packages
