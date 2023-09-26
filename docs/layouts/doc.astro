@@ -38,7 +38,7 @@ const { frontmatter } = Astro.props;
 							</li>
 						{guides.map(link => (
 							<li>
-								<a class="block transition-colors hover:text-fuchsia-700" href={link.href}>{link.label}</a>
+								<a class:list={['block transition-colors hover:text-fuchsia-700', { 'text-fuchsia-700': frontmatter.title == link.label }]} href={link.href}>{link.label}</a>
 							</li>
 						))}
 						</ul>

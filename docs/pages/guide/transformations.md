@@ -3,7 +3,7 @@ layout: ../../layouts/doc.astro
 title: Transformations
 ---
 
-The `Style` filter provides basic support for affine transformations.
+The `StyleTransform` filter provides basic support for affine transformations.
 By default, scale (S), rotation (R) and translate (T) and origin are supported.
 Rotations are measured in degrees.
 Transformations are done in **TRS** order.
@@ -32,7 +32,7 @@ interface StyledShape {
 ```js
 import * as Skittle from '@truefusion/skittle';
 
-var $skittle = new Skittle.Layer();
+const $skittle = new Skittle.Layer();
 
 $skittle.shapes.add({
 	type: 'rect',

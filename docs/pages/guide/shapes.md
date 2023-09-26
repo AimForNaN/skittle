@@ -58,40 +58,23 @@ Until more render functions are implemented, any other render functions will hav
 
 ## Custom render functions
 
-Render functions take in one parameter that provides basic context information.
+Render functions take in one parameter, the rendering context of the canvas.
 The metadata of shapes can be accessed with `this`.
-The primary function of a render function is to return path information.
-Therefore, all render functions must return path information (e.g. [Path2D](https://developer.mozilla.org/en-US/docs/Web/API/Path2D/Path2D)).
-Path information is also used for hit detection.
 
 ```ts
-interface Context {
-    ctx: RenderingContext,
-    draw: boolean,
-}
-
-function (ctx: Context): Path; 
+function (ctx: RenderingContext); 
 ```
 
-This may seem counter-intuitive, since the notion of rendering is typically associated with drawing.
-But the type of path information returned should be relevant to the rendering context provided. 
-Since both drawing and generating path information require a rendering context, having render functions return path information makes sense.
+The renderer handles saving and restoring context state so that shapes won't interfere with the rendering of other shapes.
+As such, render functions normally do not need to worry about context state.
+Context state will be saved before render and restored after render.
 
 ```js
 import { Registry, Renderer2d } from '@truefusion/skittle';
 
-Registry.set('custom', function ({ ctx, draw }) {
+Registry.set('custom', function (ctx) {
     if (Renderer2d.isValidRenderingContext(ctx)) {
-        let path = new Path2D();
-        // Calculate path information...
-
-        if (draw) {
-            if (this.type == 'custom') {
-                // Do some drawing...
-            }
-        }
-
-        return path;
+        // Do some drawing...
     }
 });
 
@@ -105,13 +88,11 @@ $skittle.draw();
 
 It is not entirely necessary to register a new render function in order to render a custom shape.
 Skittle supports using render functions as shapes.
-In either case, path information must be returned.
 
 ```js
-$skittle.shapes.add(function ({ ctx }) {
+$skittle.shapes.add(function (ctx) {
     if (Renderer2d.isValidRenderingContext(ctx)) {
         // Do some rendering...
-        return new Path2D();
     }
 });
 ```

@@ -4,8 +4,7 @@ title: Hit detection
 ---
 
 Skittle provides hit-detection methods for existing shapes and arbitrary shapes.
-In the end, all shapes are resolved to arbitrary paths.
-All shapes will be passed through a registered render function in order to obtain path information and temporarily apply any local transformations.
+All shapes will be passed through a registered render function in order to apply any path information and any local transformations.
 Global transformations will also be applied prior to checking.
 
 ```js
