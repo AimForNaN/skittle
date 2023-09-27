@@ -11,6 +11,21 @@ const guides = [
 ];
 
 const { frontmatter } = Astro.props;
+const current = guides.find((guide) => guide.label == frontmatter.title);
+const prev = guides.find((guide, idx) => {
+	var next = guides[idx+1];
+	if (next && current && next.label == current.label) {
+		return true;
+	}
+	return false;
+});
+const next = guides.find((guide, idx) => {
+	var prev = guides[idx-1];
+	if (prev && current && prev.label == current.label) {
+		return true;
+	}
+	return false;
+});
 ---
 
 <!DOCTYPE html>
@@ -47,6 +62,22 @@ const { frontmatter } = Astro.props;
 				<article class="flex flex-col gap-8 max-w-4xl p-16">
 					<h1>{frontmatter.title}</h1>
 					<slot />
+					<nav class="gap-4 grid grid-cols-2">
+						{prev ?
+							<a class="border flex flex-col p-4 rounded transition-colors hover:border-fuchsia-700" href={prev.href}>
+								<small class="text-gray-500">Previous page</small>
+								<span>{prev.label}</span>
+							</a> :
+							<span></span>
+						}
+						{next ?
+							<a class="border flex flex-col p-4 rounded transition-colors text-right hover:border-fuchsia-700" href={next.href}>
+								<small class="text-gray-500">Next page</small>
+								<span>{next.label}</span>
+							</a> :
+							<span></span>
+						}
+					</nav>
 				</article>
 			</section>
 		</main>
