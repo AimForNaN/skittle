@@ -29,9 +29,13 @@ jobs:
       - name: Setup pages
         uses: actions/configure-pages@v3
       - name: Install packages
-        run: yarn install
+        run: npm install
+      - name: Remove examples
+        run: rm -rf ./docs/pages/examples/
+      - name: Remove vite config
+        run: rm vite.config.js
       - name: Build
-        run: yarn docs:build
+        run: npm run docs:build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
