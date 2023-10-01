@@ -6,8 +6,8 @@ title: Getting started
 
 Skittle is an API-agnostic, HTML5-canvas library that is highly unopinionated.
 Skittle is inspired by [origami.js](https://raphamorim.io/origamijs/).
-Skittle mostly only cares about rendering, which itself is not constrained to any, one methodolgy.
-All parts are by nature replacable.
+Skittle mostly only cares about rendering, which itself is not constrained to any, one methodology.
+All parts are by nature replaceable.
 Since rendering is the main priority, things like animations and pointer events are left in the hands of the developer.
 Nevertheless, we provide basic examples on ways to deal with things like animations and hit detection.
 
