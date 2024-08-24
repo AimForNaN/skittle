@@ -61,6 +61,13 @@ export default class Layer {
 		return this;
 	}
 
+	get height() {
+		return this.renderer.height;
+	}
+	set height(v) {
+		this.renderer.height = v;
+	}
+
 	/**
 	 * @param {number} x
 	 * @param {number} y
@@ -215,5 +222,12 @@ export default class Layer {
 	}
 	set transform(v) {
 		this.renderer.transform = v;
+	}
+
+	get width() {
+		return this.renderer.width;
+	}
+	set width(v) {
+		this.renderer.width = v;
 	}
 }
